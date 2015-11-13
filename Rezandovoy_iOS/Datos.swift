@@ -87,15 +87,39 @@ class Conexion {
 
 // MARK: Clases
 
-class Portada {
+class Portada: NSObject, NSCoding {
     var semanaActual: Semana
     var semanaProxima: Semana
+    
+    struct Keys {
+        static let semanaActualKey = "semanaActual"
+        static let semanaProximaKey = "semanaProxima"
+    }
     
     init (entrada_json : NSDictionary) {
         print("Portada\n")
         semanaActual = Semana(entrada_json: entrada_json.valueForKey("semanaActual") as! NSDictionary)
         semanaProxima = Semana(entrada_json: entrada_json.valueForKey("semanaProxima") as! NSDictionary)
     }
+    
+    init (semact: Semana, semprox: Semana) {
+        semanaActual = semact
+        semanaProxima = semprox
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(semanaActual,forKey: Keys.semanaActualKey)
+        aCoder.encodeObject(semanaProxima, forKey: Keys.semanaProximaKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let semanaActual = aDecoder.decodeObjectForKey(Keys.semanaActualKey) as! Semana
+        let semanaProxima = aDecoder.decodeObjectForKey(Keys.semanaProximaKey) as! Semana
+        self.init(semact: semanaActual, semprox: semanaProxima)
+    }
+    
+    static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.URLByAppendingPathComponent("portada")
 }
 
 class PortadaInfantil {
