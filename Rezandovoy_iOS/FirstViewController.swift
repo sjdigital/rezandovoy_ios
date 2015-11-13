@@ -13,6 +13,15 @@ class FirstViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let conex = Conexion()
+        let paginas = Paginacion(lim: 20, off: 0)
+        let cadena_busqueda = getDocumentosRequest(cadena: "", pag: paginas)
+        conex.getDocumentos(cadena_busqueda) { respuesta in
+            print(respuesta)
+        }
+        conex.getPortada { portada in
+            print(portada)
+        }
     }
 
     override func didReceiveMemoryWarning() {
