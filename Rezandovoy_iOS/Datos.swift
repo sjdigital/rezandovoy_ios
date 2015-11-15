@@ -14,7 +14,7 @@ let format = NSDateFormatter()
 class Conexion {
     let session = NSURLSession.sharedSession()
     
-    func getPortada(onComplete: (Portada) -> ()) {
+    func getPortada(onComplete: (Portada?) -> ()) {
         let postEndpoint: String = "http://rvserver.sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortada"
         let postParams: AnyObject = []
         let url = NSURL(string: postEndpoint)!
@@ -32,11 +32,47 @@ class Conexion {
             guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
                 let respuesta = response as? NSHTTPURLResponse
                 print("Not a 200 response is:\n \(respuesta)")
+                let aux: Portada? = nil
+                onComplete(aux)
                 return
             }
             do {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
                     onComplete(Portada(entrada_json: jsonDict))
+                } else {
+                    print("Error")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }).resume()
+    }
+    
+    func getPortadaId(onComplete: (PortadaId) -> ()) {
+        let postEndpoint: String = "http://rvserver.sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortadaId"
+        let postParams: AnyObject = []
+        let url = NSURL(string: postEndpoint)!
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Funca")
+        } catch {
+            print("No funca")
+        }
+        
+        session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
+                let respuesta = response as? NSHTTPURLResponse
+                print("Not a 200 response is:\n \(respuesta)")
+                let aux: PortadaId = PortadaId(id: 0)
+                onComplete(aux)
+                return
+            }
+            do {
+                if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    onComplete(PortadaId(entrada_json: jsonDict))
                 } else {
                     print("Error")
                 }
@@ -94,6 +130,7 @@ class Portada: NSObject, NSCoding {
     struct Keys {
         static let semanaActualKey = "semanaActual"
         static let semanaProximaKey = "semanaProxima"
+        static let portada = "portada"
     }
     
     init (entrada_json : NSDictionary) {
@@ -107,19 +144,53 @@ class Portada: NSObject, NSCoding {
         semanaProxima = semprox
     }
     
+    init (portada: Portada){
+        self.semanaActual = portada.semanaActual
+        self.semanaProxima = portada.semanaProxima
+        
+    }
+    
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(semanaActual,forKey: Keys.semanaActualKey)
-        aCoder.encodeObject(semanaProxima, forKey: Keys.semanaProximaKey)
+        aCoder.encodeObject(self, forKey: Keys.portada)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let semanaActual = aDecoder.decodeObjectForKey(Keys.semanaActualKey) as! Semana
-        let semanaProxima = aDecoder.decodeObjectForKey(Keys.semanaProximaKey) as! Semana
-        self.init(semact: semanaActual, semprox: semanaProxima)
+        let portada_aux = aDecoder.decodeObjectForKey(Keys.portada) as! Portada
+        self.init(portada: portada_aux)
     }
     
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.URLByAppendingPathComponent("portada")
+}
+
+class PortadaId: NSObject, NSCoding {
+    var id: Int
+    
+    struct Keys {
+        static let idKey = "id"
+    }
+    
+    init (entrada_json: NSDictionary){
+        print(entrada_json)
+        self.id = entrada_json.valueForKey("portadaId") as! Int
+    }
+    
+    init (id: Int){
+        self.id = id
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(self, forKey: Keys.idKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! PortadaId
+        self.init(id: id_aux.id)
+    }
+    
+    static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+    static let ArchiveURL = DocumentsDirectory.URLByAppendingPathComponent("portadaId")
+    
 }
 
 class PortadaInfantil {
@@ -162,6 +233,7 @@ class Semana {
     var aviso: String?
     var zip: String
     var semanaLiturgica: String
+
     
     init(entrada_json : NSDictionary) {
         print("Semana")
@@ -183,6 +255,17 @@ class Semana {
         semanaLiturgica = entrada_json.valueForKey("semanaLiturgica") as! String
         print("\n*****\n\n")
     }
+    
+    init(oracionesPeriodicasAdulto : [OracionPeriodica], oracionEspecialAdulto: OracionEspecial?, oracionInfantil: OracionPeriodica, color: String?, aviso: String?, zip: String, semanaLiturgica: String){
+        self.oracionesPeriodicaAdulto = oracionesPeriodicasAdulto
+        self.oracionEspecialAdulto = oracionEspecialAdulto
+        self.oracionInfantil = oracionInfantil
+        self.color = color
+        self.aviso = aviso
+        self.zip = zip
+        self.semanaLiturgica = semanaLiturgica
+    }
+
 }
 
 class Oracion {
