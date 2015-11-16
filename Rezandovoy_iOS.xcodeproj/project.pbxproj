@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D40EF7251BFA06200027089D /* ic_rv_blanco.png in Resources */ = {isa = PBXBuildFile; fileRef = D40EF7241BFA06200027089D /* ic_rv_blanco.png */; };
 		D44086811BF20E57001BCC96 /* Datos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44086801BF20E57001BCC96 /* Datos.swift */; };
 		D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83B1BF0CDC40078C231 /* AppDelegate.swift */; };
 		D470A83E1BF0CDC40078C231 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83D1BF0CDC40078C231 /* FirstViewController.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D40EF7241BFA06200027089D /* ic_rv_blanco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_rv_blanco.png; sourceTree = "<group>"; };
 		D44086801BF20E57001BCC96 /* Datos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Datos.swift; sourceTree = "<group>"; };
 		D470A8381BF0CDC40078C231 /* Rezandovoy_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rezandovoy_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D470A83B1BF0CDC40078C231 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		D470A83A1BF0CDC40078C231 /* Rezandovoy_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D40EF7241BFA06200027089D /* ic_rv_blanco.png */,
 				D470A83B1BF0CDC40078C231 /* AppDelegate.swift */,
 				D470A83D1BF0CDC40078C231 /* FirstViewController.swift */,
 				D470A83F1BF0CDC40078C231 /* SecondViewController.swift */,
@@ -236,6 +239,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D40EF7251BFA06200027089D /* ic_rv_blanco.png in Resources */,
 				D470A8481BF0CDC40078C231 /* LaunchScreen.storyboard in Resources */,
 				D470A8451BF0CDC40078C231 /* Assets.xcassets in Resources */,
 				D470A8431BF0CDC40078C231 /* Main.storyboard in Resources */,
@@ -414,7 +418,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "adc64f65-ea69-4716-8237-1e244e890086";
 			};
 			name = Debug;
 		};
@@ -428,7 +432,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "adc64f65-ea69-4716-8237-1e244e890086";
 			};
 			name = Release;
 		};

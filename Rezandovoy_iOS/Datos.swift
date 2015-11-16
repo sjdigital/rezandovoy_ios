@@ -90,7 +90,6 @@ class Conexion {
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        print("Antes conex")
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: [])
             print("Funca")
@@ -137,11 +136,6 @@ class Portada: NSObject, NSCoding {
         print("Portada\n")
         semanaActual = Semana(entrada_json: entrada_json.valueForKey("semanaActual") as! NSDictionary)
         semanaProxima = Semana(entrada_json: entrada_json.valueForKey("semanaProxima") as! NSDictionary)
-    }
-    
-    init (semact: Semana, semprox: Semana) {
-        semanaActual = semact
-        semanaProxima = semprox
     }
     
     init (portada: Portada){
@@ -271,18 +265,22 @@ class Semana {
 class Oracion {
     var id: Int
     var titulo: String
-    var lectura: NSArray
+    var lectura: [Lectura] = []
     var documentos: [Documento] = []
     var oracion_link : String
     var musicas: [Musica] = []
     var ficheroImagenes: String
     var tweet: String?
     
-    init (id_oracion: Int, titulo_oracion: String, lecturas_oracion: NSArray, link: String, imagenes: String, twit: String?, docs: NSArray, mus: NSArray) {
+    init (id_oracion: Int, titulo_oracion: String, lecturas_oracion: NSArray?, link: String, imagenes: String, twit: String?, docs: NSArray, mus: NSArray) {
         print("Oracion")
         id = id_oracion
         titulo = titulo_oracion
-        lectura = lecturas_oracion
+        if let _ = lecturas_oracion {
+            for (lectura_aux) in lecturas_oracion! {
+                lectura.append(Lectura(entrada_json: lectura_aux as! NSDictionary))
+            }
+        }
         oracion_link = link
         ficheroImagenes = imagenes
         tweet = twit
@@ -312,7 +310,7 @@ class OracionPeriodica: Oracion {
         fecha = esp.components(requestedDateComponents, fromDate: fecha_aux)
         let aux_id = entrada_json.valueForKey("id") as! Int
         let aux_titulo = entrada_json.valueForKey("titulo") as! String
-        let aux_lecturas = entrada_json.valueForKey("lectura") as! NSArray
+        let aux_lecturas = entrada_json.valueForKey("lectura") as? NSArray
         let aux_link = String("\(servidor)\(entrada_json.valueForKey("oracion_link")!)")
         let aux_imagenes = entrada_json.valueForKey("ficheroImagenes") as! String
         let aux_tweet = entrada_json.valueForKey("tweet") as? String
@@ -334,7 +332,7 @@ class OracionEspecial: Oracion {
         imagen_link = entrada_json.valueForKey("imagen_link") as! String
         let aux_id = entrada_json.valueForKey("id") as! Int
         let aux_titulo = entrada_json.valueForKey("titulo") as! String
-        let aux_lecturas = entrada_json.valueForKey("lectura") as! NSArray
+        let aux_lecturas = entrada_json.valueForKey("lectura") as? NSArray
         let aux_link = String("\(servidor)\(entrada_json.valueForKey("oracion_link")!)")
         let aux_imagenes = entrada_json.valueForKey("ficheroImagenes") as! String
         let aux_tweet = entrada_json.valueForKey("tweet") as! String
@@ -344,13 +342,26 @@ class OracionEspecial: Oracion {
     }
 }
 
+class Lectura {
+    var id: Int
+    var cita: String
+    var texto: String?
+    
+    init(entrada_json : NSDictionary) {
+        id = entrada_json.valueForKey("id") as! Int
+        cita = entrada_json.valueForKey("cita") as! String
+        texto = entrada_json.valueForKey("texto") as? String
+    }
+    
+}
+
 class Documento {
-    var link: String
+    var texto: String
     var nombre: String
     
     init(entrada_json : NSDictionary) {
         print("Documento")
-        link = String("\(servidor)\(entrada_json.valueForKey("link")!)")
+        texto = String("\(servidor)\(entrada_json.valueForKey("texto")!)")
         nombre = entrada_json.valueForKey("nombre") as! String
     }
 }
@@ -460,4 +471,129 @@ class getDocumentosRequest {
         let dictionary: NSDictionary = ["busqueda": "\(busqueda)", "pag": paginacion.getDictionary()]
         return dictionary
     }
+}
+
+// MARK: funciones
+
+func obtenPortada() {
+    let semaphore = dispatch_semaphore_create(0)
+    //var portada_aux: Portada? = nil
+    let conex = Conexion()
+    
+    var portada_id_servidor = 0
+    
+    //Si tenemos portada obtenemos el id del servidor
+    conex.getPortadaId {
+        portadaId in
+        portada_id_servidor = portadaId.id
+        
+        //Si el id es distinto de 0 es que hemos recuperado un dato
+        //y obtenemos la almacenada en base de datos
+        if portada_id_servidor != 0 {
+            if let auxiliar = cargaPortadaId(){
+                print("Almacenado en base de datos \(auxiliar.id)")
+            }
+            
+            //Si la portada del servidor es superior a la actual recuperamos portada
+            if portada_id_servidor > cargaPortadaId()?.id{
+                print("Portada nueva")
+                print(portadaId)
+                guardaPortadaId(portadaId)
+                //Recuperamos la portada del servidor y la almacenamos en base de datos
+                conex.getPortada{
+                    portada in
+                    if portada != nil {
+                        guardaPortadas(portada!)
+                        //Recuperamos el id de portada del servidor y lo guardamos en base de datos
+                        //portada_aux = portada
+                        print("Portada recuperada de servidor")
+                        dispatch_semaphore_signal(semaphore)
+                        
+                    } else {
+                        //TODO: Lo que hagamos cuando no hay portada ni en servidor ni en BD
+                        print("No hay portada en ningún lado")
+                    }
+                    
+                    
+                }
+                
+                
+            } else {
+                print("Portada existente")
+                
+                //Comprobamos si la portada esta en base de datos
+                if let _ = cargaPortadas() {
+                    //portada_aux = aux
+                    print("Portada obtenida de base de datos")
+                    dispatch_semaphore_signal(semaphore)
+                } else {
+                    
+                    //Si la portada no esta en base de datos la recuperamos del servidor
+                    conex.getPortada{
+                        portada in
+                        if portada != nil {
+                            guardaPortadas(portada!)
+                            //Recuperamos el id de portada del servidor y lo guardamos en base de datos
+                            conex.getPortadaId{
+                                portadaId in guardaPortadaId(portadaId)
+                            }
+                            //portada_aux = portada
+                            print("Portada recuperada de servidor")
+                            dispatch_semaphore_signal(semaphore)
+                            
+                        } else {
+                            //TODO: Lo que hagamos cuando no hay portada ni en servidor ni en BD
+                            print("No hay portada en ningún lado")
+                        }
+                        
+                        
+                    }
+                }
+                
+            }
+        } else {
+            
+            //Recuperamos la portada en base de datos
+            //Comprobamos si la portada esta en base de datos
+            if let _ = cargaPortadas() {
+                //portada_aux = aux
+                print("Portada obtenida de base de datos")
+                dispatch_semaphore_signal(semaphore)
+            } else {
+                
+                //TODO: Lo que hagamos cuando no hay portada ni en servidor ni en BD
+                print("No hay portada en ningún lado")
+                
+            }
+            
+        }
+    }
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+    //return portada_aux
+    
+}
+
+// MARK: Obtención datos BD
+func cargaPortadas() -> Portada? {
+    let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(Portada.ArchiveURL.path!) as? Portada
+    print(Portada.ArchiveURL.path)
+    return aux
+}
+
+func cargaPortadaId() -> PortadaId? {
+    let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(PortadaId.ArchiveURL.path!) as? PortadaId
+    print(PortadaId.ArchiveURL.path)
+    return aux
+}
+
+func guardaPortadas(portada: Portada) -> Bool {
+    let exito = NSKeyedArchiver.archiveRootObject(portada, toFile: Portada.ArchiveURL.path!)
+    print(Portada.ArchiveURL.path)
+    return exito
+}
+
+func guardaPortadaId(portadaId: PortadaId) -> Bool {
+    let exito = NSKeyedArchiver.archiveRootObject(portadaId, toFile: PortadaId.ArchiveURL.path!)
+    print(PortadaId.ArchiveURL.path)
+    return exito
 }
