@@ -28,7 +28,7 @@
 		<false/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>rvserver.sjdigitaldemo.ovh</key>
+			<key>sjdigitaldemo.ovh</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>

@@ -8,14 +8,14 @@
 
 import Foundation
 
-let servidor = "http://rvserver.sjdigitaldemo.ovh/"
+let servidor = "http://sjdigitaldemo.ovh/"
 let format = NSDateFormatter()
 
 class Conexion {
     let session = NSURLSession.sharedSession()
     
     func getPortada(onComplete: (Portada?) -> ()) {
-        let postEndpoint: String = "http://rvserver.sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortada"
+        let postEndpoint: String = "http://sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortada"
         let postParams: AnyObject = []
         let url = NSURL(string: postEndpoint)!
         let request = NSMutableURLRequest(URL: url)
@@ -49,7 +49,7 @@ class Conexion {
     }
     
     func getPortadaId(onComplete: (PortadaId) -> ()) {
-        let postEndpoint: String = "http://rvserver.sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortadaId"
+        let postEndpoint: String = "http://sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getPortadaId"
         let postParams: AnyObject = []
         let url = NSURL(string: postEndpoint)!
         let request = NSMutableURLRequest(URL: url)
@@ -83,7 +83,7 @@ class Conexion {
     }
     
     func getDocumentos(busqueda: getDocumentosRequest, onComplete: ([DocumentoPublico]) -> ()) {
-        let postEndpoint: String = "http://rvserver.sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getDocumentos"
+        let postEndpoint: String = "http://sjdigitaldemo.ovh:8080/Rezandovoy_server/api/publica/getDocumentos"
         var documentos: [DocumentoPublico] = []
         let postParams: AnyObject = busqueda.getDictionary()
         let url = NSURL(string: postEndpoint)!
@@ -138,19 +138,21 @@ class Portada: NSObject, NSCoding {
         semanaProxima = Semana(entrada_json: entrada_json.valueForKey("semanaProxima") as! NSDictionary)
     }
     
-    init (portada: Portada){
-        self.semanaActual = portada.semanaActual
-        self.semanaProxima = portada.semanaProxima
+    init (sem_act: Semana, sem_prox: Semana){
+        semanaActual = sem_act
+        semanaProxima = sem_prox
         
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(self, forKey: Keys.portada)
+        aCoder.encodeObject(semanaActual, forKey: Keys.semanaActualKey)
+        aCoder.encodeObject(semanaProxima, forKey: Keys.semanaProximaKey)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let portada_aux = aDecoder.decodeObjectForKey(Keys.portada) as! Portada
-        self.init(portada: portada_aux)
+        let semana_act = aDecoder.decodeObjectForKey(Keys.semanaActualKey) as! Semana
+        let semana_prox = aDecoder.decodeObjectForKey(Keys.semanaProximaKey) as! Semana
+        self.init(sem_act: semana_act, sem_prox: semana_prox)
     }
     
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
@@ -174,12 +176,12 @@ class PortadaId: NSObject, NSCoding {
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(self, forKey: Keys.idKey)
+        aCoder.encodeObject(id, forKey: Keys.idKey)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! PortadaId
-        self.init(id: id_aux.id)
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        self.init(id: id_aux)
     }
     
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
@@ -219,7 +221,7 @@ class ResultadoBusquedaDocumentos {
     }
 }
 
-class Semana {
+class Semana: NSObject, NSCoding {
     var oracionesPeriodicaAdulto: [OracionPeriodica] = []
     var oracionEspecialAdulto: OracionEspecial?
     var oracionInfantil: OracionPeriodica
@@ -228,6 +230,15 @@ class Semana {
     var zip: String
     var semanaLiturgica: String
 
+    struct Keys {
+        static let oracionesPeriodicaAdultoKey = "oracionesPeriodicaAdulto"
+        static let oracionEspecialAdultoKey = "oracionEspecialAdulto"
+        static let oracionInfantilKey = "oracionInfantil"
+        static let colorKey = "color"
+        static let avisoKey = "aviso"
+        static let zipKey = "zip"
+        static let semanaLiturgicaKey = "semanaLiturgica"
+    }
     
     init(entrada_json : NSDictionary) {
         print("Semana")
@@ -250,7 +261,7 @@ class Semana {
         print("\n*****\n\n")
     }
     
-    init(oracionesPeriodicasAdulto : [OracionPeriodica], oracionEspecialAdulto: OracionEspecial?, oracionInfantil: OracionPeriodica, color: String?, aviso: String?, zip: String, semanaLiturgica: String){
+    init(oracionesPeriodicasAdulto: [OracionPeriodica], oracionEspecialAdulto: OracionEspecial?, oracionInfantil: OracionPeriodica, color: String?, aviso: String?, zip: String, semanaLiturgica: String){
         self.oracionesPeriodicaAdulto = oracionesPeriodicasAdulto
         self.oracionEspecialAdulto = oracionEspecialAdulto
         self.oracionInfantil = oracionInfantil
@@ -259,10 +270,31 @@ class Semana {
         self.zip = zip
         self.semanaLiturgica = semanaLiturgica
     }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(oracionesPeriodicaAdulto, forKey: Keys.oracionesPeriodicaAdultoKey)
+        aCoder.encodeObject(oracionEspecialAdulto, forKey:  Keys.oracionEspecialAdultoKey)
+        aCoder.encodeObject(oracionInfantil, forKey: Keys.oracionInfantilKey)
+        aCoder.encodeObject(color, forKey: Keys.colorKey)
+        aCoder.encodeObject(aviso, forKey: Keys.avisoKey)
+        aCoder.encodeObject(zip, forKey: Keys.zipKey)
+        aCoder.encodeObject(semanaLiturgica, forKey: Keys.semanaLiturgicaKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let oracionesPeriodicaAdulto_aux = aDecoder.decodeObjectForKey(Keys.oracionesPeriodicaAdultoKey) as! [OracionPeriodica]
+        let oracionEspecialAdulto_aux = aDecoder.decodeObjectForKey(Keys.oracionEspecialAdultoKey) as? OracionEspecial
+        let oracionInfantil_aux = aDecoder.decodeObjectForKey(Keys.oracionInfantilKey) as! OracionPeriodica
+        let color_aux = aDecoder.decodeObjectForKey(Keys.colorKey) as? String
+        let aviso_aux = aDecoder.decodeObjectForKey(Keys.avisoKey) as? String
+        let zip_aux = aDecoder.decodeObjectForKey(Keys.zipKey) as! String
+        let semanaLiturgica_aux = aDecoder.decodeObjectForKey(Keys.semanaLiturgicaKey) as! String
+        self.init(oracionesPeriodicasAdulto: oracionesPeriodicaAdulto_aux, oracionEspecialAdulto: oracionEspecialAdulto_aux, oracionInfantil: oracionInfantil_aux, color: color_aux, aviso: aviso_aux, zip: zip_aux, semanaLiturgica: semanaLiturgica_aux)
+    }
 
 }
 
-class Oracion {
+class Oracion: NSObject, NSCoding {
     var id: Int
     var titulo: String
     var lectura: [Lectura] = []
@@ -271,6 +303,22 @@ class Oracion {
     var musicas: [Musica] = []
     var ficheroImagenes: String
     var tweet: String?
+    
+    struct Keys {
+        static let idKey = "id"
+        static let tituloKey = "titulo"
+        static let lecturaKey = "lectura"
+        static let documentosKey = "documentos"
+        static let oracion_linkKey = "oracion_link"
+        static let musicasKey = "musicas"
+        static let ficheroImagenesKey = "ficheroImagenes"
+        static let tweetKey = "tweet"
+        static let tiempoLiturgicoKey = "tiempoLiturgico"
+        static let fechaKey = "fecha"
+        static let icono_linkKey = "icono_link"
+        static let textoKey = "texto"
+        static let imagen_linkKey = "imagen_link"
+    }
     
     init (id_oracion: Int, titulo_oracion: String, lecturas_oracion: NSArray?, link: String, imagenes: String, twit: String?, docs: NSArray, mus: NSArray) {
         print("Oracion")
@@ -291,6 +339,40 @@ class Oracion {
             musicas.append(Musica(entrada_json: musica as! NSDictionary))
         }
         print("\n")
+    }
+    
+    init (id: Int, titulo: String, lectura: [Lectura], documentos: [Documento], oracion_link: String, musicas: [Musica], ficheroImagenes: String, tweet: String?) {
+        self.id = id
+        self.titulo = titulo
+        self.lectura = lectura
+        self.documentos = documentos
+        self.oracion_link = oracion_link
+        self.musicas = musicas
+        self.ficheroImagenes = ficheroImagenes
+        self.tweet = tweet
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(titulo, forKey: Keys.tituloKey)
+        aCoder.encodeObject(lectura, forKey: Keys.lecturaKey)
+        aCoder.encodeObject(documentos, forKey: Keys.documentosKey)
+        aCoder.encodeObject(oracion_link, forKey: Keys.oracion_linkKey)
+        aCoder.encodeObject(musicas, forKey: Keys.musicasKey)
+        aCoder.encodeObject(ficheroImagenes, forKey: Keys.ficheroImagenesKey)
+        aCoder.encodeObject(tweet, forKey: Keys.tweetKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let titulo_aux = aDecoder.decodeObjectForKey(Keys.tituloKey) as! String
+        let lectura_aux = aDecoder.decodeObjectForKey(Keys.lecturaKey) as! [Lectura]
+        let documentos_aux = aDecoder.decodeObjectForKey(Keys.documentosKey) as! [Documento]
+        let oracion_link_aux = aDecoder.decodeObjectForKey(Keys.oracion_linkKey) as! String
+        let musicas_aux = aDecoder.decodeObjectForKey(Keys.musicasKey) as! [Musica]
+        let ficheroImagenes_aux = aDecoder.decodeObjectForKey(Keys.ficheroImagenesKey) as! String
+        let tweet_aux = aDecoder.decodeObjectForKey(Keys.tweetKey) as? String
+        self.init(id: id_aux, titulo: titulo_aux, lectura: lectura_aux, documentos: documentos_aux, oracion_link: oracion_link_aux, musicas: musicas_aux, ficheroImagenes: ficheroImagenes_aux, tweet: tweet_aux)
     }
 }
 
@@ -318,6 +400,39 @@ class OracionPeriodica: Oracion {
         let aux_mus = entrada_json.valueForKey("musicas") as! NSArray
         super.init(id_oracion: aux_id, titulo_oracion: aux_titulo, lecturas_oracion: aux_lecturas, link: aux_link, imagenes: aux_imagenes, twit: aux_tweet, docs: aux_docs, mus: aux_mus)
     }
+    
+    init (id: Int, titulo: String, lectura: [Lectura], documentos: [Documento], oracion_link: String, musicas: [Musica], ficheroImagenes: String, tweet: String?, tiempoLiturgico: String?, fecha: NSDateComponents) {
+        self.tiempoLiturgico = tiempoLiturgico
+        self.fecha = fecha
+        super.init(id: id, titulo: titulo, lectura: lectura, documentos: documentos, oracion_link: oracion_link, musicas: musicas, ficheroImagenes: ficheroImagenes, tweet: tweet)
+    }
+
+    override func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(tiempoLiturgico, forKey: Keys.tiempoLiturgicoKey)
+        aCoder.encodeObject(fecha, forKey: Keys.fechaKey)
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(titulo, forKey: Keys.tituloKey)
+        aCoder.encodeObject(lectura, forKey: Keys.lecturaKey)
+        aCoder.encodeObject(documentos, forKey: Keys.documentosKey)
+        aCoder.encodeObject(oracion_link, forKey: Keys.oracion_linkKey)
+        aCoder.encodeObject(musicas, forKey: Keys.musicasKey)
+        aCoder.encodeObject(ficheroImagenes, forKey: Keys.ficheroImagenesKey)
+        aCoder.encodeObject(tweet, forKey: Keys.tweetKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let tiempoLiturgico_aux = aDecoder.decodeObjectForKey(Keys.tiempoLiturgicoKey) as? String
+        let fecha_aux = aDecoder.decodeObjectForKey(Keys.fechaKey) as! NSDateComponents
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let titulo_aux = aDecoder.decodeObjectForKey(Keys.tituloKey) as! String
+        let lectura_aux = aDecoder.decodeObjectForKey(Keys.lecturaKey) as! [Lectura]
+        let documentos_aux = aDecoder.decodeObjectForKey(Keys.documentosKey) as! [Documento]
+        let oracion_link_aux = aDecoder.decodeObjectForKey(Keys.oracion_linkKey) as! String
+        let musicas_aux = aDecoder.decodeObjectForKey(Keys.musicasKey) as! [Musica]
+        let ficheroImagenes_aux = aDecoder.decodeObjectForKey(Keys.ficheroImagenesKey) as! String
+        let tweet_aux = aDecoder.decodeObjectForKey(Keys.tweetKey) as? String
+        self.init(id: id_aux, titulo: titulo_aux, lectura: lectura_aux, documentos: documentos_aux, oracion_link: oracion_link_aux, musicas: musicas_aux, ficheroImagenes: ficheroImagenes_aux, tweet: tweet_aux, tiempoLiturgico: tiempoLiturgico_aux, fecha: fecha_aux)
+    }
 }
 
 class OracionEspecial: Oracion {
@@ -340,12 +455,54 @@ class OracionEspecial: Oracion {
         let aux_mus = entrada_json.valueForKey("musicas") as! NSArray
         super.init(id_oracion: aux_id, titulo_oracion: aux_titulo, lecturas_oracion: aux_lecturas, link: aux_link, imagenes: aux_imagenes, twit: aux_tweet, docs: aux_docs, mus: aux_mus)
     }
+
+    init (id: Int, titulo: String, lectura: [Lectura], documentos: [Documento], oracion_link: String, musicas: [Musica], ficheroImagenes: String, tweet: String?, icono_link: String, texto: String?, imagen_link: String) {
+        self.icono_link = icono_link
+        self.texto = texto
+        self.imagen_link = imagen_link
+        super.init(id: id, titulo: titulo, lectura: lectura, documentos: documentos, oracion_link: oracion_link, musicas: musicas, ficheroImagenes: ficheroImagenes, tweet: tweet)
+    }
+    
+    override func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(icono_link, forKey: Keys.icono_linkKey)
+        aCoder.encodeObject(texto, forKey: Keys.textoKey)
+        aCoder.encodeObject(imagen_link, forKey: Keys.imagen_linkKey)
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(titulo, forKey: Keys.tituloKey)
+        aCoder.encodeObject(lectura, forKey: Keys.lecturaKey)
+        aCoder.encodeObject(documentos, forKey: Keys.documentosKey)
+        aCoder.encodeObject(oracion_link, forKey: Keys.oracion_linkKey)
+        aCoder.encodeObject(musicas, forKey: Keys.musicasKey)
+        aCoder.encodeObject(ficheroImagenes, forKey: Keys.ficheroImagenesKey)
+        aCoder.encodeObject(tweet, forKey: Keys.tweetKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let icono_link_aux = aDecoder.decodeObjectForKey(Keys.icono_linkKey) as! String
+        let texto_aux = aDecoder.decodeObjectForKey(Keys.textoKey) as? String
+        let imagen_link_aux = aDecoder.decodeObjectForKey(Keys.imagen_linkKey) as! String
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let titulo_aux = aDecoder.decodeObjectForKey(Keys.tituloKey) as! String
+        let lectura_aux = aDecoder.decodeObjectForKey(Keys.lecturaKey) as! [Lectura]
+        let documentos_aux = aDecoder.decodeObjectForKey(Keys.documentosKey) as! [Documento]
+        let oracion_link_aux = aDecoder.decodeObjectForKey(Keys.oracion_linkKey) as! String
+        let musicas_aux = aDecoder.decodeObjectForKey(Keys.musicasKey) as! [Musica]
+        let ficheroImagenes_aux = aDecoder.decodeObjectForKey(Keys.ficheroImagenesKey) as! String
+        let tweet_aux = aDecoder.decodeObjectForKey(Keys.tweetKey) as? String
+        self.init(id: id_aux, titulo: titulo_aux, lectura: lectura_aux, documentos: documentos_aux, oracion_link: oracion_link_aux, musicas: musicas_aux, ficheroImagenes: ficheroImagenes_aux, tweet: tweet_aux, icono_link: icono_link_aux, texto: texto_aux, imagen_link: imagen_link_aux)
+    }
 }
 
-class Lectura {
+class Lectura: NSObject, NSCoding {
     var id: Int
     var cita: String
     var texto: String?
+    
+    struct Keys {
+        static let idKey = "id"
+        static let citaKey = "cita"
+        static let textoKey = "texto"
+    }
     
     init(entrada_json : NSDictionary) {
         id = entrada_json.valueForKey("id") as! Int
@@ -353,23 +510,68 @@ class Lectura {
         texto = entrada_json.valueForKey("texto") as? String
     }
     
+    init(id: Int, cita: String, texto: String?) {
+        self.id = id
+        self.cita = cita
+        self.texto = texto
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(cita, forKey: Keys.citaKey)
+        aCoder.encodeObject(texto, forKey: Keys.textoKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let cita_aux = aDecoder.decodeObjectForKey(Keys.citaKey) as! String
+        let texto_aux = aDecoder.decodeObjectForKey(Keys.textoKey) as? String
+        self.init(id: id_aux, cita: cita_aux, texto: texto_aux)
+    }
 }
 
-class Documento {
+class Documento: NSObject, NSCoding {
     var texto: String
     var nombre: String
+    
+    struct Keys {
+        static let textoKey = "texto"
+        static let nombreKey = "nombre"
+    }
     
     init(entrada_json : NSDictionary) {
         print("Documento")
         texto = String("\(servidor)\(entrada_json.valueForKey("texto")!)")
         nombre = entrada_json.valueForKey("nombre") as! String
     }
+    
+    init(texto: String, nombre: String) {
+        self.texto = texto
+        self.nombre = nombre
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(texto, forKey: Keys.textoKey)
+        aCoder.encodeObject(nombre, forKey: Keys.nombreKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let texto_aux = aDecoder.decodeObjectForKey(Keys.textoKey) as! String
+        let nombre_aux = aDecoder.decodeObjectForKey(Keys.nombreKey) as! String
+        self.init(texto: texto_aux, nombre: nombre_aux)
+    }
 }
 
-class Musica {
+class Musica: NSObject, NSCoding {
     var cancion: Cancion
     var coleccion: Coleccion
     var permiso: Permiso
+    
+    struct Keys {
+        static let cancionKey = "cancion"
+        static let coleccionKey = "coleccion"
+        static let permisoKey = "permiso"
+    }
     
     init(entrada_json : NSDictionary) {
         print("Musica")
@@ -377,14 +579,41 @@ class Musica {
         coleccion = Coleccion(entrada_json: entrada_json.valueForKey("coleccion") as! NSDictionary)
         permiso = Permiso(entrada_json: entrada_json.valueForKey("permiso") as! NSDictionary)
     }
+    
+    init(cancion: Cancion, coleccion: Coleccion, permiso: Permiso) {
+        self.cancion = cancion
+        self.coleccion = coleccion
+        self.permiso = permiso
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(cancion, forKey: Keys.cancionKey)
+        aCoder.encodeObject(coleccion, forKey: Keys.coleccionKey)
+        aCoder.encodeObject(permiso, forKey: Keys.permisoKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let cancion_aux = aDecoder.decodeObjectForKey(Keys.cancionKey) as! Cancion
+        let coleccion_aux = aDecoder.decodeObjectForKey(Keys.coleccionKey) as! Coleccion
+        let permiso_aux = aDecoder.decodeObjectForKey(Keys.permisoKey) as! Permiso
+        self.init(cancion: cancion_aux, coleccion: coleccion_aux, permiso: permiso_aux)
+    }
 }
 
-class Cancion {
+class Cancion: NSObject, NSCoding {
     var id: Int
     var titulo: String
     var autor: String?
     var interprete: String?
     var id_coleccion: Int
+    
+    struct Keys {
+        static let idKey = "id"
+        static let tituloKey = "titulo"
+        static let autorKey = "autor"
+        static let interpreteKey = "interprete"
+        static let id_coleccionKey = "id_coleccion"
+    }
     
     init(entrada_json: NSDictionary) {
         print("Cancion")
@@ -394,13 +623,46 @@ class Cancion {
         interprete = entrada_json.valueForKey("interprete") as? String
         id_coleccion = entrada_json.valueForKey("id_coleccion") as! Int
     }
+    
+    init(id: Int, titulo: String, autor: String?, interprete: String?, id_coleccion: Int) {
+        self.id = id
+        self.titulo = titulo
+        self.autor = autor
+        self.interprete = interprete
+        self.id_coleccion = id_coleccion
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(titulo, forKey: Keys.tituloKey)
+        aCoder.encodeObject(autor, forKey: Keys.autorKey)
+        aCoder.encodeObject(interprete, forKey: Keys.interpreteKey)
+        aCoder.encodeObject(id_coleccion, forKey: Keys.id_coleccionKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.id_coleccionKey) as! Int
+        let titulo_aux = aDecoder.decodeObjectForKey(Keys.tituloKey) as! String
+        let autor_aux = aDecoder.decodeObjectForKey(Keys.autorKey) as? String
+        let interprete_aux = aDecoder.decodeObjectForKey(Keys.interpreteKey) as? String
+        let id_coleccion_aux = aDecoder.decodeObjectForKey(Keys.id_coleccionKey) as! Int
+        self.init(id: id_aux, titulo: titulo_aux, autor: autor_aux, interprete: interprete_aux, id_coleccion: id_coleccion_aux)
+    }
+    
 }
 
-class Coleccion {
+class Coleccion: NSObject, NSCoding {
     var id: Int
     var nombre: String
     var url_compra: String
     var id_permiso: Int
+    
+    struct Keys {
+        static let idKey = "id"
+        static let nombreKey = "nombre"
+        static let url_compraKey = "url_compra"
+        static let id_permisoKey = "id_permiso"
+    }
     
     init(entrada_json: NSDictionary) {
         print("Coleccion")
@@ -409,13 +671,42 @@ class Coleccion {
         url_compra = entrada_json.valueForKey("url_compra") as! String
         id_permiso = entrada_json.valueForKey("id_permiso") as! Int
     }
+    
+    init(id: Int, nombre: String, url_compra: String, id_permiso: Int) {
+        self.id = id
+        self.nombre = nombre
+        self.url_compra = url_compra
+        self.id_permiso = id_permiso
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(nombre, forKey: Keys.nombreKey)
+        aCoder.encodeObject(url_compra, forKey: Keys.url_compraKey)
+        aCoder.encodeObject(id_permiso, forKey: Keys.id_permisoKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let nombre_aux = aDecoder.decodeObjectForKey(Keys.nombreKey) as! String
+        let url_compra_aux = aDecoder.decodeObjectForKey(Keys.url_compraKey) as! String
+        let id_permiso_aux = aDecoder.decodeObjectForKey(Keys.id_permisoKey) as! Int
+        self.init(id: id_aux, nombre: nombre_aux, url_compra: url_compra_aux, id_permiso: id_permiso_aux)
+    }
 }
 
-class Permiso {
+class Permiso: NSObject, NSCoding {
     var id: Int
     var formula: String
     var propietario: String
     var url: String
+    
+    struct Keys {
+        static let idKey = "id"
+        static let formulaKey = "formula"
+        static let propietarioKey = "propietario"
+        static let urlKey = "url"
+    }
     
     init(entrada_json: NSDictionary) {
         print("Permiso")
@@ -423,6 +714,28 @@ class Permiso {
         formula = entrada_json.valueForKey("formula") as! String
         propietario = entrada_json.valueForKey("propietario") as! String
         url = entrada_json.valueForKey("url") as! String
+    }
+    
+    init(id: Int, formula: String, propietario: String, url: String) {
+        self.id = id
+        self.formula = formula
+        self.propietario = propietario
+        self.url = url
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(id, forKey: Keys.idKey)
+        aCoder.encodeObject(formula, forKey: Keys.formulaKey)
+        aCoder.encodeObject(propietario, forKey: Keys.propietarioKey)
+        aCoder.encodeObject(url, forKey: Keys.urlKey)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let id_aux = aDecoder.decodeObjectForKey(Keys.idKey) as! Int
+        let formula_aux = aDecoder.decodeObjectForKey(Keys.formulaKey) as! String
+        let propietario_aux = aDecoder.decodeObjectForKey(Keys.propietarioKey) as! String
+        let url_aux = aDecoder.decodeObjectForKey(Keys.urlKey) as! String
+        self.init(id: id_aux, formula: formula_aux, propietario: propietario_aux, url: url_aux)
     }
 }
 
@@ -576,24 +889,22 @@ func obtenPortada() {
 // MARK: Obtención datos BD
 func cargaPortadas() -> Portada? {
     let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(Portada.ArchiveURL.path!) as? Portada
-    print(Portada.ArchiveURL.path)
+    print(Portada.ArchiveURL.path!)
     return aux
 }
 
 func cargaPortadaId() -> PortadaId? {
     let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(PortadaId.ArchiveURL.path!) as? PortadaId
-    print(PortadaId.ArchiveURL.path)
+    print(PortadaId.ArchiveURL.path!)
     return aux
 }
 
-func guardaPortadas(portada: Portada) -> Bool {
-    let exito = NSKeyedArchiver.archiveRootObject(portada, toFile: Portada.ArchiveURL.path!)
-    print(Portada.ArchiveURL.path)
-    return exito
+func guardaPortadas(portada: Portada) {
+    NSKeyedArchiver.archiveRootObject(portada, toFile: Portada.ArchiveURL.path!)
+    print(Portada.ArchiveURL.path!)
 }
 
-func guardaPortadaId(portadaId: PortadaId) -> Bool {
-    let exito = NSKeyedArchiver.archiveRootObject(portadaId, toFile: PortadaId.ArchiveURL.path!)
-    print(PortadaId.ArchiveURL.path)
-    return exito
+func guardaPortadaId(portadaId: PortadaId) {
+    NSKeyedArchiver.archiveRootObject(portadaId, toFile: PortadaId.ArchiveURL.path!)
+    print(PortadaId.ArchiveURL.path!)
 }
