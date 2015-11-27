@@ -24,20 +24,31 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="1600"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="oración de hoy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kaJ-eW-kPL">
-                                                <rect key="frame" x="244" y="290" width="113" height="21"/>
+                                                <rect key="frame" x="223" y="290" width="154" height="29"/>
                                                 <animations/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
+                                                <color key="textColor" red="0.6588235294" green="0.16078431369999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="13I-cu-9yt">
+                                                <rect key="frame" x="250" y="114" width="100" height="135"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="rxx-cW-fla"/>
+                                                    <constraint firstAttribute="height" constant="135" id="zTy-Xv-eqv"/>
+                                                </constraints>
+                                                <state key="normal" title="Button" image="bt_play_rojo.png"/>
+                                            </button>
                                         </subviews>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="kaJ-eW-kPL" firstAttribute="top" secondItem="4Yh-4O-Vah" secondAttribute="top" constant="290" id="06h-C4-NxZ"/>
+                                            <constraint firstItem="kaJ-eW-kPL" firstAttribute="top" secondItem="13I-cu-9yt" secondAttribute="bottom" constant="41" id="7nl-JI-LTA"/>
                                             <constraint firstItem="kaJ-eW-kPL" firstAttribute="centerX" secondItem="4Yh-4O-Vah" secondAttribute="centerX" id="VkK-iE-vlX"/>
                                             <constraint firstAttribute="height" constant="1600" id="Xxi-VD-vGI"/>
                                             <constraint firstAttribute="width" constant="600" id="jN5-ni-45O"/>
+                                            <constraint firstItem="13I-cu-9yt" firstAttribute="centerX" secondItem="4Yh-4O-Vah" secondAttribute="centerX" id="rss-ZV-Jjy"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -98,6 +109,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="bt_play_rojo.png" width="223" height="373"/>
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>
