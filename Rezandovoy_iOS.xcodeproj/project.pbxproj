@@ -17,6 +17,7 @@
 		D470A8481BF0CDC40078C231 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D470A8461BF0CDC40078C231 /* LaunchScreen.storyboard */; };
 		D470A8531BF0CDC40078C231 /* Rezandovoy_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A8521BF0CDC40078C231 /* Rezandovoy_iOSTests.swift */; };
 		D470A85E1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */; };
+		D4A4A49C1C06EF9A009C70B4 /* bt_play_rojo.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A4A49B1C06EF9A009C70B4 /* bt_play_rojo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		D470A8591BF0CDC40078C231 /* Rezandovoy_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Rezandovoy_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rezandovoy_iOSUITests.swift; sourceTree = "<group>"; };
 		D470A85F1BF0CDC40078C231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4A4A49B1C06EF9A009C70B4 /* bt_play_rojo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bt_play_rojo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		D470A83A1BF0CDC40078C231 /* Rezandovoy_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D4A4A49B1C06EF9A009C70B4 /* bt_play_rojo.png */,
 				D40EF7241BFA06200027089D /* ic_rv_blanco.png */,
 				D470A83B1BF0CDC40078C231 /* AppDelegate.swift */,
 				D470A83D1BF0CDC40078C231 /* FirstViewController.swift */,
@@ -240,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D40EF7251BFA06200027089D /* ic_rv_blanco.png in Resources */,
+				D4A4A49C1C06EF9A009C70B4 /* bt_play_rojo.png in Resources */,
 				D470A8481BF0CDC40078C231 /* LaunchScreen.storyboard in Resources */,
 				D470A8451BF0CDC40078C231 /* Assets.xcassets in Resources */,
 				D470A8431BF0CDC40078C231 /* Main.storyboard in Resources */,

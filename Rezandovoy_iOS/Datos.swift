@@ -889,22 +889,18 @@ func obtenPortada() {
 // MARK: Obtención datos BD
 func cargaPortadas() -> Portada? {
     let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(Portada.ArchiveURL.path!) as? Portada
-    print(Portada.ArchiveURL.path!)
     return aux
 }
 
 func cargaPortadaId() -> PortadaId? {
     let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(PortadaId.ArchiveURL.path!) as? PortadaId
-    print(PortadaId.ArchiveURL.path!)
     return aux
 }
 
 func guardaPortadas(portada: Portada) {
     NSKeyedArchiver.archiveRootObject(portada, toFile: Portada.ArchiveURL.path!)
-    print(Portada.ArchiveURL.path!)
 }
 
 func guardaPortadaId(portadaId: PortadaId) {
     NSKeyedArchiver.archiveRootObject(portadaId, toFile: PortadaId.ArchiveURL.path!)
-    print(PortadaId.ArchiveURL.path!)
 }

@@ -14,7 +14,7 @@ class FirstViewController: UIViewController {
         super.viewDidLoad()
         let id = cargaPortadaId()
         let portada = cargaPortadas()
-        print("\n\nNo me ejecuto hasta que acaba\n \(id!.id)\n\n \(portada!)")
+        print("\n\nNo me ejecuto hasta que acaba\n \(id!.id)\n\n \(portada!.semanaActual.oracionesPeriodicaAdulto[0].fecha)")
         
     }
 
