@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="ic_rv_blanco.png" translatesAutoresizingMaskIntoConstraints="NO" id="2ck-iB-f6F">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="ic_rv_blanco" translatesAutoresizingMaskIntoConstraints="NO" id="2ck-iB-f6F">
                                 <rect key="frame" x="200" y="244" width="200" height="111"/>
                                 <animations/>
                                 <constraints>
@@ -40,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_rv_blanco.png" width="667" height="371"/>
+        <image name="ic_rv_blanco" width="666" height="370"/>
     </resources>
 </document>
