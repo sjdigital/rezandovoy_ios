@@ -9,13 +9,16 @@
 /* Begin PBXBuildFile section */
 		D44086811BF20E57001BCC96 /* Datos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44086801BF20E57001BCC96 /* Datos.swift */; };
 		D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83B1BF0CDC40078C231 /* AppDelegate.swift */; };
-		D470A83E1BF0CDC40078C231 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83D1BF0CDC40078C231 /* FirstViewController.swift */; };
-		D470A8401BF0CDC40078C231 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83F1BF0CDC40078C231 /* SecondViewController.swift */; };
+		D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83D1BF0CDC40078C231 /* InicioViewController.swift */; };
 		D470A8431BF0CDC40078C231 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D470A8411BF0CDC40078C231 /* Main.storyboard */; };
 		D470A8451BF0CDC40078C231 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D470A8441BF0CDC40078C231 /* Assets.xcassets */; };
 		D470A8481BF0CDC40078C231 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D470A8461BF0CDC40078C231 /* LaunchScreen.storyboard */; };
 		D470A8531BF0CDC40078C231 /* Rezandovoy_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A8521BF0CDC40078C231 /* Rezandovoy_iOSTests.swift */; };
 		D470A85E1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */; };
+		D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */; };
+		D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */; };
+		D4D0F7581C2AF36300AE0801 /* infoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7571C2AF36300AE0801 /* infoViewController.swift */; };
+		D4D74DDE1C4F81A9005750B9 /* audioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,10 +40,11 @@
 
 /* Begin PBXFileReference section */
 		D44086801BF20E57001BCC96 /* Datos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Datos.swift; sourceTree = "<group>"; };
+		D4699ADA1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		D4699ADB1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		D470A8381BF0CDC40078C231 /* Rezandovoy_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rezandovoy_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D470A83B1BF0CDC40078C231 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D470A83D1BF0CDC40078C231 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		D470A83F1BF0CDC40078C231 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		D470A83D1BF0CDC40078C231 /* InicioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InicioViewController.swift; sourceTree = "<group>"; };
 		D470A8421BF0CDC40078C231 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D470A8441BF0CDC40078C231 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D470A8471BF0CDC40078C231 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +55,10 @@
 		D470A8591BF0CDC40078C231 /* Rezandovoy_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Rezandovoy_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rezandovoy_iOSUITests.swift; sourceTree = "<group>"; };
 		D470A85F1BF0CDC40078C231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = especialesViewController.swift; sourceTree = "<group>"; };
+		D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infantilViewController.swift; sourceTree = "<group>"; };
+		D4D0F7571C2AF36300AE0801 /* infoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoViewController.swift; sourceTree = "<group>"; };
+		D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = audioViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,13 +110,16 @@
 			isa = PBXGroup;
 			children = (
 				D470A83B1BF0CDC40078C231 /* AppDelegate.swift */,
-				D470A83D1BF0CDC40078C231 /* FirstViewController.swift */,
-				D470A83F1BF0CDC40078C231 /* SecondViewController.swift */,
+				D470A83D1BF0CDC40078C231 /* InicioViewController.swift */,
 				D470A8411BF0CDC40078C231 /* Main.storyboard */,
+				D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */,
+				D4D0F7571C2AF36300AE0801 /* infoViewController.swift */,
+				D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */,
 				D470A8441BF0CDC40078C231 /* Assets.xcassets */,
 				D470A8461BF0CDC40078C231 /* LaunchScreen.storyboard */,
 				D470A8491BF0CDC40078C231 /* Info.plist */,
 				D44086801BF20E57001BCC96 /* Datos.swift */,
+				D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */,
 			);
 			path = Rezandovoy_iOS;
 			sourceTree = "<group>";
@@ -263,10 +274,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D470A8401BF0CDC40078C231 /* SecondViewController.swift in Sources */,
+				D4D0F7581C2AF36300AE0801 /* infoViewController.swift in Sources */,
 				D44086811BF20E57001BCC96 /* Datos.swift in Sources */,
+				D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */,
 				D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */,
-				D470A83E1BF0CDC40078C231 /* FirstViewController.swift in Sources */,
+				D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */,
+				D4D74DDE1C4F81A9005750B9 /* audioViewController.swift in Sources */,
+				D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +320,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				D470A8421BF0CDC40078C231 /* Base */,
+				D4699ADA1C60C69B003EE449 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -314,6 +329,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				D470A8471BF0CDC40078C231 /* Base */,
+				D4699ADB1C60C69B003EE449 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -414,7 +430,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "adc64f65-ea69-4716-8237-1e244e890086";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -428,7 +444,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "adc64f65-ea69-4716-8237-1e244e890086";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

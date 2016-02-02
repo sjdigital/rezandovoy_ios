@@ -1,0 +1,21 @@
+
+/* Class = "UIBarButtonItem"; title = "Especiales"; ObjectID = "JhJ-Am-GL9"; */
+"JhJ-Am-GL9.title" = "Especiales";
+
+/* Class = "UITabBarItem"; title = "Info"; ObjectID = "RSQ-Gc-Jpf"; */
+"RSQ-Gc-Jpf.title" = "Info";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "Ues-Tk-gbM"; */
+"Ues-Tk-gbM.text" = "00:00";
+
+/* Class = "UITabBarItem"; title = "Rezandovoy"; ObjectID = "acW-dT-cKf"; */
+"acW-dT-cKf.title" = "Rezandovoy";
+
+/* Class = "UITabBarItem"; title = "Mis Oraciones"; ObjectID = "iab-HW-Hlk"; */
+"iab-HW-Hlk.title" = "Mis Oraciones";
+
+/* Class = "UINavigationItem"; title = "Mis Oraciones"; ObjectID = "omS-AA-tiK"; */
+"omS-AA-tiK.title" = "Mis Oraciones";
+
+/* Class = "UITabBarItem"; title = "Infantil"; ObjectID = "wBN-Sw-OnU"; */
+"wBN-Sw-OnU.title" = "Infantil";
