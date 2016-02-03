@@ -8,7 +8,15 @@
 
 import UIKit
 
+// Id de la oración
 var id: Int = 0
+
+// Distintos tipos de oración:
+//      1 - Oración periodica adulto
+//      2 - Oración especial adulto
+//      3 - Oración periodica infantil
+//      4 - Oración especial infantil
+var tipo: Int = 0
 
 extension Array {
     mutating func shuffle() {
@@ -38,14 +46,23 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         webView.loadRequest(request)
     }
     
+    // Abrir el reproductor segun la id de la oración
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if navigationType == UIWebViewNavigationType.LinkClicked {
             let oracionUrl = "\(request.URL!)"
             let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
             id = Int(oracionArray[1])!
+            if oracionArray[0].rangeOfString("adultos") != nil {
+                tipo = 1
+            }
+            else if oracionArray[0].rangeOfString("especial") != nil {
+                tipo = 2
+            }
+            else if oracionArray[0].rangeOfString("infantil") != nil {
+                tipo = 3
+            }
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-            // self.presentViewController(nextViewController, animated:true, completion:nil)
             self.showViewController(nextViewController, sender: self)
             return false
         }

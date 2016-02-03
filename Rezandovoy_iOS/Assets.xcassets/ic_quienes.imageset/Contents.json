@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icono_quienessomos_22x22.png",
+      "filename" : "icono_quienessomos_48x32.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icono_quienessomos_44x44.png",
+      "filename" : "icono_quienessomos_96x64.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icono_quienessomos_66x66.png",
+      "filename" : "icono_quienessomos_144x96.png",
       "scale" : "3x"
     }
   ],

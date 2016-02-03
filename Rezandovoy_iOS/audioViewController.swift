@@ -17,14 +17,18 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var index = 0
     let animationDuration: NSTimeInterval = 1
     let switchingInterval: NSTimeInterval = 240
+    var diaLabel: UILabel?
+    var mesLabel: UILabel?
+    var numLabel: UILabel?
+    var iconoLabel: UIImageView?
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
     @IBOutlet var audioSlider: UISlider!
     @IBOutlet var timeLabel: UILabel!
-    @IBOutlet var mesLabel: UILabel!
     @IBOutlet var vistaScroll: UIScrollView!
     @IBOutlet var hojaView: UIView!
+    @IBOutlet var infoView: UIView!
     
     @IBAction func reproductor(sender: UIButton) {
         if (audioPlayer?.rate != 0.0) {
@@ -85,6 +89,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         self.hojaView.layer.borderWidth = 1.0
         self.hojaView.layer.borderColor = UIColor.whiteColor().CGColor
         
+        //Color de fondo del dia, de la scroll view y de la barra de controles
+        self.infoView.backgroundColor = UIColor(red: 10/255, green: 50/255, blue: 66/255, alpha: 0.7)
+        self.controles.backgroundColor = UIColor(red: 10/255, green: 50/255, blue: 66/255, alpha: 0.7)
+        
         //Background audio
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -100,9 +108,13 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         }
         
         print(id)
-        
+        print(tipo)
         self.imageView = UIImageView(frame: self.view.bounds)
-        getOracionById()
+        if tipo == 1 {
+            getOracionPeriodicaAdultoById()
+        } else if tipo == 2 {
+            
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -133,6 +145,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             self.tabBarController?.tabBar.hidden = false
             self.navigationController?.navigationBar.barTintColor = nil
             self.navigationController?.navigationBar.tintColor = self.view.tintColor
+            UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
             do {
                 try AVAudioSession.sharedInstance().setActive(false)
                 print("AVAudioSession is Stop")
@@ -152,7 +165,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     }
     */
     
-    func getOracionById() -> AnyObject {
+    func getOracionPeriodicaAdultoById() -> AnyObject {
         // Variables peticion JSON
         let session = NSURLSession.sharedSession()
         let postEndpoint: String = "http://rezandovoy.ovh:8080/Rezandovoy_server/api/publica/getPeriodicaAdultaById"
@@ -179,83 +192,16 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
                     
                     // Recuperar el link de la oración
-                    var aux = "http://rezandovoy.ovh/"
-                    aux += jsonDict.valueForKey("oracion_link") as! String
+                    var aux_mp3 = "http://rezandovoy.ovh/"
+                    aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
+                    self.reproductorInit(aux_mp3)
                     
-                    // Recuperar el fichero de imagenes y comprobar si esta cargado en la APP, si no usar default.
-                    let ficheroImagenes = jsonDict.valueForKey("ficheroImagenes") as! String
-                    let nombreImagenes = ficheroImagenes.characters.split{$0 == "/"}.map(String.init)
-                    var imagenes = ["\(nombreImagenes[2])_1","\(nombreImagenes[2])_2","\(nombreImagenes[2])_3","\(nombreImagenes[2])_4"]
-                    let pruebaImg: UIImage? = UIImage(named: "\(nombreImagenes[2])_1")
-                    if pruebaImg != nil {
-                        imagenes.shuffle()
-                        print(imagenes)
-                        self.fotoFondo(imagenes)
-                    }
-                    else {
-                        imagenes = ["default_1","default_2","default_3","default_4"]
-                        imagenes.shuffle()
-                        print(imagenes)
-                        self.fotoFondo(imagenes)
-                    }
+                    // LLamada a la funcion para recuperar imagenes
+                    self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
+                
+                    // LLamada a la funcion para recuperar fecha
+                    self.recuperarFecha(jsonDict.valueForKey("fecha") as? String)
                     
-                    // Recuperar la fecha y darla formato
-                    format.dateFormat = "MMM d, yyyy"
-                    let aux_fecha = jsonDict.valueForKey("fecha") as! String
-                    let fecha_aux = format.dateFromString(aux_fecha)!
-                    let esp = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-                    esp.timeZone = NSTimeZone(name: "Europe/Madrid")!
-                    let requestedDateComponents: NSCalendarUnit = [.Year,.Month,.Day]
-                    let fecha = esp.components(requestedDateComponents, fromDate: fecha_aux)
-                    let calendario = NSCalendar.currentCalendar().dateFromComponents(fecha)
-                    format.dateFormat = "MMMM"
-                    let mes = format.stringFromDate(calendario!)
-                    self.datos(mes)
-                    
-                    // Inicialización del reproductor con la url de la oración
-                    let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
-                    self.audioPlayer = AVPlayer(playerItem: mp3url)
-                    self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
-                        time in
-                        if (self.audioPlayer?.currentItem!.currentTime() < self.audioPlayer?.currentItem!.duration) {
-                            // Poner tiempo en texto
-                            let currentMins = Int(CMTimeGetSeconds(time)) / 60
-                            let currentSecs = Int(CMTimeGetSeconds(time)) % 60
-                            var timeString: String = ""
-                            if (currentSecs>=10 && currentMins<10) {
-                                timeString = "0\(currentMins):\(currentSecs)"
-                            }
-                            else if (currentSecs<10 && currentMins<10) {
-                                timeString = "0\(currentMins):0\(currentSecs)"
-                            }
-                            else if (currentSecs>=10 && currentMins>=10) {
-                                timeString = "\(currentMins):\(currentSecs)"
-                            }
-                            else {
-                                timeString = "\(currentMins):0\(currentSecs)"
-                            }
-                            if (UIApplication.sharedApplication().applicationState == .Active) {
-                                self.timeLabel.text = timeString
-                            } else {
-                                print("Background: \(timeString)")
-                            }
-                            
-                            //Actualizar la posicion del slider
-                            if (self.audioSlider.touchInside == false) {
-                                let tiempoActual = CMTimeGetSeconds((self.audioPlayer?.currentItem!.currentTime())!)
-                                let duracion = CMTimeGetSeconds((self.audioPlayer?.currentItem!.duration)!)
-                                let normalizedTime = Float(tiempoActual * 100.0 / duracion)
-                                self.audioSlider.value = normalizedTime
-                            }
-                        }
-                        else {
-                            self.audioPlayer?.pause()
-                            self.botonPlay.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
-                            self.audioSlider.value = 0.0
-                            self.audioPlayer?.seekToTime(CMTimeMake(0, 1))
-                        }
-                    }
-                    self.reproductor(self.botonPlay)
                 } else {
                     print("Error")
                 }
@@ -266,6 +212,118 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         return true
     }
     
+    // Inicializar reproductor
+    func reproductorInit(aux: String)->Void {
+        let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
+        self.audioPlayer = AVPlayer(playerItem: mp3url)
+        self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
+            time in
+            if (self.audioPlayer?.currentItem!.currentTime() < self.audioPlayer?.currentItem!.duration) {
+                // Poner tiempo en texto
+                let currentMins = Int(CMTimeGetSeconds(time)) / 60
+                let currentSecs = Int(CMTimeGetSeconds(time)) % 60
+                var timeString: String = ""
+                if (currentSecs>=10 && currentMins<10) {
+                    timeString = "0\(currentMins):\(currentSecs)"
+                }
+                else if (currentSecs<10 && currentMins<10) {
+                    timeString = "0\(currentMins):0\(currentSecs)"
+                }
+                else if (currentSecs>=10 && currentMins>=10) {
+                    timeString = "\(currentMins):\(currentSecs)"
+                }
+                else {
+                    timeString = "\(currentMins):0\(currentSecs)"
+                }
+                if (UIApplication.sharedApplication().applicationState == .Active) {
+                    self.timeLabel.text = timeString
+                } else {
+                    print("Background: \(timeString)")
+                }
+                
+                //Actualizar la posicion del slider
+                if (self.audioSlider.touchInside == false) {
+                    let tiempoActual = CMTimeGetSeconds((self.audioPlayer?.currentItem!.currentTime())!)
+                    let duracion = CMTimeGetSeconds((self.audioPlayer?.currentItem!.duration)!)
+                    let normalizedTime = Float(tiempoActual * 100.0 / duracion)
+                    self.audioSlider.value = normalizedTime
+                }
+            }
+            else {
+                self.audioPlayer?.pause()
+                self.botonPlay.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
+                self.audioSlider.value = 0.0
+                self.audioPlayer?.seekToTime(CMTimeMake(0, 1))
+            }
+        }
+        self.reproductor(self.botonPlay)
+    }
+    
+    // Recuperar la fecha y darla formato, si no, recuperar el icono de la oración
+    func recuperarFecha(aux_fecha: String!)-> Void {
+        format.dateFormat = "MMM d, yyyy"
+        let fecha_aux = format.dateFromString(aux_fecha!)!
+        let esp = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        esp.timeZone = NSTimeZone(name: "Europe/Madrid")!
+        let requestedDateComponents: NSCalendarUnit = [.Year,.Month,.Day]
+        let fecha = esp.components(requestedDateComponents, fromDate: fecha_aux)
+        let calendario = NSCalendar.currentCalendar().dateFromComponents(fecha)
+        format.locale = NSLocale(localeIdentifier: "es_ES")
+        format.dateFormat = "MMMM"
+        let mes = format.stringFromDate(calendario!)
+        format.dateFormat = "EEEE"
+        let dia = format.stringFromDate(calendario!)
+        self.datosFecha(mes, aux_diaNum: String(fecha.day), aux_dia: dia)
+    }
+    
+    // Maqueta la hoja del calendario
+    func datosFecha(aux_mes: NSString?, aux_diaNum: NSString?, aux_dia: NSString?)->Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            // Etiqueta para poner el número del día
+            self.numLabel = UILabel(frame: CGRectMake(0,21,self.hojaView.frame.size.width,60))
+            self.numLabel?.textAlignment = NSTextAlignment.Center
+            self.numLabel?.textColor = UIColor.whiteColor()
+            self.numLabel?.font = UIFont(name: "Aleo-Regular", size: 50)
+            self.numLabel?.text = aux_diaNum as? String
+            self.hojaView.addSubview(self.numLabel!)
+
+            // Etiqueta para poner el nombre del mes
+            self.mesLabel = UILabel(frame: CGRectMake(0,0,self.hojaView.frame.size.width,21))
+            self.mesLabel?.textAlignment = NSTextAlignment.Center
+            self.mesLabel?.textColor = UIColor.whiteColor()
+            self.mesLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
+            self.mesLabel?.text = aux_mes as? String
+            self.hojaView.addSubview(self.mesLabel!)
+            
+            // Etiqueta para poner el dia en texto
+            self.diaLabel = UILabel(frame: CGRectMake(0,self.hojaView.frame.size.height-21,self.hojaView.frame.size.width,21))
+            self.diaLabel?.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.2)
+            self.diaLabel?.textAlignment = NSTextAlignment.Center
+            self.diaLabel?.textColor = UIColor.whiteColor()
+            self.diaLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
+            self.diaLabel?.text = aux_dia as? String
+            self.hojaView.addSubview(self.diaLabel!)
+        }
+    }
+    
+    // Recuperar el fichero de imagenes y comprobar si esta cargado en la APP, si no usar default.
+    func recuperarImagenes(ficheroImagenes: String!)-> Void {
+        let nombreImagenes = ficheroImagenes.characters.split{$0 == "/"}.map(String.init)
+        var imagenes = ["\(nombreImagenes[2])_1","\(nombreImagenes[2])_2","\(nombreImagenes[2])_3","\(nombreImagenes[2])_4"]
+        let pruebaImg: UIImage? = UIImage(named: "\(nombreImagenes[2])_1")
+        if pruebaImg != nil {
+            imagenes.shuffle()
+            self.fotoFondo(imagenes)
+        }
+        else {
+            imagenes = ["default_1","default_2","default_3","default_4"]
+            imagenes.shuffle()
+            self.fotoFondo(imagenes)
+        }
+    }
+    
+    // Cargar las imagenes en el fondo
     func fotoFondo(nombre: NSArray)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
             let images = [
@@ -278,16 +336,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             self.animateImageView(images)
             self.view.addSubview(self.imageView!)
             self.view.bringSubviewToFront(self.controles)
-            self.view.bringSubviewToFront(self.vistaScroll)
+            self.view.bringSubviewToFront(self.infoView)
         }
     }
     
-    func datos(aux_mes: NSString)->Void {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.mesLabel.text = aux_mes as String
-        }
-    }
-    
+    // Crear slider de las imagenes de fondo
     func animateImageView (imagenes: NSArray) {
         CATransaction.begin()
         

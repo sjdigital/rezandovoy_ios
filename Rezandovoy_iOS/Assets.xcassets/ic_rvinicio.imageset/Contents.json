@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icono_rezandovoy_22x22.png",
+      "filename" : "icono_rezandovoy_48x32.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icono_rezandovoy_44x44.png",
+      "filename" : "icono_rezandovoy_96x64.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icono_rezandovoy_66x66.png",
+      "filename" : "icono_rezandovoy_144x96.png",
       "scale" : "3x"
     }
   ],
