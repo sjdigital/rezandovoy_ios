@@ -16,6 +16,7 @@
 		D470A8531BF0CDC40078C231 /* Rezandovoy_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A8521BF0CDC40078C231 /* Rezandovoy_iOSTests.swift */; };
 		D470A85E1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */; };
 		D47A58851C625ADB000DFA61 /* Aleo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */; };
+		D4A2D8FC1C637C6600200E7A /* especialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2D8FB1C637C6600200E7A /* especialViewController.swift */; };
 		D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */; };
 		D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */; };
 		D4D0F7581C2AF36300AE0801 /* infoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7571C2AF36300AE0801 /* infoViewController.swift */; };
@@ -57,6 +58,7 @@
 		D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rezandovoy_iOSUITests.swift; sourceTree = "<group>"; };
 		D470A85F1BF0CDC40078C231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Regular.otf"; sourceTree = "<group>"; };
+		D4A2D8FB1C637C6600200E7A /* especialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = especialViewController.swift; sourceTree = "<group>"; };
 		D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = especialesViewController.swift; sourceTree = "<group>"; };
 		D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infantilViewController.swift; sourceTree = "<group>"; };
 		D4D0F7571C2AF36300AE0801 /* infoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				D470A83D1BF0CDC40078C231 /* InicioViewController.swift */,
 				D470A8411BF0CDC40078C231 /* Main.storyboard */,
 				D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */,
+				D4A2D8FB1C637C6600200E7A /* especialViewController.swift */,
 				D4D0F7571C2AF36300AE0801 /* infoViewController.swift */,
 				D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */,
 				D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */,
@@ -282,6 +285,7 @@
 				D44086811BF20E57001BCC96 /* Datos.swift in Sources */,
 				D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */,
 				D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */,
+				D4A2D8FC1C637C6600200E7A /* especialViewController.swift in Sources */,
 				D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */,
 				D4D74DDE1C4F81A9005750B9 /* audioViewController.swift in Sources */,
 				D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */,

@@ -113,9 +113,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         if tipo == 1 {
             getOracionPeriodicaAdultoById()
         } else if tipo == 2 {
-            
+            getOracionEspecialAdultaById()
         }
-        // Do any additional setup after loading the view.
     }
     
     override func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -165,6 +164,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     }
     */
     
+    // Llamada al servidor REST para recibir la periodica
     func getOracionPeriodicaAdultoById() -> AnyObject {
         // Variables peticion JSON
         let session = NSURLSession.sharedSession()
@@ -196,6 +196,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
+                    // LLamada a la funcion para poner el titulo
+                    self.cambiaTitulo(jsonDict.valueForKey("titulo") as! String)
+                    
                     // LLamada a la funcion para recuperar imagenes
                     self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
                 
@@ -212,8 +215,60 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         return true
     }
     
+    // Llamada al servidor REST para recibir la especial
+    func getOracionEspecialAdultaById() -> AnyObject {
+        // Variables peticion JSON
+        let session = NSURLSession.sharedSession()
+        let postEndpoint: String = "http://rezandovoy.ovh:8080/Rezandovoy_server/api/publica/getEspecialAdultaById"
+        let postParams: NSDictionary = ["id": "\(id)"]
+        let url = NSURL(string: postEndpoint)!
+        let request = NSMutableURLRequest(URL: url)
+        
+        request.HTTPMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Funca by id")
+        } catch {
+            print("No funca by id")
+        }
+        
+        session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
+                let respuesta = response as? NSHTTPURLResponse
+                print("Not a 200 response is:\n \(respuesta)")
+                return
+            }
+            do {
+                if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    
+                    // Recuperar el link de la oración
+                    var aux_mp3 = "http://rezandovoy.ovh/"
+                    aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
+                    self.reproductorInit(aux_mp3)
+                    
+                    // LLamada a la funcion para poner el titulo
+                    self.cambiaTitulo(jsonDict.valueForKey("titulo") as! String)
+                    
+                    // LLamada a la funcion para recuperar imagenes
+                    self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    
+                    // LLamada a la funcion para recuperar fecha
+                    self.recuperarIcono(jsonDict.valueForKey("icono_link") as? String)
+                    
+                } else {
+                    print("Error")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }).resume()
+        return true
+    }
+    
     // Inicializar reproductor
-    func reproductorInit(aux: String)->Void {
+    func reproductorInit(var aux: String)->Void {
+        aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
         self.audioPlayer = AVPlayer(playerItem: mp3url)
         self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
@@ -259,7 +314,32 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         self.reproductor(self.botonPlay)
     }
     
-    // Recuperar la fecha y darla formato, si no, recuperar el icono de la oración
+    // Cambiar el titulo de la barra de navegacion
+    func cambiaTitulo(var aux_titulo: String!)-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            aux_titulo = aux_titulo.uppercaseString
+            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
+            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
+            self.navigationController?.navigationBar.topItem!.title = aux_titulo
+        }
+    }
+    
+    // Recuperar el icono y darle formato.
+    func recuperarIcono(aux_icono: String!)-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.hojaView.layer.borderWidth = 0.0
+            var aux = "http://rezandovoy.ovh/"
+            aux += aux_icono
+            aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            let filePath = NSURL(string: aux)
+            let icono = NSData(contentsOfURL: filePath!)
+            self.iconoLabel = UIImageView(frame: self.hojaView.bounds)
+            self.iconoLabel?.image = UIImage(data: icono!)
+            self.hojaView.addSubview(self.iconoLabel!)
+        }
+    }
+    
+    // Recuperar la fecha y darle formato
     func recuperarFecha(aux_fecha: String!)-> Void {
         format.dateFormat = "MMM d, yyyy"
         let fecha_aux = format.dateFromString(aux_fecha!)!

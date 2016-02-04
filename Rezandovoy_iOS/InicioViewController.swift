@@ -39,7 +39,7 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         let donativosUrl = NSURL(string: "http://rezandovoy.org/appsdonativos.php");
         UIApplication.sharedApplication().openURL(donativosUrl!)
     }
-
+    
     func cargaPagina(){
         let requestURL = NSURL(string: url)
         let request = NSURLRequest(URL: requestURL!)
@@ -50,21 +50,33 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if navigationType == UIWebViewNavigationType.LinkClicked {
             let oracionUrl = "\(request.URL!)"
-            let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
-            id = Int(oracionArray[1])!
-            if oracionArray[0].rangeOfString("adultos") != nil {
-                tipo = 1
+            if oracionUrl.rangeOfString(".php") == nil {
+                let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
+                id = Int(oracionArray[1])!
+                if oracionArray[0].rangeOfString("adultos") != nil {
+                    tipo = 1
+                }
+                else if oracionArray[0].rangeOfString("especial") != nil {
+                    tipo = 2
+                }
+                else if oracionArray[0].rangeOfString("infantil") != nil {
+                    tipo = 3
+                }
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
+                self.showViewController(nextViewController, sender: self)
+                return false
             }
-            else if oracionArray[0].rangeOfString("especial") != nil {
-                tipo = 2
+            else {
+                if oracionUrl.rangeOfString("especial.php") != nil {
+                    tipo = 2
+                    let oracionArray = oracionUrl.characters.split{$0 == "="}.map(String.init)
+                    id = Int(oracionArray[1])!
+                }
+                let nextViewControlles = storyboard!.instantiateViewControllerWithIdentifier("especialViewController") as UIViewController
+                self.showViewController(nextViewControlles, sender: self)
+                return false
             }
-            else if oracionArray[0].rangeOfString("infantil") != nil {
-                tipo = 3
-            }
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-            self.showViewController(nextViewController, sender: self)
-            return false
         }
         return true
     }

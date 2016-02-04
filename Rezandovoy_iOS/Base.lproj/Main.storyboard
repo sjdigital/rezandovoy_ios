@@ -64,7 +64,7 @@
         <!--Especiales View Controller-->
         <scene sceneID="p4i-Xi-Ehw">
             <objects>
-                <viewController id="7X3-2Z-z8N" customClass="especialesViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="especialesViewController" id="7X3-2Z-z8N" customClass="especialesViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BB0-Id-PlO"/>
                         <viewControllerLayoutGuide type="bottom" id="1vx-Qm-H7x"/>
@@ -102,11 +102,70 @@
                     <connections>
                         <outlet property="especialesIndicator" destination="9q9-XZ-drZ" id="lBx-2x-qas"/>
                         <outlet property="webView" destination="74F-Zh-a5t" id="vGp-Mo-g5O"/>
+                        <segue destination="VSX-LR-ibt" kind="show" id="dsH-J0-xZ0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OYR-56-QNB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1720" y="-834"/>
+        </scene>
+        <!--Especial View Controller-->
+        <scene sceneID="7gf-1G-mxk">
+            <objects>
+                <viewController storyboardIdentifier="especialViewController" id="VSX-LR-ibt" customClass="especialViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="X2D-5p-utP"/>
+                        <viewControllerLayoutGuide type="bottom" id="JzE-RZ-ZfL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="H9Y-2l-Zbw">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lTS-RR-t0I">
+                                <rect key="frame" x="281" y="282" width="37" height="37"/>
+                                <color key="color" red="0.6588235294" green="0.16078431369999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdK-OG-XQy">
+                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hdK-OG-XQy" firstAttribute="leading" secondItem="H9Y-2l-Zbw" secondAttribute="leading" id="50J-q7-AoI"/>
+                            <constraint firstItem="hdK-OG-XQy" firstAttribute="height" secondItem="H9Y-2l-Zbw" secondAttribute="height" constant="-108" id="WAG-sh-gEa"/>
+                            <constraint firstItem="hdK-OG-XQy" firstAttribute="top" secondItem="H9Y-2l-Zbw" secondAttribute="top" constant="64" id="awg-zz-bZd"/>
+                            <constraint firstItem="hdK-OG-XQy" firstAttribute="width" secondItem="H9Y-2l-Zbw" secondAttribute="width" id="gQv-P9-Q4Y"/>
+                            <constraint firstItem="lTS-RR-t0I" firstAttribute="centerX" secondItem="H9Y-2l-Zbw" secondAttribute="centerX" id="hiN-QA-Drh"/>
+                            <constraint firstItem="lTS-RR-t0I" firstAttribute="centerY" secondItem="H9Y-2l-Zbw" secondAttribute="centerY" id="pEo-XP-GLI"/>
+                            <constraint firstAttribute="trailing" secondItem="hdK-OG-XQy" secondAttribute="trailing" id="yKF-p9-sLN"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="RfA-Rh-Wch">
+                        <barButtonItem key="rightBarButtonItem" image="ic_donativos" id="dtF-ED-aFr">
+                            <connections>
+                                <action selector="donativos:" destination="VSX-LR-ibt" id="VhW-Qa-j4C"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="especialIndicator" destination="lTS-RR-t0I" id="nHX-8Y-vUV"/>
+                        <outlet property="searchDisplayController" destination="Ryz-CK-sYX" id="bbr-de-Tyo"/>
+                        <outlet property="webView" destination="hdK-OG-XQy" id="njp-Ro-h6H"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8OB-na-xCG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="Ryz-CK-sYX">
+                    <connections>
+                        <outlet property="delegate" destination="VSX-LR-ibt" id="xxY-Gy-zgy"/>
+                        <outlet property="searchContentsController" destination="VSX-LR-ibt" id="bkG-zb-jSK"/>
+                        <outlet property="searchResultsDataSource" destination="VSX-LR-ibt" id="RFG-G1-dao"/>
+                        <outlet property="searchResultsDelegate" destination="VSX-LR-ibt" id="WLX-9o-WP1"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="2532" y="-834"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -117,6 +176,11 @@
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="selectedImageTintColor" red="0.6588235294" green="0.16078431369999999" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.6588235294117647" green="0.16078431372549018" blue="0.22352941176470587" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="NaK-zS-a0a" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
