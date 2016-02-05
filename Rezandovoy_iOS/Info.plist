@@ -4,6 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Aleo-Italic.otf</string>
+		<string>Aleo-Bold.otf</string>
 		<string>Aleo-Regular.otf</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>

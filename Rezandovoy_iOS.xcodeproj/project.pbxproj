@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4144A261C64B05100CFE210 /* Aleo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A251C64B05000CFE210 /* Aleo-Bold.otf */; };
+		D4144A281C64B08000CFE210 /* Aleo-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A271C64B08000CFE210 /* Aleo-Italic.otf */; };
 		D44086811BF20E57001BCC96 /* Datos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44086801BF20E57001BCC96 /* Datos.swift */; };
 		D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83B1BF0CDC40078C231 /* AppDelegate.swift */; };
 		D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83D1BF0CDC40078C231 /* InicioViewController.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D4144A251C64B05000CFE210 /* Aleo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Bold.otf"; sourceTree = "<group>"; };
+		D4144A271C64B08000CFE210 /* Aleo-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Italic.otf"; sourceTree = "<group>"; };
 		D44086801BF20E57001BCC96 /* Datos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Datos.swift; sourceTree = "<group>"; };
 		D4699ADA1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		D4699ADB1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -119,7 +123,9 @@
 				D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */,
 				D4A2D8FB1C637C6600200E7A /* especialViewController.swift */,
 				D4D0F7571C2AF36300AE0801 /* infoViewController.swift */,
+				D4144A271C64B08000CFE210 /* Aleo-Italic.otf */,
 				D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */,
+				D4144A251C64B05000CFE210 /* Aleo-Bold.otf */,
 				D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */,
 				D470A8441BF0CDC40078C231 /* Assets.xcassets */,
 				D470A8461BF0CDC40078C231 /* LaunchScreen.storyboard */,
@@ -255,6 +261,8 @@
 			files = (
 				D470A8481BF0CDC40078C231 /* LaunchScreen.storyboard in Resources */,
 				D470A8451BF0CDC40078C231 /* Assets.xcassets in Resources */,
+				D4144A281C64B08000CFE210 /* Aleo-Italic.otf in Resources */,
+				D4144A261C64B05100CFE210 /* Aleo-Bold.otf in Resources */,
 				D470A8431BF0CDC40078C231 /* Main.storyboard in Resources */,
 				D47A58851C625ADB000DFA61 /* Aleo-Regular.otf in Resources */,
 			);

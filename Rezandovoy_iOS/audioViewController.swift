@@ -21,6 +21,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var mesLabel: UILabel?
     var numLabel: UILabel?
     var iconoLabel: UIImageView?
+    var iconoMusica: UIImageView?
+    var musicaLabel: UILabel?
+    var datosView: UIView?
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -29,6 +32,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     @IBOutlet var vistaScroll: UIScrollView!
     @IBOutlet var hojaView: UIView!
     @IBOutlet var infoView: UIView!
+    @IBOutlet var dentroScroll: UIView!
     
     @IBAction func reproductor(sender: UIButton) {
         if (audioPlayer?.rate != 0.0) {
@@ -205,6 +209,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     // LLamada a la funcion para recuperar fecha
                     self.recuperarFecha(jsonDict.valueForKey("fecha") as? String)
                     
+                    // LLamada a la funcion para recuperar musicas
+                    self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
+                    
                 } else {
                     print("Error")
                 }
@@ -312,6 +319,62 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             }
         }
         self.reproductor(self.botonPlay)
+    }
+    
+    // Recuperar las músicas y darlas formato
+    func recuperarMusica(aux_mus: NSArray)-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            var alto = 0
+            self.iconoMusica = UIImageView(frame: CGRect(x: 8, y: 8, width: 32, height: 32))
+            self.iconoMusica!.image = UIImage(named: "ic_musicas")
+            var cadena1: NSAttributedString?
+            var cadena2: NSAttributedString?
+            var cadena3: NSAttributedString?
+            var cadena4: NSAttributedString?
+            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)! ] as [String : AnyObject]
+            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 12)! ] as [String : AnyObject]
+            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 12)! ] as [String : AnyObject]
+            for (musica) in aux_mus {
+                self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll.frame.width), height: 0))
+                self.dentroScroll.addSubview(self.datosView!)
+                self.datosView!.addSubview(self.iconoMusica!)
+                let cancion = musica.valueForKey("cancion")
+                let coleccion = musica.valueForKey("coleccion")
+                let permiso = musica.valueForKey("permiso")
+                let titulo = cancion?.valueForKey("titulo")
+                cadena1 = NSAttributedString(string: String(titulo!), attributes: bold)
+                if (cancion?.valueForKey("autor") as! String == "" && cancion?.valueForKey("interprete") as! String != "") {
+                    let interprete = cancion?.valueForKey("interprete")
+                    cadena2 = NSAttributedString(string: "interpretado por \(interprete!)", attributes: normal)
+                }
+                else if (cancion?.valueForKey("interprete") as! String == "" && cancion?.valueForKey("autor") as! String != "") {
+                    let autor = cancion?.valueForKey("autor")
+                    cadena2 = NSAttributedString(string: "de \(autor!)", attributes: normal)
+                }
+                else if (cancion?.valueForKey("interprete") as! String != "" && cancion?.valueForKey("autor") as! String != "") {
+                    let interprete = cancion?.valueForKey("interprete")
+                    let autor = cancion?.valueForKey("autor")
+                    cadena2 = NSAttributedString(string: "de \(autor) interpretado por \(interprete!)", attributes: normal)
+                }
+                let cd = coleccion?.valueForKey("nombre")
+                cadena3 = NSAttributedString(string: "\(cd!)", attributes: italic)
+                let formula = permiso?.valueForKey("formula")
+                let propietario = permiso?.valueForKey("propietario")
+                cadena4 = NSAttributedString(string: "\(formula!) \(propietario!)", attributes: normal)
+                let cadenaMusica: NSMutableAttributedString = NSMutableAttributedString(string: "")
+                cadenaMusica.appendAttributedString(cadena1!)
+                cadenaMusica.appendAttributedString(cadena2!)
+                cadenaMusica.appendAttributedString(cadena3!)
+                cadenaMusica.appendAttributedString(cadena4!)
+                self.musicaLabel = UILabel(frame: CGRect(x: self.iconoMusica!.frame.origin.x+48, y: 8, width: self.dentroScroll.frame.width-56, height: 0))
+                self.musicaLabel?.attributedText = cadenaMusica
+                self.musicaLabel?.numberOfLines = 0
+                self.musicaLabel?.textColor = UIColor.whiteColor()
+                self.musicaLabel?.sizeToFit()
+                alto += Int(self.musicaLabel!.frame.height)+8
+                self.datosView!.addSubview(self.musicaLabel!)
+            }
+        }
     }
     
     // Cambiar el titulo de la barra de navegacion
