@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Inicio View Controller-->
@@ -411,10 +412,10 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="8Ie-es-oOT"/>
                                                 </constraints>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                                <variation key="widthClass=compact" misplaced="YES">
                                                     <rect key="frame" x="8" y="116" width="304" height="1"/>
                                                 </variation>
-                                                <variation key="widthClass=regular" ambiguous="YES" misplaced="YES">
+                                                <variation key="widthClass=regular" misplaced="YES">
                                                     <rect key="frame" x="8" y="116" width="704" height="1"/>
                                                 </variation>
                                             </view>
@@ -428,24 +429,25 @@
                                             <constraint firstAttribute="height" constant="120" id="pdE-lc-gRV"/>
                                         </constraints>
                                     </view>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TCm-Ea-oKx">
-                                        <rect key="frame" x="0.0" y="119" width="520" height="260"/>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TCm-Ea-oKx">
+                                        <rect key="frame" x="0.0" y="120" width="520" height="260"/>
                                         <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dBy-gt-Zd2">
-                                                <rect key="frame" x="0.0" y="0.0" width="520" height="260"/>
+                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tM5-kT-Dsg">
+                                                <rect key="frame" x="8" y="8" width="504" height="244"/>
                                             </view>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="dBy-gt-Zd2" firstAttribute="top" secondItem="TCm-Ea-oKx" secondAttribute="top" id="6z8-Zh-1SH"/>
-                                            <constraint firstAttribute="trailing" secondItem="dBy-gt-Zd2" secondAttribute="trailing" id="HKj-kX-eSg"/>
-                                            <constraint firstItem="dBy-gt-Zd2" firstAttribute="centerX" secondItem="TCm-Ea-oKx" secondAttribute="centerX" id="ei0-j3-K8Y"/>
-                                            <constraint firstItem="dBy-gt-Zd2" firstAttribute="leading" secondItem="TCm-Ea-oKx" secondAttribute="leading" id="tGs-9r-YhF"/>
-                                            <constraint firstItem="dBy-gt-Zd2" firstAttribute="centerY" secondItem="TCm-Ea-oKx" secondAttribute="centerY" id="xFW-kl-NCY"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="tM5-kT-Dsg" secondAttribute="trailing" id="HIF-LN-GYv"/>
+                                            <constraint firstItem="tM5-kT-Dsg" firstAttribute="top" secondItem="TCm-Ea-oKx" secondAttribute="topMargin" id="OxW-X6-6gg"/>
+                                            <constraint firstItem="tM5-kT-Dsg" firstAttribute="centerX" secondItem="TCm-Ea-oKx" secondAttribute="centerX" id="cPZ-qZ-zgX"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="tM5-kT-Dsg" secondAttribute="bottom" id="e2c-FR-5rl"/>
+                                            <constraint firstItem="tM5-kT-Dsg" firstAttribute="leading" secondItem="TCm-Ea-oKx" secondAttribute="leadingMargin" id="kLp-E1-Fmc"/>
+                                            <constraint firstItem="tM5-kT-Dsg" firstAttribute="centerY" secondItem="TCm-Ea-oKx" secondAttribute="centerY" id="pdI-Uz-eam"/>
                                         </constraints>
-                                        <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                        <variation key="widthClass=compact" misplaced="YES">
                                             <rect key="frame" x="40" y="70" width="320" height="380"/>
                                         </variation>
-                                        <variation key="widthClass=regular" ambiguous="YES" misplaced="YES">
+                                        <variation key="widthClass=regular" misplaced="YES">
                                             <rect key="frame" x="40" y="70" width="720" height="380"/>
                                         </variation>
                                     </scrollView>
@@ -457,6 +459,7 @@
                                     <constraint firstItem="TCm-Ea-oKx" firstAttribute="centerX" secondItem="rAg-8r-tal" secondAttribute="centerX" id="JCc-EO-OOG"/>
                                     <constraint firstAttribute="trailing" secondItem="NtZ-oS-6MJ" secondAttribute="trailing" id="R02-5a-faJ"/>
                                     <constraint firstItem="NtZ-oS-6MJ" firstAttribute="centerX" secondItem="rAg-8r-tal" secondAttribute="centerX" id="Zc1-XL-ad9"/>
+                                    <constraint firstItem="TCm-Ea-oKx" firstAttribute="height" secondItem="rAg-8r-tal" secondAttribute="height" constant="-120" id="eof-h4-WcS"/>
                                     <constraint firstItem="TCm-Ea-oKx" firstAttribute="top" secondItem="NtZ-oS-6MJ" secondAttribute="bottom" id="g8m-Sy-DqX"/>
                                     <constraint firstAttribute="bottom" secondItem="TCm-Ea-oKx" secondAttribute="bottom" id="ldz-qs-osY"/>
                                     <constraint firstItem="NtZ-oS-6MJ" firstAttribute="width" secondItem="rAg-8r-tal" secondAttribute="width" id="oFk-jX-zIH"/>
@@ -467,7 +470,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rAg-8r-tal" firstAttribute="height" secondItem="DcG-ng-gxJ" secondAttribute="height" constant="-220" id="5mZ-8m-urO"/>
                             <constraint firstAttribute="bottom" secondItem="g8L-2c-2bT" secondAttribute="bottom" id="F7P-hl-whR"/>
                             <constraint firstItem="rAg-8r-tal" firstAttribute="width" secondItem="DcG-ng-gxJ" secondAttribute="width" constant="-80" id="VEp-TV-jZ9"/>
                             <constraint firstAttribute="trailing" secondItem="g8L-2c-2bT" secondAttribute="trailing" id="a3v-pr-dP8"/>
@@ -475,6 +477,7 @@
                             <constraint firstItem="rAg-8r-tal" firstAttribute="centerX" secondItem="DcG-ng-gxJ" secondAttribute="centerX" id="bx2-2n-KEW"/>
                             <constraint firstItem="g8L-2c-2bT" firstAttribute="leading" secondItem="DcG-ng-gxJ" secondAttribute="leading" id="e1r-4s-NPG"/>
                             <constraint firstItem="g8L-2c-2bT" firstAttribute="width" secondItem="DcG-ng-gxJ" secondAttribute="width" id="hoy-sl-Pzr"/>
+                            <constraint firstItem="g8L-2c-2bT" firstAttribute="top" secondItem="rAg-8r-tal" secondAttribute="bottom" constant="50" id="sMA-CM-RMi"/>
                             <constraint firstItem="rAg-8r-tal" firstAttribute="top" secondItem="qy1-m3-714" secondAttribute="bottom" constant="50" id="vvd-wp-9Jy"/>
                         </constraints>
                     </view>
@@ -487,7 +490,7 @@
                         <outlet property="audioSlider" destination="dmd-iU-qNT" id="hXB-aG-Gzd"/>
                         <outlet property="botonPlay" destination="OGT-uE-WxY" id="bva-1O-dem"/>
                         <outlet property="controles" destination="g8L-2c-2bT" id="hZg-5C-rLQ"/>
-                        <outlet property="dentroScroll" destination="dBy-gt-Zd2" id="aH7-qg-53c"/>
+                        <outlet property="dentroScroll" destination="tM5-kT-Dsg" id="xxM-1q-TyK"/>
                         <outlet property="hojaView" destination="s4P-Vi-Rbg" id="vM5-Hi-Gne"/>
                         <outlet property="infoView" destination="rAg-8r-tal" id="wUQ-PG-K24"/>
                         <outlet property="timeLabel" destination="Ues-Tk-gbM" id="THc-Sh-5nB"/>

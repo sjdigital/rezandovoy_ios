@@ -10,6 +10,24 @@ import UIKit
 import AVKit
 import AVFoundation
 
+extension UIView {
+    
+    func resizeToFitSubviews() {
+        
+        let subviewsRect = subviews.reduce(CGRect.zero) {
+            $0.union($1.frame)
+        }
+        
+        let fix = subviewsRect.origin
+        subviews.forEach {
+            $0.frame.offsetInPlace(dx: -fix.x, dy: -fix.y)
+        }
+        
+        frame.offsetInPlace(dx: fix.x, dy: fix.y)
+        frame.size = subviewsRect.size
+    }
+}
+
 class audioViewController: UIViewController, AVAudioPlayerDelegate {
     
     var audioPlayer: AVPlayer?
@@ -24,6 +42,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var iconoMusica: UIImageView?
     var musicaLabel: UILabel?
     var datosView: UIView?
+    var lineaView: UIView?
+    var botonCita: UIButton?
+    var citaLabel: UILabel?
+    var citasView: UIView?
+    var botonCompartir: UIButton?
+    var compartirView: UIView?
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -74,8 +98,65 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         }
     }
     
+    func toggleCita() {
+        let suma: CGFloat = CGFloat(8)
+        if (self.citaLabel!.hidden == true) {
+            self.citaLabel!.sizeToFit()
+            self.citaLabel!.hidden = false
+        }
+        else {
+            self.citaLabel!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
+            self.citaLabel!.hidden = true
+        }
+        self.citasView?.resizeToFitSubviews()
+        self.lineaView!.frame.origin.y = (self.citasView?.frame.origin.y)! + (self.citasView?.frame.height)! + suma
+        self.compartirView?.frame.origin.y = self.lineaView!.frame.origin.y + CGFloat(1) + suma
+        self.redimensionar()
+    }
+    
+    func toggleCompartir() {
+        var url: String?
+        let miTexto = "Rezandovoy - Una oración diaria en mp3"
+        if tipo == 1 {
+            url = "http://www.rezandovoy.org/reproductor/adulta/\(id)"
+        }
+        else if tipo == 2 {
+            url = "http://www.rezandovoy.org/reproductor/especial-adulta/\(id)"
+        }
+        else if tipo == 3 {
+            url = "http://www.rezandovoy.org/reproductor/infantil/\(id)"
+        }
+        else if tipo == 4 {
+            url = "http://www.rezandovoy.org/reproductor/especial-infantil/\(id)"
+        }
+        let miSitio = NSURL(string: url!)
+        let activityViewController : UIActivityViewController = UIActivityViewController(
+            activityItems: [miTexto, miSitio!], applicationActivities: nil)
+        
+        // This lines is for the popover you need to show in iPad
+        activityViewController.popoverPresentationController?.sourceView = self.controles
+        
+        // This line remove the arrow of the popover to show in iPad
+        activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+        activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
+        
+        // Anything you want to exclude
+        activityViewController.excludedActivityTypes = [
+            UIActivityTypePostToWeibo,
+            UIActivityTypePrint,
+            UIActivityTypeAssignToContact,
+            UIActivityTypeSaveToCameraRoll,
+            UIActivityTypeAddToReadingList,
+            UIActivityTypePostToFlickr,
+            UIActivityTypePostToVimeo,
+            UIActivityTypePostToTencentWeibo
+        ]
+        self.presentViewController(activityViewController, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //Deshabilitar el gesto de ir hacia atras
         self.navigationController!.interactivePopGestureRecognizer!.enabled = false
@@ -212,6 +293,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     // LLamada a la funcion para recuperar musicas
                     self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
                     
+                    // LLamada a la funcion para recuperar la cita
+                    self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    
+                    // LLamada a la funcion para crear el boton de compartir
+                    self.compartir()
+                    
                 } else {
                     print("Error")
                 }
@@ -262,6 +349,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     
                     // LLamada a la funcion para recuperar fecha
                     self.recuperarIcono(jsonDict.valueForKey("icono_link") as? String)
+                    
+                    // LLamada a la funcion para recuperar musicas
+                    self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
                     
                 } else {
                     print("Error")
@@ -321,6 +411,37 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         self.reproductor(self.botonPlay)
     }
     
+    // Recuperar la cita y darla formato
+    func recuperaCita(aux_citas: NSArray)-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            for (aux_cita) in aux_citas {
+                self.citasView = UIView(frame: CGRect(x: 0, y: Int(self.lineaView!.frame.origin.y)+9, width: Int(self.datosView!.frame.width), height: 0))
+                self.dentroScroll!.addSubview(self.citasView!)
+                self.botonCita = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
+                self.botonCita?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                self.botonCita?.setTitle(aux_cita.valueForKey("cita") as? String, forState: UIControlState.Normal)
+                self.botonCita?.setImage(UIImage(named: "ic_lectura"), forState: UIControlState.Normal)
+                self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+                self.botonCita?.titleEdgeInsets.left = 10.0
+                self.botonCita?.addTarget(self, action: Selector("toggleCita"), forControlEvents: .TouchUpInside)
+                self.citasView?.addSubview(self.botonCita!)
+                self.citaLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
+                self.citaLabel?.text = aux_cita.valueForKey("texto") as? String
+                self.citaLabel?.numberOfLines = 0
+                self.citaLabel?.textColor = UIColor.whiteColor()
+                self.citaLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                self.citaLabel?.sizeToFit()
+                self.citasView?.addSubview(self.citaLabel!)
+            }
+            self.citasView?.resizeToFitSubviews()
+            let aux_y = Int((self.citasView?.frame.origin.y)!) + Int((self.citasView?.frame.height)!) + 8
+            self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+            self.lineaView!.layer.borderWidth = 1.0
+            self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+            self.dentroScroll!.addSubview(self.lineaView!)
+        }
+    }
+    
     // Recuperar las músicas y darlas formato
     func recuperarMusica(aux_mus: NSArray)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
@@ -331,13 +452,19 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             var cadena2: NSAttributedString?
             var cadena3: NSAttributedString?
             var cadena4: NSAttributedString?
-            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)! ] as [String : AnyObject]
-            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 12)! ] as [String : AnyObject]
-            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 12)! ] as [String : AnyObject]
+            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 13)! ] as [String : AnyObject]
+            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 13)! ] as [String : AnyObject]
+            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 13)! ] as [String : AnyObject]
             for (musica) in aux_mus {
-                self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll.frame.width), height: 0))
-                self.dentroScroll.addSubview(self.datosView!)
-                self.datosView!.addSubview(self.iconoMusica!)
+                if alto == 0 {
+                    self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll!.frame.width), height: 0))
+                    self.dentroScroll!.addSubview(self.datosView!)
+                    self.datosView!.addSubview(self.iconoMusica!)
+                }
+                else {
+                    self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll!.frame.width), height: 0))
+                    self.dentroScroll!.addSubview(self.datosView!)
+                }
                 let cancion = musica.valueForKey("cancion")
                 let coleccion = musica.valueForKey("coleccion")
                 let permiso = musica.valueForKey("permiso")
@@ -345,19 +472,19 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 cadena1 = NSAttributedString(string: String(titulo!), attributes: bold)
                 if (cancion?.valueForKey("autor") as! String == "" && cancion?.valueForKey("interprete") as! String != "") {
                     let interprete = cancion?.valueForKey("interprete")
-                    cadena2 = NSAttributedString(string: "interpretado por \(interprete!)", attributes: normal)
+                    cadena2 = NSAttributedString(string: " interpretado por \(interprete!). CD ", attributes: normal)
                 }
                 else if (cancion?.valueForKey("interprete") as! String == "" && cancion?.valueForKey("autor") as! String != "") {
                     let autor = cancion?.valueForKey("autor")
-                    cadena2 = NSAttributedString(string: "de \(autor!)", attributes: normal)
+                    cadena2 = NSAttributedString(string: " de \(autor!). CD ", attributes: normal)
                 }
                 else if (cancion?.valueForKey("interprete") as! String != "" && cancion?.valueForKey("autor") as! String != "") {
                     let interprete = cancion?.valueForKey("interprete")
                     let autor = cancion?.valueForKey("autor")
-                    cadena2 = NSAttributedString(string: "de \(autor) interpretado por \(interprete!)", attributes: normal)
+                    cadena2 = NSAttributedString(string: " de \(autor) interpretado por \(interprete!). CD ", attributes: normal)
                 }
                 let cd = coleccion?.valueForKey("nombre")
-                cadena3 = NSAttributedString(string: "\(cd!)", attributes: italic)
+                cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic)
                 let formula = permiso?.valueForKey("formula")
                 let propietario = permiso?.valueForKey("propietario")
                 cadena4 = NSAttributedString(string: "\(formula!) \(propietario!)", attributes: normal)
@@ -366,14 +493,20 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 cadenaMusica.appendAttributedString(cadena2!)
                 cadenaMusica.appendAttributedString(cadena3!)
                 cadenaMusica.appendAttributedString(cadena4!)
-                self.musicaLabel = UILabel(frame: CGRect(x: self.iconoMusica!.frame.origin.x+48, y: 8, width: self.dentroScroll.frame.width-56, height: 0))
+                self.musicaLabel = UILabel(frame: CGRect(x: self.iconoMusica!.frame.origin.x+48, y: 8, width: self.dentroScroll!.frame.width-56, height: 0))
                 self.musicaLabel?.attributedText = cadenaMusica
                 self.musicaLabel?.numberOfLines = 0
                 self.musicaLabel?.textColor = UIColor.whiteColor()
                 self.musicaLabel?.sizeToFit()
                 alto += Int(self.musicaLabel!.frame.height)+8
                 self.datosView!.addSubview(self.musicaLabel!)
+                self.datosView?.resizeToFitSubviews()
             }
+            let aux_y = Int((self.datosView?.frame.origin.y)!) + Int((self.datosView?.frame.height)!) + 8
+            self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+            self.lineaView!.layer.borderWidth = 1.0
+            self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+            self.dentroScroll!.addSubview(self.lineaView!)
         }
     }
     
@@ -504,5 +637,37 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         CATransaction.commit()
         
         index = index < imagenes.count - 1 ? index + 1 : 0
+    }
+    
+    // Crear el boton de compartir
+    func compartir()-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            let ultimo = self.dentroScroll!.subviews[self.dentroScroll!.subviews.count-1].frame
+            let aux_y = Int(ultimo.origin.y) + Int(ultimo.height)
+            self.compartirView = UIView(frame: CGRect(x: 0, y: aux_y+8, width: Int(self.dentroScroll!.frame.width), height: 0))
+            self.dentroScroll!.addSubview(self.compartirView!)
+            self.botonCompartir = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
+            self.botonCompartir?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+            self.botonCompartir?.setTitle("compartir", forState: UIControlState.Normal)
+            self.botonCompartir?.setImage(UIImage(named: "ic_compartir"), forState: UIControlState.Normal)
+            self.botonCompartir?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+            self.botonCompartir?.titleEdgeInsets.left = 10.0
+            self.botonCompartir?.addTarget(self, action: Selector("toggleCompartir"), forControlEvents: .TouchUpInside)
+            self.compartirView?.addSubview(self.botonCompartir!)
+            self.compartirView?.resizeToFitSubviews()
+            
+            // Llamada a la funcion para recalcular el alto y que funcione el scroll
+            self.redimensionar()
+        }
+    }
+    
+    // Redimensionar views para que el scroll vaya bien
+    func redimensionar()-> Void {
+        let ultimo = self.dentroScroll!.subviews.last
+        self.vistaScroll.contentSize = CGSize(width: self.dentroScroll!.frame.width, height: ultimo!.frame.height+16.0+ultimo!.frame.origin.y)
+        self.dentroScroll?.resizeToFitSubviews()
+        
+        // Funciona pero no tiene sentido
+        self.dentroScroll.translatesAutoresizingMaskIntoConstraints = true
     }
 }
