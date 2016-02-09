@@ -48,6 +48,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var citasView: UIView?
     var botonCompartir: UIButton?
     var compartirView: UIView?
+    var docsView: UIView?
+    var bottonDocs: UIButton?
+    var docsLabel: UILabel?
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -110,7 +113,23 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         }
         self.citasView?.resizeToFitSubviews()
         self.lineaView!.frame.origin.y = (self.citasView?.frame.origin.y)! + (self.citasView?.frame.height)! + suma
-        self.compartirView?.frame.origin.y = self.lineaView!.frame.origin.y + CGFloat(1) + suma
+        self.compartirView?.frame.origin.y = self.dentroScroll!.subviews.last!.frame.origin.y + CGFloat(1) + suma
+        self.redimensionar()
+    }
+    
+    func toggleDocs() {
+        let suma: CGFloat = CGFloat(8)
+        if (self.docsLabel!.hidden == true) {
+            self.docsLabel!.sizeToFit()
+            self.docsLabel!.hidden = false
+        }
+        else {
+            self.docsLabel!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
+            self.docsLabel!.hidden = true
+        }
+        self.docsView?.resizeToFitSubviews()
+        self.lineaView!.frame.origin.y = (self.citasView?.frame.origin.y)! + (self.citasView?.frame.height)! + suma
+        self.compartirView?.frame.origin.y = self.dentroScroll!.subviews.last!.frame.origin.y + CGFloat(1) + suma
         self.redimensionar()
     }
     
@@ -296,6 +315,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     // LLamada a la funcion para recuperar la cita
                     self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
                     
+                    // LLamada a la funcion para recuperar los documentos
+                    self.recuperaDocs((jsonDict.valueForKey("documentos") as? NSArray)!)
+                    
                     // LLamada a la funcion para crear el boton de compartir
                     self.compartir()
                     
@@ -411,6 +433,40 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         self.reproductor(self.botonPlay)
     }
     
+    // Recuperar los documentos y darles formato, puede estar vacio
+    func recuperaDocs(aux_docs: NSArray?)->Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            if let docs = aux_docs {
+                for (doc) in docs {
+                    self.docsView = UIView(frame: CGRect(x: 0, y: Int(self.lineaView!.frame.origin.y)+9, width: Int(self.dentroScroll!.frame.width), height: 0))
+                    self.dentroScroll!.addSubview(self.docsView!)
+                    self.bottonDocs = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
+                    self.bottonDocs?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                    self.bottonDocs?.setTitle(doc.valueForKey("nombre") as? String, forState: UIControlState.Normal)
+                    self.bottonDocs?.setImage(UIImage(named: "ic_docs"), forState: UIControlState.Normal)
+                    self.bottonDocs?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.bottonDocs?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+                    self.bottonDocs?.titleEdgeInsets.left = 10.0
+                    self.bottonDocs?.addTarget(self, action: Selector("toggleDocs"), forControlEvents: .TouchUpInside)
+                    self.docsView?.addSubview(self.bottonDocs!)
+                    self.docsLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
+                    self.docsLabel?.text = doc.valueForKey("texto") as? String
+                    self.docsLabel?.numberOfLines = 0
+                    self.docsLabel?.textColor = UIColor.whiteColor()
+                    self.docsLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                    self.docsLabel?.sizeToFit()
+                    self.docsView?.addSubview(self.docsLabel!)
+                }
+                self.docsView?.resizeToFitSubviews()
+                let aux_y = Int((self.docsView?.frame.origin.y)!) + Int((self.docsView?.frame.height)!) + 8
+                self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+                self.lineaView!.layer.borderWidth = 1.0
+                self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+                self.dentroScroll!.addSubview(self.lineaView!)
+            }
+        }
+    }
+    
     // Recuperar la cita y darla formato
     func recuperaCita(aux_citas: NSArray)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
@@ -422,6 +478,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 self.botonCita?.setTitle(aux_cita.valueForKey("cita") as? String, forState: UIControlState.Normal)
                 self.botonCita?.setImage(UIImage(named: "ic_lectura"), forState: UIControlState.Normal)
                 self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+                self.botonCita?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
                 self.botonCita?.titleEdgeInsets.left = 10.0
                 self.botonCita?.addTarget(self, action: Selector("toggleCita"), forControlEvents: .TouchUpInside)
                 self.citasView?.addSubview(self.botonCita!)
@@ -650,6 +707,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             self.botonCompartir?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
             self.botonCompartir?.setTitle("compartir", forState: UIControlState.Normal)
             self.botonCompartir?.setImage(UIImage(named: "ic_compartir"), forState: UIControlState.Normal)
+            self.botonCompartir?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             self.botonCompartir?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             self.botonCompartir?.titleEdgeInsets.left = 10.0
             self.botonCompartir?.addTarget(self, action: Selector("toggleCompartir"), forControlEvents: .TouchUpInside)
