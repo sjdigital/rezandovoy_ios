@@ -18,6 +18,24 @@ class infantilViewController: UIViewController, UIWebViewDelegate {
         UIApplication.sharedApplication().openURL(donativosUrl!)
     }
     
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.LinkClicked {
+            let oracionUrl = "\(request.URL!)"
+            let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
+            if oracionArray[0].rangeOfString("infantil") != nil {
+                tipo = 3
+            }
+            else if oracionArray[0].rangeOfString("especial") != nil {
+                tipo = 4
+            }
+            id = Int(oracionArray[1])!
+            let nextViewControlles = storyboard!.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
+            self.showViewController(nextViewControlles, sender: self)
+            return false
+        }
+        return true
+    }
+    
     
     let url = "http://iosrv.rezandovoy.org/infantil.php"
 

@@ -6,6 +6,8 @@
 //  Copyright © 2016 sjdigital. All rights reserved.
 //
 
+/* TODO: La ventana de la informacion sale oculta cuando arranca el reproductor y las etiquetas de informacion tambien */
+
 import UIKit
 import AVKit
 import AVFoundation
@@ -65,9 +67,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         if (audioPlayer?.rate != 0.0) {
             audioPlayer?.pause()
             sender.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
+            self.infoView.hidden = false
         } else {
             audioPlayer?.play()
             sender.setImage(UIImage(named: "ic_pause"), forState: UIControlState.Normal)
+            self.infoView.hidden = true
         }
     }
     
@@ -101,35 +105,51 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         }
     }
     
-    func toggleCita() {
-        let suma: CGFloat = CGFloat(8)
-        if (self.citaLabel!.hidden == true) {
-            self.citaLabel!.sizeToFit()
-            self.citaLabel!.hidden = false
+    @IBAction func toggleInfo(sender: UIButton) {
+        if (self.infoView.hidden == true) {
+            self.infoView.hidden = false
         }
         else {
-            self.citaLabel!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
-            self.citaLabel!.hidden = true
+            self.infoView.hidden = true
         }
-        self.citasView?.resizeToFitSubviews()
-        self.lineaView!.frame.origin.y = (self.citasView?.frame.origin.y)! + (self.citasView?.frame.height)! + suma
-        self.compartirView?.frame.origin.y = self.dentroScroll!.subviews.last!.frame.origin.y + CGFloat(1) + suma
+    }
+    
+    func imageTap() {
+        if (self.infoView.hidden == true) {
+            self.infoView.hidden = false
+        }
+        else {
+            self.infoView.hidden = true
+        }
+    }
+    
+    func toggleCita(sender: UIButton) {
+        let supervista = sender.superview
+        if (supervista?.subviews.last!.hidden == true) {
+            supervista?.subviews.last!.sizeToFit()
+            supervista?.subviews.last!.hidden = false
+        }
+        else {
+            supervista?.subviews.last!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
+            supervista?.subviews.last!.hidden = true
+        }
+        supervista!.resizeToFitSubviews()
+        self.recolocar()
         self.redimensionar()
     }
     
-    func toggleDocs() {
-        let suma: CGFloat = CGFloat(8)
-        if (self.docsLabel!.hidden == true) {
-            self.docsLabel!.sizeToFit()
-            self.docsLabel!.hidden = false
+    func toggleDocs(sender: UIButton) {
+        let supervista = sender.superview
+        if (supervista?.subviews.last!.hidden == true) {
+            supervista?.subviews.last!.sizeToFit()
+            supervista?.subviews.last!.hidden = false
         }
         else {
-            self.docsLabel!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
-            self.docsLabel!.hidden = true
+            supervista?.subviews.last!.frame.size = CGSize(width: self.citaLabel!.frame.width, height: 0.0)
+            supervista?.subviews.last!.hidden = true
         }
-        self.docsView?.resizeToFitSubviews()
-        self.lineaView!.frame.origin.y = (self.citasView?.frame.origin.y)! + (self.citasView?.frame.height)! + suma
-        self.compartirView?.frame.origin.y = self.dentroScroll!.subviews.last!.frame.origin.y + CGFloat(1) + suma
+        supervista!.resizeToFitSubviews()
+        self.recolocar()
         self.redimensionar()
     }
     
@@ -176,6 +196,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Ocultar la vista de informacion
+        self.infoView.hidden = true
         
         //Deshabilitar el gesto de ir hacia atras
         self.navigationController!.interactivePopGestureRecognizer!.enabled = false
@@ -218,6 +240,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             getOracionPeriodicaAdultoById()
         } else if tipo == 2 {
             getOracionEspecialAdultaById()
+        } else if tipo == 3 {
+            getOracionPeriodicaInfantilById()
+        } else if tipo == 4 {
+            getOracionEspecialInfantilById()
         }
     }
     
@@ -331,6 +357,133 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         return true
     }
     
+    // Llamada al servidor REST para recibir la infantil
+    func getOracionPeriodicaInfantilById() -> AnyObject {
+        // Variables peticion JSON
+        let session = NSURLSession.sharedSession()
+        let postEndpoint: String = "http://rezandovoy.ovh:8080/Rezandovoy_server/api/publica/getPeriodicaInfantilById"
+        let postParams: NSDictionary = ["id": "\(id)"]
+        let url = NSURL(string: postEndpoint)!
+        let request = NSMutableURLRequest(URL: url)
+        
+        request.HTTPMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Funca by id")
+        } catch {
+            print("No funca by id")
+        }
+        
+        session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
+                let respuesta = response as? NSHTTPURLResponse
+                print("Not a 200 response is:\n \(respuesta)")
+                return
+            }
+            do {
+                if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    
+                    // Recuperar el link de la oración
+                    var aux_mp3 = "http://rezandovoy.ovh/"
+                    aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
+                    self.reproductorInit(aux_mp3)
+                    
+                    // LLamada a la funcion para poner el titulo
+                    self.cambiaTitulo(jsonDict.valueForKey("titulo") as! String)
+                    
+                    // LLamada a la funcion para recuperar imagenes
+                    self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    
+                    // LLamada a la funcion para recuperar el titulo y maquetarlo
+                    self.recuperarTitulo(jsonDict.valueForKey("titulo") as? String)
+                    
+                    // LLamada a la funcion para recuperar musicas
+                    self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar la cita
+                    self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar los documentos
+                    self.recuperaDocs((jsonDict.valueForKey("documentos") as? NSArray)!)
+                    
+                    // LLamada a la funcion para crear el boton de compartir
+                    self.compartir()
+                    
+                } else {
+                    print("Error")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }).resume()
+        return true
+    }
+    
+    // Llamada al servidor REST para recibir la especial infantil
+    func getOracionEspecialInfantilById() -> AnyObject {
+        // Variables peticion JSON
+        let session = NSURLSession.sharedSession()
+        let postEndpoint: String = "http://rezandovoy.ovh:8080/Rezandovoy_server/api/publica/getEspecialInfantilById"
+        let postParams: NSDictionary = ["id": "\(id)"]
+        let url = NSURL(string: postEndpoint)!
+        let request = NSMutableURLRequest(URL: url)
+        
+        request.HTTPMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Funca by id")
+        } catch {
+            print("No funca by id")
+        }
+        
+        session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
+                let respuesta = response as? NSHTTPURLResponse
+                print("Not a 200 response is:\n \(respuesta)")
+                return
+            }
+            do {
+                if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    
+                    // Recuperar el link de la oración
+                    var aux_mp3 = "http://rezandovoy.ovh/"
+                    aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
+                    self.reproductorInit(aux_mp3)
+                    
+                    // LLamada a la funcion para poner el titulo
+                    self.cambiaTitulo(jsonDict.valueForKey("titulo") as! String)
+                    
+                    // LLamada a la funcion para recuperar imagenes
+                    self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    
+                    // LLamada a la funcion para recuperar fecha
+                    self.recuperarTitulo(jsonDict.valueForKey("icono_link") as? String)
+                    
+                    // LLamada a la funcion para recuperar musicas
+                    self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar la cita
+                    self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar los documentos
+                    self.recuperaDocs((jsonDict.valueForKey("documentos") as? NSArray)!)
+                    
+                    // LLamada a la funcion para crear el boton de compartir
+                    self.compartir()
+                    
+                } else {
+                    print("Error")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }).resume()
+        return true
+    }
+
+    
     // Llamada al servidor REST para recibir la especial
     func getOracionEspecialAdultaById() -> AnyObject {
         // Variables peticion JSON
@@ -374,6 +527,15 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     
                     // LLamada a la funcion para recuperar musicas
                     self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar la cita
+                    self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    
+                    // LLamada a la funcion para recuperar los documentos
+                    self.recuperaDocs((jsonDict.valueForKey("documentos") as? NSArray)!)
+                    
+                    // LLamada a la funcion para crear el boton de compartir
+                    self.compartir()
                     
                 } else {
                     print("Error")
@@ -428,6 +590,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 self.botonPlay.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
                 self.audioSlider.value = 0.0
                 self.audioPlayer?.seekToTime(CMTimeMake(0, 1))
+                self.infoView.hidden = false
             }
         }
         self.reproductor(self.botonPlay)
@@ -436,8 +599,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     // Recuperar los documentos y darles formato, puede estar vacio
     func recuperaDocs(aux_docs: NSArray?)->Void {
         dispatch_async(dispatch_get_main_queue()) {
-            if let docs = aux_docs {
-                for (doc) in docs {
+            if aux_docs!.count > 0 {
+                for (doc) in aux_docs! {
                     self.docsView = UIView(frame: CGRect(x: 0, y: Int(self.lineaView!.frame.origin.y)+9, width: Int(self.dentroScroll!.frame.width), height: 0))
                     self.dentroScroll!.addSubview(self.docsView!)
                     self.bottonDocs = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
@@ -447,22 +610,23 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     self.bottonDocs?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
                     self.bottonDocs?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
                     self.bottonDocs?.titleEdgeInsets.left = 10.0
-                    self.bottonDocs?.addTarget(self, action: Selector("toggleDocs"), forControlEvents: .TouchUpInside)
+                    self.bottonDocs?.addTarget(self, action: Selector("toggleDocs:"), forControlEvents: .TouchUpInside)
                     self.docsView?.addSubview(self.bottonDocs!)
                     self.docsLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
                     self.docsLabel?.text = doc.valueForKey("texto") as? String
                     self.docsLabel?.numberOfLines = 0
                     self.docsLabel?.textColor = UIColor.whiteColor()
                     self.docsLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
-                    self.docsLabel?.sizeToFit()
+                    //self.docsLabel?.sizeToFit()
+                    self.docsLabel?.hidden = true
                     self.docsView?.addSubview(self.docsLabel!)
+                    self.docsView?.resizeToFitSubviews()
+                    let aux_y = Int((self.docsView?.frame.origin.y)!) + Int((self.docsView?.frame.height)!) + 8
+                    self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+                    self.lineaView!.layer.borderWidth = 1.0
+                    self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+                    self.dentroScroll!.addSubview(self.lineaView!)
                 }
-                self.docsView?.resizeToFitSubviews()
-                let aux_y = Int((self.docsView?.frame.origin.y)!) + Int((self.docsView?.frame.height)!) + 8
-                self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
-                self.lineaView!.layer.borderWidth = 1.0
-                self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
-                self.dentroScroll!.addSubview(self.lineaView!)
             }
         }
     }
@@ -471,7 +635,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     func recuperaCita(aux_citas: NSArray)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
             for (aux_cita) in aux_citas {
-                self.citasView = UIView(frame: CGRect(x: 0, y: Int(self.lineaView!.frame.origin.y)+9, width: Int(self.datosView!.frame.width), height: 0))
+                self.citasView = UIView(frame: CGRect(x: 0, y: Int(self.dentroScroll!.subviews.last!.frame.origin.y)+8+Int(self.dentroScroll!.subviews.last!.frame.height), width: Int(self.datosView!.frame.width), height: 0))
                 self.dentroScroll!.addSubview(self.citasView!)
                 self.botonCita = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
                 self.botonCita?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
@@ -480,22 +644,23 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
                 self.botonCita?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
                 self.botonCita?.titleEdgeInsets.left = 10.0
-                self.botonCita?.addTarget(self, action: Selector("toggleCita"), forControlEvents: .TouchUpInside)
+                self.botonCita?.addTarget(self, action: Selector("toggleCita:"), forControlEvents: .TouchUpInside)
                 self.citasView?.addSubview(self.botonCita!)
                 self.citaLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
                 self.citaLabel?.text = aux_cita.valueForKey("texto") as? String
                 self.citaLabel?.numberOfLines = 0
                 self.citaLabel?.textColor = UIColor.whiteColor()
                 self.citaLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
-                self.citaLabel?.sizeToFit()
+                //self.citaLabel?.sizeToFit()
+                self.citaLabel?.hidden = true
                 self.citasView?.addSubview(self.citaLabel!)
+                self.citasView?.resizeToFitSubviews()
+                let aux_y = Int((self.citasView?.frame.origin.y)!) + Int((self.citasView?.frame.height)!) + 8
+                self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+                self.lineaView!.layer.borderWidth = 1.0
+                self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+                self.dentroScroll!.addSubview(self.lineaView!)
             }
-            self.citasView?.resizeToFitSubviews()
-            let aux_y = Int((self.citasView?.frame.origin.y)!) + Int((self.citasView?.frame.height)!) + 8
-            self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
-            self.lineaView!.layer.borderWidth = 1.0
-            self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
-            self.dentroScroll!.addSubview(self.lineaView!)
         }
     }
     
@@ -543,13 +708,21 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 let cd = coleccion?.valueForKey("nombre")
                 cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic)
                 let formula = permiso?.valueForKey("formula")
-                let propietario = permiso?.valueForKey("propietario")
-                cadena4 = NSAttributedString(string: "\(formula!) \(propietario!)", attributes: normal)
+                let propietario = permiso?.valueForKey("propietario") as! String
+                if propietario != "#" {
+                    cadena4 = NSAttributedString(string: "\(formula!) \(propietario)", attributes: normal)
+                }
                 let cadenaMusica: NSMutableAttributedString = NSMutableAttributedString(string: "")
                 cadenaMusica.appendAttributedString(cadena1!)
-                cadenaMusica.appendAttributedString(cadena2!)
-                cadenaMusica.appendAttributedString(cadena3!)
-                cadenaMusica.appendAttributedString(cadena4!)
+                if let _ : NSAttributedString = cadena2 {
+                    cadenaMusica.appendAttributedString(cadena2!)
+                }
+                if let _ : NSAttributedString = cadena3 {
+                    cadenaMusica.appendAttributedString(cadena3!)
+                }
+                if let _ : NSAttributedString = cadena4 {
+                    cadenaMusica.appendAttributedString(cadena4!)
+                }
                 self.musicaLabel = UILabel(frame: CGRect(x: self.iconoMusica!.frame.origin.x+48, y: 8, width: self.dentroScroll!.frame.width-56, height: 0))
                 self.musicaLabel?.attributedText = cadenaMusica
                 self.musicaLabel?.numberOfLines = 0
@@ -574,6 +747,27 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
             self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             self.navigationController?.navigationBar.topItem!.title = aux_titulo
+        }
+    }
+    
+    // Recuperar el titulo y darle formato
+    func recuperarTitulo(aux_titulo: String!)-> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.diaLabel = UILabel(frame: CGRectMake(0,self.hojaView.frame.size.height,self.hojaView.frame.size.width,0))
+            self.diaLabel?.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.2)
+            self.diaLabel?.textAlignment = NSTextAlignment.Center
+            self.diaLabel?.textColor = UIColor.whiteColor()
+            self.diaLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+            self.diaLabel?.text = aux_titulo
+            self.diaLabel?.numberOfLines = 0
+            self.diaLabel?.sizeToFit()
+            self.diaLabel?.frame.origin = CGPoint(x: CGFloat(0), y: self.hojaView.frame.size.height - self.diaLabel!.frame.size.height)
+            self.hojaView.addSubview(self.diaLabel!)
+            self.iconoLabel = UIImageView(frame: self.hojaView.bounds)
+            self.iconoLabel?.image = UIImage(named: "ic_rvn_blanco")
+            self.iconoLabel?.contentMode = UIViewContentMode.ScaleAspectFit
+            self.iconoLabel?.contentMode = UIViewContentMode.Top
+            self.hojaView.addSubview(self.iconoLabel!)
         }
     }
     
@@ -665,8 +859,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 UIImage(named: nombre[2] as! String)!,
                 UIImage(named: nombre[3] as! String)!
             ]
+            let tapGesture = UITapGestureRecognizer(target: self, action: Selector("imageTap"))
             self.imageView!.image = images[self.index++]
             self.animateImageView(images)
+            self.imageView?.userInteractionEnabled = true
+            self.imageView?.addGestureRecognizer(tapGesture)
             self.view.addSubview(self.imageView!)
             self.view.bringSubviewToFront(self.controles)
             self.view.bringSubviewToFront(self.infoView)
@@ -716,6 +913,17 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             
             // Llamada a la funcion para recalcular el alto y que funcione el scroll
             self.redimensionar()
+        }
+    }
+    
+    // Recolocar views cuando desplieges u ocultes informacion
+    func recolocar()-> Void {
+        let vista = self.dentroScroll!
+        
+        var aux_y = 0
+        for (subvista) in vista.subviews {
+            subvista.frame.origin = CGPoint(x: 0, y: aux_y)
+            aux_y = 8 + Int(subvista.frame.origin.y) + Int(subvista.frame.height)
         }
     }
     
