@@ -459,7 +459,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
                     
                     // LLamada a la funcion para recuperar fecha
-                    self.recuperarTitulo(jsonDict.valueForKey("icono_link") as? String)
+                    self.recuperarTitulo(jsonDict.valueForKey("titulo") as? String)
                     
                     // LLamada a la funcion para recuperar musicas
                     self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
@@ -529,7 +529,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                     self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
                     
                     // LLamada a la funcion para recuperar la cita
-                    self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    if let _ : AnyObject = jsonDict.valueForKey("lectura") {
+                        self.recuperaCita((jsonDict.valueForKey("lectura") as? NSArray)!)
+                    }
                     
                     // LLamada a la funcion para recuperar los documentos
                     self.recuperaDocs((jsonDict.valueForKey("documentos") as? NSArray)!)
@@ -632,34 +634,36 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     }
     
     // Recuperar la cita y darla formato
-    func recuperaCita(aux_citas: NSArray)-> Void {
+    func recuperaCita(aux_citas: NSArray?)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
-            for (aux_cita) in aux_citas {
-                self.citasView = UIView(frame: CGRect(x: 0, y: Int(self.dentroScroll!.subviews.last!.frame.origin.y)+8+Int(self.dentroScroll!.subviews.last!.frame.height), width: Int(self.datosView!.frame.width), height: 0))
-                self.dentroScroll!.addSubview(self.citasView!)
-                self.botonCita = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
-                self.botonCita?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
-                self.botonCita?.setTitle(aux_cita.valueForKey("cita") as? String, forState: UIControlState.Normal)
-                self.botonCita?.setImage(UIImage(named: "ic_lectura"), forState: UIControlState.Normal)
-                self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-                self.botonCita?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-                self.botonCita?.titleEdgeInsets.left = 10.0
-                self.botonCita?.addTarget(self, action: Selector("toggleCita:"), forControlEvents: .TouchUpInside)
-                self.citasView?.addSubview(self.botonCita!)
-                self.citaLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
-                self.citaLabel?.text = aux_cita.valueForKey("texto") as? String
-                self.citaLabel?.numberOfLines = 0
-                self.citaLabel?.textColor = UIColor.whiteColor()
-                self.citaLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
-                //self.citaLabel?.sizeToFit()
-                self.citaLabel?.hidden = true
-                self.citasView?.addSubview(self.citaLabel!)
-                self.citasView?.resizeToFitSubviews()
-                let aux_y = Int((self.citasView?.frame.origin.y)!) + Int((self.citasView?.frame.height)!) + 8
-                self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
-                self.lineaView!.layer.borderWidth = 1.0
-                self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
-                self.dentroScroll!.addSubview(self.lineaView!)
+            if aux_citas!.count > 0 {
+                for (aux_cita) in aux_citas! {
+                    self.citasView = UIView(frame: CGRect(x: 0, y: Int(self.dentroScroll!.subviews.last!.frame.origin.y)+8+Int(self.dentroScroll!.subviews.last!.frame.height), width: Int(self.datosView!.frame.width), height: 0))
+                    self.dentroScroll!.addSubview(self.citasView!)
+                    self.botonCita = UIButton(frame: CGRect(x: 8, y: 0, width: Int(self.dentroScroll!.frame.width)-8, height: 32))
+                    self.botonCita?.titleLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                    self.botonCita?.setTitle(aux_cita.valueForKey("cita") as? String, forState: UIControlState.Normal)
+                    self.botonCita?.setImage(UIImage(named: "ic_lectura"), forState: UIControlState.Normal)
+                    self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+                    self.botonCita?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.botonCita?.titleEdgeInsets.left = 10.0
+                    self.botonCita?.addTarget(self, action: Selector("toggleCita:"), forControlEvents: .TouchUpInside)
+                    self.citasView?.addSubview(self.botonCita!)
+                    self.citaLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
+                    self.citaLabel?.text = aux_cita.valueForKey("texto") as? String
+                    self.citaLabel?.numberOfLines = 0
+                    self.citaLabel?.textColor = UIColor.whiteColor()
+                    self.citaLabel?.font = UIFont(name: "Aleo-Regular", size: 13)
+                    //self.citaLabel?.sizeToFit()
+                    self.citaLabel?.hidden = true
+                    self.citasView?.addSubview(self.citaLabel!)
+                    self.citasView?.resizeToFitSubviews()
+                    let aux_y = Int((self.citasView?.frame.origin.y)!) + Int((self.citasView?.frame.height)!) + 8
+                    self.lineaView = UIView(frame: CGRect(x: 8, y: aux_y, width: Int(self.dentroScroll!.frame.width)-16, height: 1))
+                    self.lineaView!.layer.borderWidth = 1.0
+                    self.lineaView!.layer.borderColor = UIColor.whiteColor().CGColor
+                    self.dentroScroll!.addSubview(self.lineaView!)
+                }
             }
         }
     }
@@ -761,7 +765,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             self.diaLabel?.text = aux_titulo
             self.diaLabel?.numberOfLines = 0
             self.diaLabel?.sizeToFit()
-            self.diaLabel?.frame.origin = CGPoint(x: CGFloat(0), y: self.hojaView.frame.size.height - self.diaLabel!.frame.size.height)
+            self.diaLabel?.frame = CGRectMake(CGFloat(0), self.hojaView.frame.size.height - self.diaLabel!.frame.size.height, self.hojaView.frame.size.width, self.diaLabel!.frame.size.height)
             self.hojaView.addSubview(self.diaLabel!)
             self.iconoLabel = UIImageView(frame: self.hojaView.bounds)
             self.iconoLabel?.image = UIImage(named: "ic_rvn_blanco")
@@ -861,6 +865,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
             ]
             let tapGesture = UITapGestureRecognizer(target: self, action: Selector("imageTap"))
             self.imageView!.image = images[self.index++]
+            self.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
             self.animateImageView(images)
             self.imageView?.userInteractionEnabled = true
             self.imageView?.addGestureRecognizer(tapGesture)

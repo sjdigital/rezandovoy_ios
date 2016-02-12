@@ -10,7 +10,7 @@
         <!--Inicio View Controller-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="InicioViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" customClass="InicioViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rHv-tX-uhL"/>
                         <viewControllerLayoutGuide type="bottom" id="ttG-fv-Caf"/>
@@ -65,7 +65,7 @@
         <!--Especiales View Controller-->
         <scene sceneID="p4i-Xi-Ehw">
             <objects>
-                <viewController storyboardIdentifier="especialesViewController" id="7X3-2Z-z8N" customClass="especialesViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="especialesViewController" id="7X3-2Z-z8N" customClass="especialesViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BB0-Id-PlO"/>
                         <viewControllerLayoutGuide type="bottom" id="1vx-Qm-H7x"/>
@@ -113,7 +113,7 @@
         <!--Especial View Controller-->
         <scene sceneID="7gf-1G-mxk">
             <objects>
-                <viewController storyboardIdentifier="especialViewController" id="VSX-LR-ibt" customClass="especialViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="especialViewController" id="VSX-LR-ibt" customClass="especialViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="X2D-5p-utP"/>
                         <viewControllerLayoutGuide type="bottom" id="JzE-RZ-ZfL"/>
@@ -187,7 +187,6 @@
                         <segue destination="NaK-zS-a0a" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="3XX-w4-au0" kind="relationship" relationship="viewControllers" id="yOL-RM-3xP"/>
                         <segue destination="i8K-J0-efJ" kind="relationship" relationship="viewControllers" id="dtK-qY-y4d"/>
-                        <segue destination="bTf-PN-97B" kind="relationship" relationship="viewControllers" id="fBo-xj-3LP"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -216,7 +215,7 @@
         <!--Infantil View Controller-->
         <scene sceneID="3q6-qJ-PyW">
             <objects>
-                <viewController id="j21-4P-QDS" customClass="infantilViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="j21-4P-QDS" customClass="infantilViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yuE-Qr-WXW"/>
                         <viewControllerLayoutGuide type="bottom" id="RGg-nr-SIo"/>
@@ -270,7 +269,7 @@
         <!--Info-->
         <scene sceneID="g9z-XV-oYM">
             <objects>
-                <viewController id="i8K-J0-efJ" customClass="infoViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="i8K-J0-efJ" customClass="infoViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MJo-RT-Gin"/>
                         <viewControllerLayoutGuide type="bottom" id="UqI-uS-FtR"/>
@@ -318,7 +317,7 @@
         <!--Audio View Controller-->
         <scene sceneID="Hhr-BE-zIY">
             <objects>
-                <viewController storyboardIdentifier="audioPlayer" id="53B-DE-vo2" customClass="audioViewController" customModule="Rezandovoy_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="audioPlayer" id="53B-DE-vo2" customClass="audioViewController" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qy1-m3-714"/>
                         <viewControllerLayoutGuide type="bottom" id="Cj7-CH-htz"/>
@@ -487,9 +486,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="W8R-Pa-sOg">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ucs-Gu-jIz"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="W8R-Pa-sOg"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="audioSlider" destination="dmd-iU-qNT" id="hXB-aG-Gzd"/>
@@ -505,56 +502,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z0k-jf-EmU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2532" y="0.0"/>
-        </scene>
-        <!--Mis Oraciones-->
-        <scene sceneID="jAR-Fi-kNl">
-            <objects>
-                <tableViewController id="ogg-wW-EX2" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMr-WA-Fhh">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="rhs-jv-hdc">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rhs-jv-hdc" id="RiT-X3-PiE">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="ogg-wW-EX2" id="yO8-Bw-AKo"/>
-                            <outlet property="delegate" destination="ogg-wW-EX2" id="g8z-Nt-8fR"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Mis Oraciones" id="omS-AA-tiK">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="TcE-SO-seY"/>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VkM-YR-VQC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3344" y="1017"/>
-        </scene>
-        <!--Mis Oraciones-->
-        <scene sceneID="N6L-kr-54x">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bTf-PN-97B" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Mis Oraciones" image="ic_oraciones" id="iab-HW-Hlk"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="neS-mC-qXt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="ogg-wW-EX2" kind="relationship" relationship="rootViewController" id="Tio-tm-w85"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dFT-aX-FwW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2532" y="1017"/>
         </scene>
         <!--Infantil-->
         <scene sceneID="Hm9-ce-tob">
@@ -581,7 +528,6 @@
         <image name="ic_cross" width="45" height="45"/>
         <image name="ic_donativos" width="48" height="32"/>
         <image name="ic_forward" width="55" height="47"/>
-        <image name="ic_oraciones" width="48" height="32"/>
         <image name="ic_play" width="30" height="48"/>
         <image name="ic_quienes" width="48" height="32"/>
         <image name="ic_rvinicio" width="48" height="32"/>

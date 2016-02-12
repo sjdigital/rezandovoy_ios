@@ -15,6 +15,18 @@ class infoViewController: UIViewController, UIWebViewDelegate {
     
     let url = "http://iosrv.rezandovoy.org/quienes.php"
 
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.LinkClicked {
+            let aux_url = "\(request.URL!)"
+            let url = NSURL(string: aux_url);
+            UIApplication.sharedApplication().openURL(url!)
+            return false
+        }
+        else {
+            return true
+        }
+    }
+    
     func cargaPagina(){
         let requestURL = NSURL(string: url)
         let request = NSURLRequest(URL: requestURL!)
