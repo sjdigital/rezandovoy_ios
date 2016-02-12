@@ -81,8 +81,21 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         return true
     }
     
+    func cerrar() {
+        UIControl().sendAction(Selector("suspend"), to: UIApplication.sharedApplication(), forEvent: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if Reachability.isConnectedToNetwork() == true {
+            print("Internet connection OK")
+        } else {
+            print("Internet connection FAILED")
+            let alert = UIAlertController(title: "Sin conexión a Internet", message: "Esta aplicación necesita una conexión activa a internet para funcionar.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Cerrar", style: .Default, handler: { (alert: UIAlertAction!) in self.cerrar() }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
         
         webView.delegate = self
         

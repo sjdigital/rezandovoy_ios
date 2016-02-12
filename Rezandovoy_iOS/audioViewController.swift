@@ -12,6 +12,8 @@ import UIKit
 import AVKit
 import AVFoundation
 
+var format = NSDateFormatter()
+
 extension UIView {
     
     func resizeToFitSubviews() {
