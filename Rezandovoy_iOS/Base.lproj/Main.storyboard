@@ -184,6 +184,7 @@
                     <connections>
                         <segue destination="NaK-zS-a0a" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="3XX-w4-au0" kind="relationship" relationship="viewControllers" id="yOL-RM-3xP"/>
+                        <segue destination="WzC-S1-pA9" kind="relationship" relationship="viewControllers" id="I8B-5j-FgN"/>
                         <segue destination="i8K-J0-efJ" kind="relationship" relationship="viewControllers" id="dtK-qY-y4d"/>
                     </connections>
                 </tabBarController>
@@ -311,6 +312,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DFn-Si-snm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1720" y="1017"/>
+        </scene>
+        <!--Mis Oraciones-->
+        <scene sceneID="dAE-QX-Ld9">
+            <objects>
+                <tableViewController id="WzC-S1-pA9" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Bcx-xe-rsh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ZYX-W4-YHK">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZYX-W4-YHK" id="C2B-AR-U4x">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="WzC-S1-pA9" id="oZt-mL-JP6"/>
+                            <outlet property="delegate" destination="WzC-S1-pA9" id="rLW-Bo-b2V"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Mis Oraciones" image="ic_oraciones" id="Szn-bH-fIo"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uyl-gb-EFv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2532" y="1017"/>
         </scene>
         <!--Audio View Controller-->
         <scene sceneID="Hhr-BE-zIY">
@@ -485,13 +516,21 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="W8R-Pa-sOg"/>
+                    <navigationItem key="navigationItem" id="cb7-BN-ZpT">
+                        <barButtonItem key="rightBarButtonItem" image="ic_down" id="uUs-3R-Pgr">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="descargar:" destination="53B-DE-vo2" id="9gj-0Z-z8N"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="audioSlider" destination="dmd-iU-qNT" id="hXB-aG-Gzd"/>
                         <outlet property="botonPlay" destination="OGT-uE-WxY" id="bva-1O-dem"/>
                         <outlet property="controles" destination="g8L-2c-2bT" id="hZg-5C-rLQ"/>
                         <outlet property="dentroScroll" destination="tM5-kT-Dsg" id="xxM-1q-TyK"/>
+                        <outlet property="downloadButton" destination="uUs-3R-Pgr" id="f6p-eC-tDg"/>
                         <outlet property="hojaView" destination="s4P-Vi-Rbg" id="vM5-Hi-Gne"/>
                         <outlet property="infoView" destination="rAg-8r-tal" id="wUQ-PG-K24"/>
                         <outlet property="timeLabel" destination="Ues-Tk-gbM" id="THc-Sh-5nB"/>
@@ -526,7 +565,9 @@
         <image name="ic_backward" width="55" height="47"/>
         <image name="ic_cross" width="45" height="45"/>
         <image name="ic_donativos" width="48" height="32"/>
+        <image name="ic_down" width="45" height="45"/>
         <image name="ic_forward" width="55" height="47"/>
+        <image name="ic_oraciones" width="48" height="32"/>
         <image name="ic_play" width="30" height="48"/>
         <image name="ic_quienes" width="48" height="32"/>
         <image name="ic_rvinicio" width="48" height="32"/>

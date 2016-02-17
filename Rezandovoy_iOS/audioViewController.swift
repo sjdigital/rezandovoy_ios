@@ -39,6 +39,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var index = 0
     let animationDuration: NSTimeInterval = 1
     let switchingInterval: NSTimeInterval = 240
+    let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
     var diaLabel: UILabel?
     var mesLabel: UILabel?
     var numLabel: UILabel?
@@ -55,6 +56,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var docsView: UIView?
     var bottonDocs: UIButton?
     var docsLabel: UILabel?
+    var mp3Url: String?
+    var modalView: UIView?
+    var downloadLoader: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -64,6 +68,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     @IBOutlet var hojaView: UIView!
     @IBOutlet var infoView: UIView!
     @IBOutlet var dentroScroll: UIView!
+    @IBOutlet var downloadButton: UIBarButtonItem!
     
     @IBAction func reproductor(sender: UIButton) {
         if (audioPlayer?.rate != 0.0) {
@@ -114,6 +119,61 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         else {
             self.infoView.hidden = true
         }
+    }
+    
+    @IBAction func descargar(sender: UIBarButtonItem) {
+        if self.modalView?.hidden == true {
+            self.modalView?.hidden = false
+        }
+        self.audioPlayer?.pause()
+        self.botonPlay.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
+        self.infoView.hidden = false
+        self.audioPlayer?.pause()
+        self.view.bringSubviewToFront(self.modalView!)
+        self.downloadLoader.center = self.view.center
+        self.downloadLoader.startAnimating()
+        self.view.addSubview(self.downloadLoader)
+        
+
+        if let audioUrl = NSURL(string: self.mp3Url!) {
+                
+            // your destination file url
+            let destinationUrl = self.documentsUrl.URLByAppendingPathComponent(audioUrl.lastPathComponent!)
+            print(destinationUrl)
+        
+            // check if it exists before downloading it
+            if NSFileManager().fileExistsAtPath(destinationUrl.path!) {
+                self.esconderLoader()
+                print("file already exists [\(destinationUrl.path!)]")
+            } else {
+                let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+                let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+                let request = NSMutableURLRequest(URL: audioUrl)
+                request.HTTPMethod = "GET"
+                session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                    guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
+                        let respuesta = response as? NSHTTPURLResponse
+                        print("Not a 200 response is:\n \(respuesta)")
+                        self.esconderLoader()
+                        return
+                    }
+                    do {
+                        if data!.writeToURL(destinationUrl, atomically: true) {
+                            self.esconderLoader()
+                            print("file saved [\(destinationUrl.path!)]")
+                        } else {
+                            self.esconderLoader()
+                            print("error saving file")
+                        }
+                    }
+                }).resume()
+            }
+        }
+    }
+    
+    func esconderLoader() {
+        self.downloadLoader.stopAnimating()
+        self.modalView?.hidden = true
     }
     
     func imageTap() {
@@ -247,6 +307,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         } else if tipo == 4 {
             getOracionEspecialInfantilById()
         }
+        self.modalView = UIView(frame: self.view.bounds)
+        self.modalView?.backgroundColor = UIColor(red: 55/255, green: 55/255, blue: 55/255, alpha: 0.6)
+        self.view.addSubview(self.modalView!)
     }
     
     override func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -554,6 +617,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     // Inicializar reproductor
     func reproductorInit(var aux: String)->Void {
         aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        self.mp3Url = aux
         let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
         self.audioPlayer = AVPlayer(playerItem: mp3url)
         self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
@@ -577,8 +641,6 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
                 }
                 if (UIApplication.sharedApplication().applicationState == .Active) {
                     self.timeLabel.text = timeString
-                } else {
-                    print("Background: \(timeString)")
                 }
                 
                 //Actualizar la posicion del slider
