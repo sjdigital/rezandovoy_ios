@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D4144A261C64B05100CFE210 /* Aleo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A251C64B05000CFE210 /* Aleo-Bold.otf */; };
 		D4144A281C64B08000CFE210 /* Aleo-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A271C64B08000CFE210 /* Aleo-Italic.otf */; };
+		D41BA1BC1C74BE2F00749BF2 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41BA1BB1C74BE2F00749BF2 /* ProgressView.swift */; };
 		D445589F1C6E020200B60412 /* conexion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D445589E1C6E020200B60412 /* conexion.swift */; };
 		D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83B1BF0CDC40078C231 /* AppDelegate.swift */; };
 		D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A83D1BF0CDC40078C231 /* InicioViewController.swift */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		D4144A251C64B05000CFE210 /* Aleo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Bold.otf"; sourceTree = "<group>"; };
 		D4144A271C64B08000CFE210 /* Aleo-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Italic.otf"; sourceTree = "<group>"; };
+		D41BA1BB1C74BE2F00749BF2 /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		D445589E1C6E020200B60412 /* conexion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = conexion.swift; path = ../conexion.swift; sourceTree = "<group>"; };
 		D4699ADA1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		D4699ADB1C60C69B003EE449 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				D470A83D1BF0CDC40078C231 /* InicioViewController.swift */,
 				D470A8411BF0CDC40078C231 /* Main.storyboard */,
 				D4D74DDD1C4F81A9005750B9 /* audioViewController.swift */,
+				D41BA1BB1C74BE2F00749BF2 /* ProgressView.swift */,
 				D4A2D8FB1C637C6600200E7A /* especialViewController.swift */,
 				D4D0F7571C2AF36300AE0801 /* infoViewController.swift */,
 				D4144A271C64B08000CFE210 /* Aleo-Italic.otf */,
@@ -297,6 +300,7 @@
 				D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */,
 				D4D74DDE1C4F81A9005750B9 /* audioViewController.swift in Sources */,
 				D470A83E1BF0CDC40078C231 /* InicioViewController.swift in Sources */,
+				D41BA1BC1C74BE2F00749BF2 /* ProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

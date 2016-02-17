@@ -32,7 +32,7 @@ extension UIView {
     }
 }
 
-class audioViewController: UIViewController, AVAudioPlayerDelegate {
+class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSessionDownloadDelegate {
     
     var audioPlayer: AVPlayer?
     var imageView: UIImageView?
@@ -57,8 +57,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     var bottonDocs: UIButton?
     var docsLabel: UILabel?
     var mp3Url: String?
-    var modalView: UIView?
-    var downloadLoader: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    private var downloadTask: NSURLSessionDownloadTask?
+
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -69,6 +69,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     @IBOutlet var infoView: UIView!
     @IBOutlet var dentroScroll: UIView!
     @IBOutlet var downloadButton: UIBarButtonItem!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var progressView: ProgressView!
+    @IBOutlet var modalView: UIView!
     
     @IBAction func reproductor(sender: UIButton) {
         if (audioPlayer?.rate != 0.0) {
@@ -122,60 +125,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
     }
     
     @IBAction func descargar(sender: UIBarButtonItem) {
-        if self.modalView?.hidden == true {
-            self.modalView?.hidden = false
-        }
-        self.audioPlayer?.pause()
-        self.botonPlay.setImage(UIImage(named: "ic_play"), forState: UIControlState.Normal)
-        self.infoView.hidden = false
-        self.audioPlayer?.pause()
-        self.view.bringSubviewToFront(self.modalView!)
-        self.downloadLoader.center = self.view.center
-        self.downloadLoader.startAnimating()
-        self.view.addSubview(self.downloadLoader)
-        
+        self.modalView.hidden = false
+        self.view.bringSubviewToFront(self.modalView)
+        statusLabel.text = "Descargando oración"
+        createDownloadTask()
+    }
 
-        if let audioUrl = NSURL(string: self.mp3Url!) {
-                
-            // your destination file url
-            let destinationUrl = self.documentsUrl.URLByAppendingPathComponent(audioUrl.lastPathComponent!)
-            print(destinationUrl)
-        
-            // check if it exists before downloading it
-            if NSFileManager().fileExistsAtPath(destinationUrl.path!) {
-                self.esconderLoader()
-                print("file already exists [\(destinationUrl.path!)]")
-            } else {
-                let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-                let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-                let request = NSMutableURLRequest(URL: audioUrl)
-                request.HTTPMethod = "GET"
-                session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                    guard let realResponse = response as? NSHTTPURLResponse where realResponse.statusCode == 200 else {
-                        let respuesta = response as? NSHTTPURLResponse
-                        print("Not a 200 response is:\n \(respuesta)")
-                        self.esconderLoader()
-                        return
-                    }
-                    do {
-                        if data!.writeToURL(destinationUrl, atomically: true) {
-                            self.esconderLoader()
-                            print("file saved [\(destinationUrl.path!)]")
-                        } else {
-                            self.esconderLoader()
-                            print("error saving file")
-                        }
-                    }
-                }).resume()
-            }
-        }
-    }
-    
-    func esconderLoader() {
-        self.downloadLoader.stopAnimating()
-        self.modalView?.hidden = true
-    }
-    
     func imageTap() {
         if (self.infoView.hidden == true) {
             self.infoView.hidden = false
@@ -307,9 +262,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         } else if tipo == 4 {
             getOracionEspecialInfantilById()
         }
-        self.modalView = UIView(frame: self.view.bounds)
-        self.modalView?.backgroundColor = UIColor(red: 55/255, green: 55/255, blue: 55/255, alpha: 0.6)
-        self.view.addSubview(self.modalView!)
+        
+        statusLabel.text = ""
+        modalView.frame = view.bounds
+        modalView.backgroundColor = UIColor(red: 55/255, green: 55/255, blue: 55/255, alpha: 0.8)
     }
     
     override func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -1004,5 +960,47 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate {
         
         // Funciona pero no tiene sentido
         self.dentroScroll.translatesAutoresizingMaskIntoConstraints = true
+    }
+    
+    // Funciones de la clase delegate session download data
+    func createDownloadTask() {
+        let downloadRequest = NSMutableURLRequest(URL: NSURL(string: self.mp3Url!)!)
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        
+        downloadTask = session.downloadTaskWithRequest(downloadRequest)
+        downloadTask!.resume()
+    }
+    
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+        progressView.animateProgressViewToProgress(progress)
+        progressView.updateProgressViewLabelWithProgress(progress * 100)
+        progressView.updateProgressViewWith(Float(totalBytesWritten), totalFileSize: Float(totalBytesExpectedToWrite))
+    }
+    
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        statusLabel.text = "Download finished"
+        print(location)
+        let audioUrl = NSURL(string: self.mp3Url!)
+        let destinationUrl = self.documentsUrl.URLByAppendingPathComponent(audioUrl!.lastPathComponent!)
+        print(destinationUrl.path)
+        if NSFileManager().fileExistsAtPath(destinationUrl.path!) {
+            print("file already exists [\(destinationUrl.path!)]")
+        } else {
+            do {
+                try NSFileManager.defaultManager().moveItemAtURL(location, toURL: destinationUrl)
+                print("Move successful")
+            } catch let error as NSError {
+                print("Moved failed with error \(error)")
+            }
+        }
+    }
+    
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let _ = error {
+            statusLabel.text = "Download failed"
+        } else {
+            statusLabel.text = "Download finished"
+        }
     }
 }

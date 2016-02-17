@@ -4,6 +4,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Aleo-Regular.otf">
+            <string>Aleo-Regular</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Inicio View Controller-->
         <scene sceneID="hNz-n2-bh7">
@@ -355,6 +360,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-6j-AaK">
+                                <rect key="frame" x="0.0" y="20" width="600" height="480"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAg-W8-WW9">
+                                        <rect key="frame" x="35" y="305" width="530" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="qIR-wd-geU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Aleo-Regular" family="Aleo" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NRP-nT-Sbg" customClass="ProgressView" customModule="Rezandovoy" customModuleProvider="target">
+                                        <rect key="frame" x="175" y="40" width="250" height="250"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="250" id="BH1-8N-ocF"/>
+                                            <constraint firstAttribute="width" constant="250" id="Hcl-Zf-m2Y"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="UAg-W8-WW9" firstAttribute="top" secondItem="NRP-nT-Sbg" secondAttribute="bottom" constant="15" id="Gol-dS-zsh"/>
+                                    <constraint firstItem="NRP-nT-Sbg" firstAttribute="top" secondItem="8b5-6j-AaK" secondAttribute="top" constant="40" id="Uvi-QP-Da1"/>
+                                    <constraint firstItem="UAg-W8-WW9" firstAttribute="leading" secondItem="8b5-6j-AaK" secondAttribute="leading" constant="35" id="VWn-Id-2NK"/>
+                                    <constraint firstItem="NRP-nT-Sbg" firstAttribute="centerX" secondItem="8b5-6j-AaK" secondAttribute="centerX" id="bYB-oc-TJj"/>
+                                    <constraint firstAttribute="trailing" secondItem="UAg-W8-WW9" secondAttribute="trailing" constant="35" id="gq5-hY-NLd"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g8L-2c-2bT">
                                 <rect key="frame" x="0.0" y="500" width="600" height="100"/>
                                 <subviews>
@@ -504,6 +539,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="8b5-6j-AaK" firstAttribute="top" secondItem="qy1-m3-714" secondAttribute="bottom" id="7qH-Z5-6VV"/>
+                            <constraint firstItem="g8L-2c-2bT" firstAttribute="top" secondItem="8b5-6j-AaK" secondAttribute="bottom" id="AMj-YX-5wP"/>
+                            <constraint firstAttribute="trailing" secondItem="8b5-6j-AaK" secondAttribute="trailing" id="AWy-IQ-CCA"/>
                             <constraint firstAttribute="bottom" secondItem="g8L-2c-2bT" secondAttribute="bottom" id="F7P-hl-whR"/>
                             <constraint firstItem="rAg-8r-tal" firstAttribute="width" secondItem="DcG-ng-gxJ" secondAttribute="width" constant="-80" id="VEp-TV-jZ9"/>
                             <constraint firstAttribute="trailing" secondItem="g8L-2c-2bT" secondAttribute="trailing" id="a3v-pr-dP8"/>
@@ -511,6 +549,7 @@
                             <constraint firstItem="rAg-8r-tal" firstAttribute="centerX" secondItem="DcG-ng-gxJ" secondAttribute="centerX" id="bx2-2n-KEW"/>
                             <constraint firstItem="g8L-2c-2bT" firstAttribute="leading" secondItem="DcG-ng-gxJ" secondAttribute="leading" id="e1r-4s-NPG"/>
                             <constraint firstItem="g8L-2c-2bT" firstAttribute="width" secondItem="DcG-ng-gxJ" secondAttribute="width" id="hoy-sl-Pzr"/>
+                            <constraint firstItem="8b5-6j-AaK" firstAttribute="leading" secondItem="DcG-ng-gxJ" secondAttribute="leading" id="n0E-a4-4Ch"/>
                             <constraint firstItem="g8L-2c-2bT" firstAttribute="top" secondItem="rAg-8r-tal" secondAttribute="bottom" constant="50" id="sMA-CM-RMi"/>
                             <constraint firstItem="rAg-8r-tal" firstAttribute="top" secondItem="qy1-m3-714" secondAttribute="bottom" constant="50" id="vvd-wp-9Jy"/>
                         </constraints>
@@ -533,6 +572,9 @@
                         <outlet property="downloadButton" destination="uUs-3R-Pgr" id="f6p-eC-tDg"/>
                         <outlet property="hojaView" destination="s4P-Vi-Rbg" id="vM5-Hi-Gne"/>
                         <outlet property="infoView" destination="rAg-8r-tal" id="wUQ-PG-K24"/>
+                        <outlet property="modalView" destination="8b5-6j-AaK" id="cEA-R7-03C"/>
+                        <outlet property="progressView" destination="NRP-nT-Sbg" id="CO7-VM-fmW"/>
+                        <outlet property="statusLabel" destination="UAg-W8-WW9" id="y6M-pE-QrH"/>
                         <outlet property="timeLabel" destination="Ues-Tk-gbM" id="THc-Sh-5nB"/>
                         <outlet property="vistaScroll" destination="TCm-Ea-oKx" id="A8i-wp-pLA"/>
                     </connections>
