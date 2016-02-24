@@ -130,6 +130,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         statusLabel.text = "Descargando oración"
         createDownloadTask()
     }
+    
+    @IBAction func downloadButtonPressed() {
+        self.downloadTask!.cancel()
+        self.modalView.hidden = true
+    }
 
     func imageTap() {
         if (self.infoView.hidden == true) {
@@ -265,7 +270,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         
         statusLabel.text = ""
         modalView.frame = view.bounds
-        modalView.backgroundColor = UIColor(red: 55/255, green: 55/255, blue: 55/255, alpha: 0.8)
+        modalView.backgroundColor = UIColor(red: 10/255, green: 50/255, blue: 66/255, alpha: 0.7)
     }
     
     override func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -727,7 +732,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                 else if (cancion?.valueForKey("interprete") as! String != "" && cancion?.valueForKey("autor") as! String != "") {
                     let interprete = cancion?.valueForKey("interprete")
                     let autor = cancion?.valueForKey("autor")
-                    cadena2 = NSAttributedString(string: " de \(autor) interpretado por \(interprete!). CD ", attributes: normal)
+                    cadena2 = NSAttributedString(string: " de \(autor!) interpretado por \(interprete!). CD ", attributes: normal)
                 }
                 let cd = coleccion?.valueForKey("nombre")
                 cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic)
@@ -979,7 +984,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        statusLabel.text = "Download finished"
+        statusLabel.text = "Descarga finalizada"
         print(location)
         let audioUrl = NSURL(string: self.mp3Url!)
         let destinationUrl = self.documentsUrl.URLByAppendingPathComponent(audioUrl!.lastPathComponent!)
@@ -990,6 +995,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             do {
                 try NSFileManager.defaultManager().moveItemAtURL(location, toURL: destinationUrl)
                 print("Move successful")
+                self.downloadButton.tintColor = UIColor.greenColor()
+                let delay = 5.0 * Double(NSEC_PER_SEC)
+                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+                dispatch_after(time, dispatch_get_main_queue(), {
+                    self.modalView.hidden = true
+                })
             } catch let error as NSError {
                 print("Moved failed with error \(error)")
             }
@@ -998,9 +1009,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if let _ = error {
-            statusLabel.text = "Download failed"
+            statusLabel.text = "Fallo al descargar"
         } else {
-            statusLabel.text = "Download finished"
+            statusLabel.text = "Descarga finalizada"
         }
     }
 }

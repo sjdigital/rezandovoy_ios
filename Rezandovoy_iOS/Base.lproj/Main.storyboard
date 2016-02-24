@@ -7,6 +7,7 @@
     <customFonts key="customFonts">
         <mutableArray key="Aleo-Regular.otf">
             <string>Aleo-Regular</string>
+            <string>Aleo-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -363,6 +364,16 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8b5-6j-AaK">
                                 <rect key="frame" x="0.0" y="20" width="600" height="480"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rMV-gH-5bo">
+                                        <rect key="frame" x="238" y="350" width="125" height="30"/>
+                                        <fontDescription key="fontDescription" name="Aleo-Regular" family="Aleo" pointSize="15"/>
+                                        <state key="normal" title="Cancelar Descarga">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="downloadButtonPressed" destination="53B-DE-vo2" eventType="touchUpInside" id="OYI-PV-270"/>
+                                        </connections>
+                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAg-W8-WW9">
                                         <rect key="frame" x="35" y="305" width="530" height="30"/>
                                         <constraints>
@@ -384,8 +395,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="UAg-W8-WW9" firstAttribute="top" secondItem="NRP-nT-Sbg" secondAttribute="bottom" constant="15" id="Gol-dS-zsh"/>
+                                    <constraint firstItem="rMV-gH-5bo" firstAttribute="centerX" secondItem="8b5-6j-AaK" secondAttribute="centerX" id="Tu6-k0-5V5"/>
                                     <constraint firstItem="NRP-nT-Sbg" firstAttribute="top" secondItem="8b5-6j-AaK" secondAttribute="top" constant="40" id="Uvi-QP-Da1"/>
                                     <constraint firstItem="UAg-W8-WW9" firstAttribute="leading" secondItem="8b5-6j-AaK" secondAttribute="leading" constant="35" id="VWn-Id-2NK"/>
+                                    <constraint firstItem="UAg-W8-WW9" firstAttribute="bottom" secondItem="rMV-gH-5bo" secondAttribute="top" constant="-15" id="bDo-rG-fUz"/>
                                     <constraint firstItem="NRP-nT-Sbg" firstAttribute="centerX" secondItem="8b5-6j-AaK" secondAttribute="centerX" id="bYB-oc-TJj"/>
                                     <constraint firstAttribute="trailing" secondItem="UAg-W8-WW9" secondAttribute="trailing" constant="35" id="gq5-hY-NLd"/>
                                 </constraints>

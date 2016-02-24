@@ -66,7 +66,7 @@ class ProgressView: UIView {
         let centerPoint = CGPointMake(CGRectGetWidth(frame)/2 , CGRectGetHeight(frame)/2)
         
         progressLayer.path = UIBezierPath(arcCenter:centerPoint, radius: CGRectGetWidth(frame)/2 - 10.0, startAngle:startAngle, endAngle:endAngle, clockwise: true).CGPath
-        progressLayer.backgroundColor = UIColor.clearColor().CGColor
+        progressLayer.backgroundColor = UIColor.whiteColor().CGColor
         progressLayer.fillColor = nil
         progressLayer.strokeColor = UIColor.whiteColor().CGColor
         progressLayer.lineWidth = 4.0
