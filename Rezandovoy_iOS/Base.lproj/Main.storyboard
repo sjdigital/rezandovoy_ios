@@ -8,6 +8,7 @@
         <mutableArray key="Aleo-Regular.otf">
             <string>Aleo-Regular</string>
             <string>Aleo-Regular</string>
+            <string>Aleo-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -190,7 +191,7 @@
                     <connections>
                         <segue destination="NaK-zS-a0a" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="3XX-w4-au0" kind="relationship" relationship="viewControllers" id="yOL-RM-3xP"/>
-                        <segue destination="WzC-S1-pA9" kind="relationship" relationship="viewControllers" id="I8B-5j-FgN"/>
+                        <segue destination="WyU-1Q-uG4" kind="relationship" relationship="viewControllers" id="I8B-5j-FgN"/>
                         <segue destination="i8K-J0-efJ" kind="relationship" relationship="viewControllers" id="dtK-qY-y4d"/>
                     </connections>
                 </tabBarController>
@@ -322,19 +323,35 @@
         <!--Mis Oraciones-->
         <scene sceneID="dAE-QX-Ld9">
             <objects>
-                <tableViewController id="WzC-S1-pA9" sceneMemberID="viewController">
+                <tableViewController id="WzC-S1-pA9" customClass="misOraciones" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Bcx-xe-rsh">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ZYX-W4-YHK">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="celdaOracion" id="ZYX-W4-YHK" customClass="celdaOracion" customModule="Rezandovoy" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZYX-W4-YHK" id="C2B-AR-U4x">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EFW-7F-zN3">
+                                            <rect key="frame" x="8" y="13" width="584" height="18"/>
+                                            <fontDescription key="fontDescription" name="Aleo-Regular" family="Aleo" pointSize="15"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="EFW-7F-zN3" firstAttribute="trailing" secondItem="C2B-AR-U4x" secondAttribute="trailingMargin" id="Cma-Mt-kGS"/>
+                                        <constraint firstItem="EFW-7F-zN3" firstAttribute="leading" secondItem="C2B-AR-U4x" secondAttribute="leadingMargin" id="Rr3-sy-dHo"/>
+                                        <constraint firstItem="EFW-7F-zN3" firstAttribute="centerY" secondItem="C2B-AR-U4x" secondAttribute="centerY" id="tDc-tP-Urg"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="titulo" destination="EFW-7F-zN3" id="Ffn-SV-32U"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -342,12 +359,12 @@
                             <outlet property="delegate" destination="WzC-S1-pA9" id="rLW-Bo-b2V"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Mis Oraciones" image="ic_oraciones" id="Szn-bH-fIo"/>
+                    <navigationItem key="navigationItem" id="6fU-lz-MwT"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uyl-gb-EFv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2532" y="1017"/>
+            <point key="canvasLocation" x="3344" y="1017"/>
         </scene>
         <!--Audio View Controller-->
         <scene sceneID="Hhr-BE-zIY">
@@ -580,6 +597,7 @@
                     <connections>
                         <outlet property="audioSlider" destination="dmd-iU-qNT" id="hXB-aG-Gzd"/>
                         <outlet property="botonPlay" destination="OGT-uE-WxY" id="bva-1O-dem"/>
+                        <outlet property="cancelDownload" destination="rMV-gH-5bo" id="Ml3-WU-iGy"/>
                         <outlet property="controles" destination="g8L-2c-2bT" id="hZg-5C-rLQ"/>
                         <outlet property="dentroScroll" destination="tM5-kT-Dsg" id="xxM-1q-TyK"/>
                         <outlet property="downloadButton" destination="uUs-3R-Pgr" id="f6p-eC-tDg"/>
@@ -614,6 +632,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sz4-O9-CoR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="1017"/>
+        </scene>
+        <!--Mis Oraciones-->
+        <scene sceneID="ZSe-8M-H8x">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WyU-1Q-uG4" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Mis Oraciones" image="ic_oraciones" id="Szn-bH-fIo"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KYK-AK-seb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="WzC-S1-pA9" kind="relationship" relationship="rootViewController" id="GBw-y7-Umh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dRM-xb-sZ1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2532" y="1017"/>
         </scene>
     </scenes>
     <resources>

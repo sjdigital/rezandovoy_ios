@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D40201961C96D9C800E83A25 /* misOraciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40201951C96D9C800E83A25 /* misOraciones.swift */; };
+		D40201981C96DA8500E83A25 /* celdaOracion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40201971C96DA8500E83A25 /* celdaOracion.swift */; };
 		D407786D1C7DF365002F3DFE /* Oracion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D407786C1C7DF365002F3DFE /* Oracion.swift */; };
 		D4144A261C64B05100CFE210 /* Aleo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A251C64B05000CFE210 /* Aleo-Bold.otf */; };
 		D4144A281C64B08000CFE210 /* Aleo-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4144A271C64B08000CFE210 /* Aleo-Italic.otf */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D40201951C96D9C800E83A25 /* misOraciones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = misOraciones.swift; sourceTree = "<group>"; };
+		D40201971C96DA8500E83A25 /* celdaOracion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = celdaOracion.swift; sourceTree = "<group>"; };
 		D407786C1C7DF365002F3DFE /* Oracion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Oracion.swift; sourceTree = "<group>"; };
 		D4144A251C64B05000CFE210 /* Aleo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Bold.otf"; sourceTree = "<group>"; };
 		D4144A271C64B08000CFE210 /* Aleo-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Italic.otf"; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 		D470A83A1BF0CDC40078C231 /* Rezandovoy_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D40201951C96D9C800E83A25 /* misOraciones.swift */,
+				D40201971C96DA8500E83A25 /* celdaOracion.swift */,
 				D445589E1C6E020200B60412 /* conexion.swift */,
 				D470A83B1BF0CDC40078C231 /* AppDelegate.swift */,
 				D470A83D1BF0CDC40078C231 /* InicioViewController.swift */,
@@ -296,9 +302,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4D0F7581C2AF36300AE0801 /* infoViewController.swift in Sources */,
+				D40201981C96DA8500E83A25 /* celdaOracion.swift in Sources */,
 				D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */,
 				D470A83C1BF0CDC40078C231 /* AppDelegate.swift in Sources */,
 				D4A2D8FC1C637C6600200E7A /* especialViewController.swift in Sources */,
+				D40201961C96D9C800E83A25 /* misOraciones.swift in Sources */,
 				D445589F1C6E020200B60412 /* conexion.swift in Sources */,
 				D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */,
 				D4D74DDE1C4F81A9005750B9 /* audioViewController.swift in Sources */,

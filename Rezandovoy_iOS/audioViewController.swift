@@ -37,6 +37,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     var audioPlayer: AVPlayer?
     var imageView: UIImageView?
     var index = 0
+    var offline = 0
     let animationDuration: NSTimeInterval = 1
     let switchingInterval: NSTimeInterval = 240
     let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
@@ -58,6 +59,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     var docsLabel: UILabel?
     var mp3Url: String?
     private var downloadTask: NSURLSessionDownloadTask?
+    var oracion: Oracion = Oracion(auxId: id, auxTipo: tipo)
 
     
     @IBOutlet var controles: UIView!
@@ -72,6 +74,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     @IBOutlet var statusLabel: UILabel!
     @IBOutlet var progressView: ProgressView!
     @IBOutlet var modalView: UIView!
+    @IBOutlet var cancelDownload: UIButton!
     
     @IBAction func reproductor(sender: UIButton) {
         if (audioPlayer?.rate != 0.0) {
@@ -129,11 +132,13 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         self.view.bringSubviewToFront(self.modalView)
         statusLabel.text = "Descargando oración"
         createDownloadTask()
+        sender.enabled = false
     }
     
     @IBAction func downloadButtonPressed() {
         self.downloadTask!.cancel()
         self.modalView.hidden = true
+        self.downloadButton.enabled = true
     }
 
     func imageTap() {
@@ -257,16 +262,40 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         
         print(id)
         print(tipo)
-        self.imageView = UIImageView(frame: self.view.bounds)
-        if tipo == 1 {
-            getOracionPeriodicaAdultoById()
-        } else if tipo == 2 {
-            getOracionEspecialAdultaById()
-        } else if tipo == 3 {
-            getOracionPeriodicaInfantilById()
-        } else if tipo == 4 {
-            getOracionEspecialInfantilById()
+        
+        do {
+            let items = try NSFileManager.defaultManager().contentsOfDirectoryAtPath("\(self.documentsUrl.path!)")
+            for item in items {
+                if item.hasSuffix("mp3") {
+                    print(item)
+                } else {
+                    if (item == "\(id)") {
+                        print("Datos: \(item) -> ID: \(id)")
+                        self.downloadButton.enabled = false
+                        offline = 1
+                    }
+                }
+            }
+        } catch let error as NSError {
+            print("Fallo al leer el directorio \(error)")
         }
+        
+        if (offline == 1) {
+            print("Offline")
+            getOracionGuardada()
+        } else {
+            if tipo == 1 {
+                getOracionPeriodicaAdultoById()
+            } else if tipo == 2 {
+                getOracionEspecialAdultaById()
+            } else if tipo == 3 {
+                getOracionPeriodicaInfantilById()
+            } else if tipo == 4 {
+                getOracionEspecialInfantilById()
+            }
+        }
+        
+        self.imageView = UIImageView(frame: self.view.bounds)
         
         statusLabel.text = ""
         modalView.frame = view.bounds
@@ -300,6 +329,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             self.tabBarController?.tabBar.hidden = false
             self.navigationController?.navigationBar.barTintColor = nil
             self.navigationController?.navigationBar.tintColor = self.view.tintColor
+            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
+            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
             do {
                 try AVAudioSession.sharedInstance().setActive(false)
@@ -319,6 +350,41 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // Cargar oración guardada en el telefono 
+    func getOracionGuardada() -> AnyObject {
+        let oracionGuardada = self.loadOracion(id)
+        
+        // Recuperar el link de la oración
+        var aux_mp3 = "\(self.documentsUrl)"
+        aux_mp3 += oracionGuardada!.mp3! as String
+        print(aux_mp3)
+        self.reproductorInit(aux_mp3)
+        
+        // LLamada a la funcion para poner el titulo
+        self.cambiaTitulo(oracionGuardada!.titulo! as String)
+        
+        // LLamada a la funcion para recuperar imagenes
+        self.recuperarImagenes(oracionGuardada!.images! as String)
+        
+        // LLamada a la funcion para recuperar fecha
+        self.recuperarFecha(oracionGuardada!.fecha! as String)
+        
+        // LLamada a la funcion para recuperar musicas
+        self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
+        
+        // LLamada a la funcion para recuperar la cita
+        self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+        
+        // LLamada a la funcion para recuperar los documentos
+        self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+        
+        // LLamada a la funcion para crear el boton de compartir
+        self.compartir()
+        
+        return true
+    }
+    
     
     // Llamada al servidor REST para recibir la periodica
     func getOracionPeriodicaAdultoById() -> AnyObject {
@@ -346,6 +412,14 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             }
             do {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    
+                    // Guardar datos
+                    self.oracion.settitulo(jsonDict.valueForKey("titulo") as! String)
+                    self.oracion.setimages(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    self.oracion.setfecha(jsonDict.valueForKey("fecha") as? String)
+                    self.oracion.setmusicas(jsonDict.valueForKey("musicas") as? NSArray)
+                    self.oracion.setlectura(jsonDict.valueForKey("lectura") as? NSArray)
+                    self.oracion.setdocumentos(jsonDict.valueForKey("documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
                     var aux_mp3 = "http://rezandovoy.ovh/"
@@ -579,8 +653,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     func reproductorInit(var aux: String)->Void {
         aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         self.mp3Url = aux
-        let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
-        self.audioPlayer = AVPlayer(playerItem: mp3url)
+        print(aux)
+        let assetmp3 = AVURLAsset(URL: NSURL(string:aux)!)
+        let localmp3 = AVPlayerItem(asset: assetmp3)
+        //let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
+        //self.audioPlayer = AVPlayer(playerItem: mp3url)
+        self.audioPlayer = AVPlayer(playerItem: localmp3)
         self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
             time in
             if (self.audioPlayer?.currentItem!.currentTime() < self.audioPlayer?.currentItem!.duration) {
@@ -620,6 +698,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                 self.infoView.hidden = false
             }
         }
+        print(self.audioPlayer!.status)
         self.reproductor(self.botonPlay)
     }
     
@@ -995,7 +1074,12 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             do {
                 try NSFileManager.defaultManager().moveItemAtURL(location, toURL: destinationUrl)
                 print("Move successful")
-                self.downloadButton.tintColor = UIColor.greenColor()
+                self.cancelDownload.hidden = true
+                
+                // Guardar datos
+                oracion.setmp3(audioUrl!.lastPathComponent!)
+                self.saveOracion()
+                
                 let delay = 5.0 * Double(NSEC_PER_SEC)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 dispatch_after(time, dispatch_get_main_queue(), {
@@ -1013,5 +1097,18 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
         } else {
             statusLabel.text = "Descarga finalizada"
         }
+    }
+    
+    func saveOracion() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(oracion, toFile: Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oracion.id)").path!)
+        if !isSuccessfulSave {
+            print("Failed to save oracion...")
+        }
+    }
+    
+    func loadOracion(aux_id: Int) -> Oracion? {
+        let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(aux_id)").path!) as? Oracion
+        print(aux!.id)
+        return aux
     }
 }
