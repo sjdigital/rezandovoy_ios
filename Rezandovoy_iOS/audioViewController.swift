@@ -58,6 +58,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     var bottonDocs: UIButton?
     var docsLabel: UILabel?
     var mp3Url: String?
+    var iconoUrl: NSURL?
     private var downloadTask: NSURLSessionDownloadTask?
     var oracion: Oracion = Oracion(auxId: id, auxTipo: tipo)
 
@@ -355,29 +356,117 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     func getOracionGuardada() -> AnyObject {
         let oracionGuardada = self.loadOracion(id)
         
-        // Recuperar el link de la oración
-        var aux_mp3 = "\(self.documentsUrl)"
-        aux_mp3 += oracionGuardada!.mp3! as String
-        print(aux_mp3)
-        self.reproductorInit(aux_mp3)
         
-        // LLamada a la funcion para poner el titulo
-        self.cambiaTitulo(oracionGuardada!.titulo! as String)
+        // Si es oracion periodica normal
+        if (oracionGuardada!.tipo == 1) {
+            
+            // Recuperar el link de la oración
+            var aux_mp3 = "\(self.documentsUrl)"
+            aux_mp3 += oracionGuardada!.mp3! as String
+            print(aux_mp3)
+            self.reproductorInit(aux_mp3)
         
-        // LLamada a la funcion para recuperar imagenes
-        self.recuperarImagenes(oracionGuardada!.images! as String)
+            // LLamada a la funcion para poner el titulo
+            self.cambiaTitulo(oracionGuardada!.titulo! as String)
         
-        // LLamada a la funcion para recuperar fecha
-        self.recuperarFecha(oracionGuardada!.fecha! as String)
+            // LLamada a la funcion para recuperar imagenes
+            self.recuperarImagenes(oracionGuardada!.images! as String)
         
-        // LLamada a la funcion para recuperar musicas
-        self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
+            // LLamada a la funcion para recuperar fecha
+            self.recuperarFecha(oracionGuardada!.fecha! as String)
         
-        // LLamada a la funcion para recuperar la cita
-        self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+            // LLamada a la funcion para recuperar musicas
+            self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
         
-        // LLamada a la funcion para recuperar los documentos
-        self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+            // LLamada a la funcion para recuperar la cita
+            self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+        
+            // LLamada a la funcion para recuperar los documentos
+            self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+            
+        } else if (oracionGuardada!.tipo == 2) {
+            
+            // Recuperar el link de la oración
+            var aux_mp3 = "\(self.documentsUrl)"
+            aux_mp3 += oracionGuardada!.mp3! as String
+            print(aux_mp3)
+            self.reproductorInit(aux_mp3)
+            
+            // LLamada a la funcion para poner el titulo
+            self.cambiaTitulo(oracionGuardada!.titulo! as String)
+            
+            // LLamada a la funcion para recuperar imagenes
+            self.recuperarImagenes(oracionGuardada!.images! as String)
+            
+            // LLamada a la funcion para recuperar fecha
+            var aux_icono = "\(self.documentsUrl)"
+            aux_icono += oracionGuardada!.icono! as String
+            self.recuperarIcono(aux_icono as String)
+            
+            // LLamada a la funcion para recuperar musicas
+            self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
+            
+            // LLamada a la funcion para recuperar la cita
+            if let _ : AnyObject = oracionGuardada!.lectura {
+                self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+            }
+            
+            // LLamada a la funcion para recuperar los documentos
+            self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+            
+        } else if (oracionGuardada!.tipo == 3) {
+            
+            // Recuperar el link de la oración
+            var aux_mp3 = "\(self.documentsUrl)"
+            aux_mp3 += oracionGuardada!.mp3! as String
+            print(aux_mp3)
+            self.reproductorInit(aux_mp3)
+            
+            // LLamada a la funcion para poner el titulo
+            self.cambiaTitulo(oracionGuardada!.titulo! as String)
+            
+            // LLamada a la funcion para recuperar imagenes
+            self.recuperarImagenes(oracionGuardada!.images! as String)
+            
+            // LLamada a la funcion para recuperar musicas
+            self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
+            
+            // LLamada a la funcion para recuperar el titulo y maquetarlo
+            self.recuperarTitulo(oracionGuardada!.titulo! as String)
+            
+            // LLamada a la funcion para recuperar la cita
+            self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+            
+            // LLamada a la funcion para recuperar los documentos
+            self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+            
+        } else if (oracionGuardada!.tipo == 4) {
+            
+            // Recuperar el link de la oración
+            var aux_mp3 = "\(self.documentsUrl)"
+            aux_mp3 += oracionGuardada!.mp3! as String
+            print(aux_mp3)
+            self.reproductorInit(aux_mp3)
+            
+            // LLamada a la funcion para poner el titulo
+            self.cambiaTitulo(oracionGuardada!.titulo! as String)
+            
+            // LLamada a la funcion para recuperar imagenes
+            self.recuperarImagenes(oracionGuardada!.images! as String)
+            
+            // LLamada a la funcion para recuperar musicas
+            self.recuperarMusica((oracionGuardada!.musicas! as NSArray))
+            
+            // LLamada a la funcion para recuperar el titulo y maquetarlo
+            self.recuperarTitulo(oracionGuardada!.titulo! as String)
+            
+            // LLamada a la funcion para recuperar la cita
+            self.recuperaCita((oracionGuardada!.lectura! as NSArray))
+            
+            // LLamada a la funcion para recuperar los documentos
+            self.recuperaDocs((oracionGuardada!.documentos! as NSArray))
+            
+        }
         
         // LLamada a la funcion para crear el boton de compartir
         self.compartir()
@@ -484,6 +573,14 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             do {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
                     
+                    // Guardar datos
+                    self.oracion.settitulo(jsonDict.valueForKey("titulo") as! String)
+                    self.oracion.setimages(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    self.oracion.setfecha(jsonDict.valueForKey("fecha") as? String)
+                    self.oracion.setmusicas(jsonDict.valueForKey("musicas") as? NSArray)
+                    self.oracion.setlectura(jsonDict.valueForKey("lectura") as? NSArray)
+                    self.oracion.setdocumentos(jsonDict.valueForKey("documentos") as? NSArray)
+                    
                     // Recuperar el link de la oración
                     var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
@@ -546,6 +643,13 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             }
             do {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
+                    
+                    // Guardar datos
+                    self.oracion.settitulo(jsonDict.valueForKey("titulo") as! String)
+                    self.oracion.setimages(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    self.oracion.setmusicas(jsonDict.valueForKey("musicas") as? NSArray)
+                    self.oracion.setlectura(jsonDict.valueForKey("lectura") as? NSArray)
+                    self.oracion.setdocumentos(jsonDict.valueForKey("documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
                     var aux_mp3 = "http://rezandovoy.ovh/"
@@ -611,6 +715,13 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             do {
                 if let jsonDict = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions(rawValue: 0)) as? NSDictionary {
                     
+                    // Guardar datos
+                    self.oracion.settitulo(jsonDict.valueForKey("titulo") as! String)
+                    self.oracion.setimages(jsonDict.valueForKey("ficheroImagenes") as! String)
+                    self.oracion.setmusicas(jsonDict.valueForKey("musicas") as? NSArray)
+                    self.oracion.setlectura(jsonDict.valueForKey("lectura") as? NSArray)
+                    self.oracion.setdocumentos(jsonDict.valueForKey("documentos") as? NSArray)
+                    
                     // Recuperar el link de la oración
                     var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.valueForKey("oracion_link") as! String
@@ -623,7 +734,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                     self.recuperarImagenes(jsonDict.valueForKey("ficheroImagenes") as! String)
                     
                     // LLamada a la funcion para recuperar fecha
-                    self.recuperarIcono(jsonDict.valueForKey("icono_link") as? String)
+                    var aux = "http://rezandovoy.ovh/"
+                    aux += jsonDict.valueForKey("icono_link") as!  String
+                    self.recuperarIcono(aux)
                     
                     // LLamada a la funcion para recuperar musicas
                     self.recuperarMusica((jsonDict.valueForKey("musicas") as? NSArray)!)
@@ -653,11 +766,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     func reproductorInit(var aux: String)->Void {
         aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         self.mp3Url = aux
-        print(aux)
         let assetmp3 = AVURLAsset(URL: NSURL(string:aux)!)
         let localmp3 = AVPlayerItem(asset: assetmp3)
-        //let mp3url = AVPlayerItem(URL: NSURL(string:aux)!)
-        //self.audioPlayer = AVPlayer(playerItem: mp3url)
         self.audioPlayer = AVPlayer(playerItem: localmp3)
         self.audioPlayer?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 10), queue: dispatch_get_main_queue()) {
             time in
@@ -883,10 +993,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     func recuperarIcono(aux_icono: String!)-> Void {
         dispatch_async(dispatch_get_main_queue()) {
             self.hojaView.layer.borderWidth = 0.0
-            var aux = "http://rezandovoy.ovh/"
-            aux += aux_icono
-            aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            var aux = aux_icono
+            aux = aux_icono.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
             let filePath = NSURL(string: aux)
+            self.iconoUrl = filePath
             let icono = NSData(contentsOfURL: filePath!)
             self.iconoLabel = UIImageView(frame: self.hojaView.bounds)
             self.iconoLabel?.image = UIImage(data: icono!)
@@ -1076,11 +1186,19 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                 print("Move successful")
                 self.cancelDownload.hidden = true
                 
+                // Descargar y guardar icono en caso de que lo haya
+                if let _ = self.iconoUrl {
+                    let filePath = self.iconoUrl
+                    let icono = NSData(contentsOfURL: filePath!)
+                    icono?.writeToFile(self.documentsUrl.URLByAppendingPathComponent(filePath!.lastPathComponent!).path!, atomically: true)
+                    self.oracion.seticono("\(filePath!.lastPathComponent!)")
+                }
+                
                 // Guardar datos
                 oracion.setmp3(audioUrl!.lastPathComponent!)
                 self.saveOracion()
                 
-                let delay = 5.0 * Double(NSEC_PER_SEC)
+                let delay = 3.0 * Double(NSEC_PER_SEC)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 dispatch_after(time, dispatch_get_main_queue(), {
                     self.modalView.hidden = true

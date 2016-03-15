@@ -54,7 +54,30 @@ class misOraciones: UITableViewController {
         let cellIdentifier = "celdaOracion"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! celdaOracion
         let oracion = oraciones[indexPath.row]
-        cell.titulo.text = "\(oracion.fecha!) - \(oracion.titulo!)"
+        if let aux_fecha = oracion.fecha {
+            cell.titulo.text = "\(aux_fecha) - \(oracion.titulo!)"
+        }
+        else {
+            cell.titulo.text = "Especial - \(oracion.titulo!)"
+        }
+
+        if oracion.tipo == 1 {
+            cell.logoOracion.image = UIImage(named: "ic_rv_blanco")
+            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.fondo.backgroundColor = UIColor(red: 168/255, green: 41/255, blue: 57/255, alpha: 1.0)
+        } else if oracion.tipo == 2 {
+            cell.logoOracion.image = UIImage(named: "ic_rv_blanco")
+            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.fondo.backgroundColor = UIColor(red: 168/255, green: 41/255, blue: 57/255, alpha: 1.0)
+        } else if oracion.tipo == 3 {
+            cell.logoOracion.image = UIImage(named: "ic_rvn_blanco")
+            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.fondo.backgroundColor = UIColor(red: 233/255, green: 98/255, blue: 26/255, alpha: 1.0)
+        } else if oracion.tipo == 4 {
+            cell.logoOracion.image = UIImage(named: "ic_rvn_blanco")
+            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.fondo.backgroundColor = UIColor(red: 233/255, green: 98/255, blue: 26/255, alpha: 1.0)
+        }
 
         // Configure the cell...
 
@@ -85,6 +108,9 @@ class misOraciones: UITableViewController {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].mp3!)").path!)
                 try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].id)").path!)
+                if oraciones[indexPath.row].icono != "" {
+                    try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].icono!)").path!)
+                }
                 oraciones.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             }
@@ -135,7 +161,7 @@ class misOraciones: UITableViewController {
         do {
             let items = try NSFileManager.defaultManager().contentsOfDirectoryAtPath("\(self.documentsUrl.path!)")
             for item in items {
-                if item.hasSuffix("mp3") || item == ".DS_Store" {
+                if item.hasSuffix("mp3") || item == ".DS_Store" || item.hasSuffix("png") {
                     print(item)
                 } else {
                     let aux = loadOracion(Int(item)!)

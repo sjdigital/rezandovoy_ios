@@ -323,33 +323,54 @@
         <!--Mis Oraciones-->
         <scene sceneID="dAE-QX-Ld9">
             <objects>
-                <tableViewController id="WzC-S1-pA9" customClass="misOraciones" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="misOraciones" id="WzC-S1-pA9" customClass="misOraciones" customModule="Rezandovoy" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Bcx-xe-rsh">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="celdaOracion" id="ZYX-W4-YHK" customClass="celdaOracion" customModule="Rezandovoy" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="celdaOracion" rowHeight="60" id="ZYX-W4-YHK" customClass="celdaOracion" customModule="Rezandovoy" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZYX-W4-YHK" id="C2B-AR-U4x">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EFW-7F-zN3">
-                                            <rect key="frame" x="8" y="13" width="584" height="18"/>
+                                            <rect key="frame" x="69" y="21" width="523" height="18"/>
                                             <fontDescription key="fontDescription" name="Aleo-Regular" family="Aleo" pointSize="15"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfU-nR-2km">
+                                            <rect key="frame" x="0.0" y="0.0" width="59" height="59"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HaM-Hq-sec">
+                                                    <rect key="frame" x="5" y="5" width="49" height="49"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="HaM-Hq-sec" secondAttribute="trailing" constant="5" id="68X-zt-7Z4"/>
+                                                <constraint firstAttribute="width" constant="59" id="HzN-mL-Xxi"/>
+                                                <constraint firstItem="HaM-Hq-sec" firstAttribute="top" secondItem="tfU-nR-2km" secondAttribute="top" constant="5" id="QBu-ok-ERF"/>
+                                                <constraint firstAttribute="bottom" secondItem="HaM-Hq-sec" secondAttribute="bottom" constant="5" id="T6m-tg-HPx"/>
+                                                <constraint firstItem="HaM-Hq-sec" firstAttribute="leading" secondItem="tfU-nR-2km" secondAttribute="leading" constant="5" id="huN-SD-LSQ"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="EFW-7F-zN3" firstAttribute="trailing" secondItem="C2B-AR-U4x" secondAttribute="trailingMargin" id="Cma-Mt-kGS"/>
-                                        <constraint firstItem="EFW-7F-zN3" firstAttribute="leading" secondItem="C2B-AR-U4x" secondAttribute="leadingMargin" id="Rr3-sy-dHo"/>
+                                        <constraint firstItem="tfU-nR-2km" firstAttribute="leading" secondItem="C2B-AR-U4x" secondAttribute="leading" id="DqV-CW-Kwr"/>
+                                        <constraint firstAttribute="bottom" secondItem="tfU-nR-2km" secondAttribute="bottom" id="Dzt-bE-fb0"/>
+                                        <constraint firstItem="EFW-7F-zN3" firstAttribute="leading" secondItem="tfU-nR-2km" secondAttribute="trailing" constant="10" id="TB0-g6-oDa"/>
+                                        <constraint firstItem="tfU-nR-2km" firstAttribute="top" secondItem="C2B-AR-U4x" secondAttribute="top" id="aOu-jl-Wdx"/>
                                         <constraint firstItem="EFW-7F-zN3" firstAttribute="centerY" secondItem="C2B-AR-U4x" secondAttribute="centerY" id="tDc-tP-Urg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="fondo" destination="tfU-nR-2km" id="6ce-sn-MlA"/>
+                                    <outlet property="logoOracion" destination="HaM-Hq-sec" id="OAr-pc-uqu"/>
                                     <outlet property="titulo" destination="EFW-7F-zN3" id="Ffn-SV-32U"/>
                                 </connections>
                             </tableViewCell>

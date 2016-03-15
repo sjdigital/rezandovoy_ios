@@ -11,6 +11,8 @@ import UIKit
 class celdaOracion: UITableViewCell {
 
     @IBOutlet var titulo: UILabel!
+    @IBOutlet var logoOracion: UIImageView!
+    @IBOutlet var fondo: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

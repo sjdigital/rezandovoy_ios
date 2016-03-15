@@ -19,6 +19,7 @@ class Oracion: NSObject, NSCoding {
     var musicas: NSArray?
     var lectura: NSArray?
     var documentos: NSArray?
+    var icono: String?
     
     struct PropertyKey {
         static let idKey = "id"
@@ -30,6 +31,7 @@ class Oracion: NSObject, NSCoding {
         static let musicasKey = "musicas"
         static let lecturaKey = "lectura"
         static let documentosKey = "documentos"
+        static let iconoKey = "icono"
     }
     
     init (auxId: Int, auxTipo: Int) {
@@ -65,7 +67,11 @@ class Oracion: NSObject, NSCoding {
         self.documentos = auxdocs
     }
     
-    init?(auxId: Int, auxTipo: Int, auxmp3: String, auxtitulo: String, auximages: String, auxfecha: String?, auxmusicas: NSArray?, auxlectura: NSArray?, auxdocs: NSArray?) {
+    func seticono (auxicon: String?) {
+        self.icono = auxicon
+    }
+    
+    init?(auxId: Int, auxTipo: Int, auxmp3: String, auxtitulo: String, auximages: String, auxfecha: String?, auxmusicas: NSArray?, auxlectura: NSArray?, auxdocs: NSArray?, auxicon: String?) {
         self.id = auxId
         self.tipo = auxTipo
         self.mp3 = auxmp3
@@ -83,6 +89,9 @@ class Oracion: NSObject, NSCoding {
         if let _ = auxdocs {
             self.documentos = auxdocs
         }
+        if let _ = auxicon {
+            self.icono = auxicon
+        }
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
@@ -95,6 +104,7 @@ class Oracion: NSObject, NSCoding {
         aCoder.encodeObject(musicas, forKey: PropertyKey.musicasKey)
         aCoder.encodeObject(lectura, forKey: PropertyKey.lecturaKey)
         aCoder.encodeObject(documentos, forKey: PropertyKey.documentosKey)
+        aCoder.encodeObject(icono, forKey: PropertyKey.iconoKey)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -107,7 +117,8 @@ class Oracion: NSObject, NSCoding {
         let musicas = aDecoder.decodeObjectForKey(PropertyKey.musicasKey) as? NSArray
         let lectura = aDecoder.decodeObjectForKey(PropertyKey.lecturaKey) as? NSArray
         let documentos = aDecoder.decodeObjectForKey(PropertyKey.documentosKey) as? NSArray
-        self.init(auxId: id, auxTipo: tipo, auxmp3: mp3, auxtitulo: titulo, auximages: images, auxfecha: fecha, auxmusicas: musicas, auxlectura: lectura, auxdocs: documentos)
+        let icono = aDecoder.decodeObjectForKey(PropertyKey.iconoKey) as? String
+        self.init(auxId: id, auxTipo: tipo, auxmp3: mp3, auxtitulo: titulo, auximages: images, auxfecha: fecha, auxmusicas: musicas, auxlectura: lectura, auxdocs: documentos, auxicon: icono)
     }
     
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!

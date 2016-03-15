@@ -11,6 +11,13 @@ import UIKit
 // Id de la oración
 var id: Int = 0
 
+// Comprobacion de conexion
+var conexion: Int = 0
+
+// Variables globales stores
+let defaults = NSUserDefaults.standardUserDefaults()
+let DAY_IN_SECONDS = Double(-24*60*60)
+
 // Distintos tipos de oración:
 //      1 - Oración periodica adulto
 //      2 - Oración especial adulto
@@ -40,7 +47,7 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         UIApplication.sharedApplication().openURL(donativosUrl!)
     }
     
-    func cargaPagina(){
+    func cargaPagina() {
         let requestURL = NSURL(string: url)
         let request = NSURLRequest(URL: requestURL!)
         webView.loadRequest(request)
@@ -82,24 +89,41 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
     }
     
     func cerrar() {
-        UIControl().sendAction(Selector("suspend"), to: UIApplication.sharedApplication(), forEvent: nil)
+        self.tabBarController!.selectedIndex = 2;
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        defaults.setObject(NSDate(), forKey: "LastRun")
         if Reachability.isConnectedToNetwork() == true {
             print("Internet connection OK")
+            conexion = 1
         } else {
             print("Internet connection FAILED")
-            let alert = UIAlertController(title: "Sin conexión a Internet", message: "Esta aplicación necesita una conexión activa a internet para funcionar.", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Sin conexión a Internet", message: "Le redirigiremos a sus oraciones descargadas.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Cerrar", style: .Default, handler: { (alert: UIAlertAction!) in self.cerrar() }))
             self.presentViewController(alert, animated: true, completion: nil)
+            conexion = 0
         }
         
         webView.delegate = self
         
         cargaPagina()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let lastTimeTheUserAnsweredTimestamp = defaults.objectForKey("LastRun") as! NSDate
+        if (lastTimeTheUserAnsweredTimestamp.timeIntervalSinceNow <= DAY_IN_SECONDS) {
+            defaults.setObject(NSDate(), forKey: "LastRun")
+            conexion = 0
+        }
+        
+        if Reachability.isConnectedToNetwork() == true && conexion == 0 {
+            cargaPagina()
+            conexion = 1
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -48,6 +48,21 @@ class especialViewController: UIViewController, UIWebViewDelegate {
         cargaPagina()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let lastTimeTheUserAnsweredTimestamp = defaults.objectForKey("LastRun") as! NSDate
+        if (lastTimeTheUserAnsweredTimestamp.timeIntervalSinceNow <= DAY_IN_SECONDS) {
+            defaults.setObject(NSDate(), forKey: "LastRun")
+            conexion = 0
+        }
+        
+        if Reachability.isConnectedToNetwork() == true && conexion == 0 {
+            cargaPagina()
+            conexion = 1
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

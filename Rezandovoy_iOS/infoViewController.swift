@@ -42,6 +42,14 @@ class infoViewController: UIViewController, UIWebViewDelegate {
         // Do any additional setup after loading the view.
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        if Reachability.isConnectedToNetwork() == true && conexion == 0 {
+            cargaPagina()
+            conexion = 1
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
