@@ -60,6 +60,8 @@ class especialViewController: UIViewController, UIWebViewDelegate {
         if Reachability.isConnectedToNetwork() == true && conexion == 0 {
             cargaPagina()
             conexion = 1
+        } else if Reachability.isConnectedToNetwork() == false {
+            conexion = 0
         }
     }
     
