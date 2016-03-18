@@ -108,7 +108,7 @@ class misOraciones: UITableViewController {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].mp3!)").path!)
                 try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].id)").path!)
-                if oraciones[indexPath.row].icono != "" {
+                if let _ = oraciones[indexPath.row].icono {
                     try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].icono!)").path!)
                 }
                 oraciones.removeAtIndex(indexPath.row)
@@ -168,6 +168,7 @@ class misOraciones: UITableViewController {
                     oraciones.append(aux!)
                 }
             }
+            oraciones = oraciones.reverse()
         } catch let error as NSError {
             print("Fallo al leer el directorio \(error)")
         }

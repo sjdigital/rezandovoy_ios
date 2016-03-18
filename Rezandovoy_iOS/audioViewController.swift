@@ -271,7 +271,6 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                     print(item)
                 } else {
                     if (item == "\(id)") {
-                        print("Datos: \(item) -> ID: \(id)")
                         self.downloadButton.enabled = false
                         offline = 1
                     }
@@ -326,6 +325,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
         if (self.isMovingFromParentViewController()) {
+            if let _ = self.downloadTask {
+                 self.downloadTask!.cancel()
+            }
             self.audioPlayer?.pause()
             self.tabBarController?.tabBar.hidden = false
             self.navigationController?.navigationBar.barTintColor = nil
