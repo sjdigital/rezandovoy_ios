@@ -765,7 +765,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     }
     
     // Inicializar reproductor
-    func reproductorInit(var aux: String)->Void {
+    func reproductorInit( auxiliar: String)->Void {
+        var aux = auxiliar
         aux = aux.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         self.mp3Url = aux
         let assetmp3 = AVURLAsset(URL: NSURL(string:aux)!)
@@ -828,7 +829,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                     self.bottonDocs?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
                     self.bottonDocs?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
                     self.bottonDocs?.titleEdgeInsets.left = 10.0
-                    self.bottonDocs?.addTarget(self, action: Selector("toggleDocs:"), forControlEvents: .TouchUpInside)
+                    self.bottonDocs?.addTarget(self, action: #selector(audioViewController.toggleDocs(_:)), forControlEvents: .TouchUpInside)
                     self.docsView?.addSubview(self.bottonDocs!)
                     self.docsLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
                     self.docsLabel?.text = doc.valueForKey("texto") as? String
@@ -863,7 +864,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                     self.botonCita?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
                     self.botonCita?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
                     self.botonCita?.titleEdgeInsets.left = 10.0
-                    self.botonCita?.addTarget(self, action: Selector("toggleCita:"), forControlEvents: .TouchUpInside)
+                    self.botonCita?.addTarget(self, action: #selector(audioViewController.toggleCita(_:)), forControlEvents: .TouchUpInside)
                     self.citasView?.addSubview(self.botonCita!)
                     self.citaLabel = UILabel(frame: CGRect(x: 8, y: 40, width: Int(self.dentroScroll!.frame.width)-8, height: 0))
                     self.citaLabel?.text = aux_cita.valueForKey("texto") as? String
@@ -925,6 +926,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                     let autor = cancion?.valueForKey("autor")
                     cadena2 = NSAttributedString(string: " de \(autor!) interpretado por \(interprete!). CD ", attributes: normal)
                 }
+                else{
+                    cadena2 = NSAttributedString(string: " ",attributes:normal)
+                }
                 let cd = coleccion?.valueForKey("nombre")
                 cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic)
                 let formula = permiso?.valueForKey("formula")
@@ -961,7 +965,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
     }
     
     // Cambiar el titulo de la barra de navegacion
-    func cambiaTitulo(var aux_titulo: String!)-> Void {
+    func cambiaTitulo(auxiliar_titulo: String!)-> Void {
+        var aux_titulo = auxiliar_titulo
         dispatch_async(dispatch_get_main_queue()) {
             aux_titulo = aux_titulo.uppercaseString
             let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
@@ -1079,8 +1084,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
                 UIImage(named: nombre[2] as! String)!,
                 UIImage(named: nombre[3] as! String)!
             ]
-            let tapGesture = UITapGestureRecognizer(target: self, action: Selector("imageTap"))
-            self.imageView!.image = images[self.index++]
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(audioViewController.imageTap))
+            self.imageView!.image = images[self.index+1] //JCM sustituido ++ por +1
             self.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
             self.animateImageView(images)
             self.imageView?.userInteractionEnabled = true
@@ -1128,7 +1133,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, NSURLSession
             self.botonCompartir?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             self.botonCompartir?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
             self.botonCompartir?.titleEdgeInsets.left = 10.0
-            self.botonCompartir?.addTarget(self, action: Selector("toggleCompartir"), forControlEvents: .TouchUpInside)
+            self.botonCompartir?.addTarget(self, action: #selector(audioViewController.toggleCompartir), forControlEvents: .TouchUpInside)
             self.compartirView?.addSubview(self.botonCompartir!)
             self.compartirView?.resizeToFitSubviews()
             
