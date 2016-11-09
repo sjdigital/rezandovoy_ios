@@ -10,22 +10,22 @@ import UIKit
 
 class misOraciones: UITableViewController {
     
-    let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first! as NSURL
+    let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! as URL
     var oraciones = [Oracion]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
+        let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
         self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
         self.navigationController?.navigationBar.topItem!.title = "Mis Oraciones"
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.loadData()
         
         self.tableView.reloadData()
@@ -39,20 +39,20 @@ class misOraciones: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return oraciones.count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "celdaOracion"
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! celdaOracion
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! celdaOracion
         let oracion = oraciones[indexPath.row]
         if let aux_fecha = oracion.fecha {
             cell.titulo.text = "\(aux_fecha) - \(oracion.titulo!)"
@@ -63,19 +63,19 @@ class misOraciones: UITableViewController {
 
         if oracion.tipo == 1 {
             cell.logoOracion.image = UIImage(named: "ic_rv_blanco")
-            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.logoOracion.contentMode = UIViewContentMode.scaleAspectFit
             cell.fondo.backgroundColor = UIColor(red: 168/255, green: 41/255, blue: 57/255, alpha: 1.0)
         } else if oracion.tipo == 2 {
             cell.logoOracion.image = UIImage(named: "ic_rv_blanco")
-            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.logoOracion.contentMode = UIViewContentMode.scaleAspectFit
             cell.fondo.backgroundColor = UIColor(red: 168/255, green: 41/255, blue: 57/255, alpha: 1.0)
         } else if oracion.tipo == 3 {
             cell.logoOracion.image = UIImage(named: "ic_rvn_blanco")
-            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.logoOracion.contentMode = UIViewContentMode.scaleAspectFit
             cell.fondo.backgroundColor = UIColor(red: 233/255, green: 98/255, blue: 26/255, alpha: 1.0)
         } else if oracion.tipo == 4 {
             cell.logoOracion.image = UIImage(named: "ic_rvn_blanco")
-            cell.logoOracion.contentMode = UIViewContentMode.ScaleAspectFit
+            cell.logoOracion.contentMode = UIViewContentMode.scaleAspectFit
             cell.fondo.backgroundColor = UIColor(red: 233/255, green: 98/255, blue: 26/255, alpha: 1.0)
         }
 
@@ -84,12 +84,12 @@ class misOraciones: UITableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         id = oraciones[indexPath.row].id
         tipo = oraciones[indexPath.row].tipo
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-        self.showViewController(nextViewController, sender: self)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "audioPlayer") as UIViewController
+        self.show(nextViewController, sender: self)
     }
     
     /*
@@ -102,17 +102,17 @@ class misOraciones: UITableViewController {
 
     
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].mp3!)").path!)
-                try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].id)").path!)
+                try FileManager.default.removeItem(atPath: Oracion.DocumentsDirectory.appendingPathComponent("\(oraciones[indexPath.row].mp3!)").path)
+                try FileManager.default.removeItem(atPath: Oracion.DocumentsDirectory.appendingPathComponent("\(oraciones[indexPath.row].id)").path)
                 if let _ = oraciones[indexPath.row].icono {
-                    try NSFileManager.defaultManager().removeItemAtPath(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(oraciones[indexPath.row].icono!)").path!)
+                    try FileManager.default.removeItem(atPath: Oracion.DocumentsDirectory.appendingPathComponent("\(oraciones[indexPath.row].icono!)").path)
                 }
-                oraciones.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                oraciones.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
             }
             catch let error as NSError {
                 print("Ooops! Something went wrong: \(error)")
@@ -120,7 +120,7 @@ class misOraciones: UITableViewController {
             catch {
                 print("i dunno")
             }
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
@@ -150,8 +150,8 @@ class misOraciones: UITableViewController {
     }
     */
 
-    func loadOracion(aux_id: Int) -> Oracion? {
-        let aux = NSKeyedUnarchiver.unarchiveObjectWithFile(Oracion.DocumentsDirectory.URLByAppendingPathComponent("\(aux_id)").path!) as? Oracion
+    func loadOracion(_ aux_id: Int) -> Oracion? {
+        let aux = NSKeyedUnarchiver.unarchiveObject(withFile: Oracion.DocumentsDirectory.appendingPathComponent("\(aux_id)").path) as? Oracion
         print(aux!.id)
         return aux
     }
@@ -159,7 +159,7 @@ class misOraciones: UITableViewController {
     func loadData() {
         oraciones.removeAll()
         do {
-            let items = try NSFileManager.defaultManager().contentsOfDirectoryAtPath("\(self.documentsUrl.path!)")
+            let items = try FileManager.default.contentsOfDirectory(atPath: "\(self.documentsUrl.path)")
             for item in items {
                 if item.hasSuffix("mp3") || item == ".DS_Store" || item.hasSuffix("png") {
                     print(item)
@@ -168,7 +168,7 @@ class misOraciones: UITableViewController {
                     oraciones.append(aux!)
                 }
             }
-            oraciones = oraciones.reverse()
+            oraciones = oraciones.reversed()
         } catch let error as NSError {
             print("Fallo al leer el directorio \(error)")
         }

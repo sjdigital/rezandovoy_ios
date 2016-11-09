@@ -15,7 +15,7 @@ var id: Int = 0
 var conexion: Int = 0
 
 // Variables globales stores
-let defaults = NSUserDefaults.standardUserDefaults()
+let defaults = UserDefaults.standard
 let DAY_IN_SECONDS = Double(-24*60*60)
 
 // Distintos tipos de oración:
@@ -37,51 +37,51 @@ extension Array {
 
 class InicioViewController: UIViewController, UIWebViewDelegate {
     
-    let url = "http://iosrv.rezandovoy.org"
+    let url = "https://iosrv.rezandovoy.org"
 
     @IBOutlet weak var loaderIndicator: UIActivityIndicatorView!
     @IBOutlet var webView: UIWebView!
     
-    @IBAction func donativos(sender: UIBarButtonItem) {
-        let donativosUrl = NSURL(string: "http://rezandovoy.org/appsdonativos.php");
-        UIApplication.sharedApplication().openURL(donativosUrl!)
+    @IBAction func donativos(_ sender: UIBarButtonItem) {
+        let donativosUrl = URL(string: "https://rezandovoy.org/appsdonativos.php");
+        UIApplication.shared.openURL(donativosUrl!)
     }
     
     func cargaPagina() {
-        let requestURL = NSURL(string: url)
-        let request = NSURLRequest(URL: requestURL!)
+        let requestURL = URL(string: url)
+        let request = URLRequest(url: requestURL!)
         webView.loadRequest(request)
     }
     
     // Abrir el reproductor segun la id de la oración
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if navigationType == UIWebViewNavigationType.LinkClicked {
-            let oracionUrl = "\(request.URL!)"
-            if oracionUrl.rangeOfString(".php") == nil {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.linkClicked {
+            let oracionUrl = "\(request.url!)"
+            if oracionUrl.range(of: ".php") == nil {
                 let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
                 id = Int(oracionArray[1])!
-                if oracionArray[0].rangeOfString("adultos") != nil {
+                if oracionArray[0].range(of: "adultos") != nil {
                     tipo = 1
                 }
-                else if oracionArray[0].rangeOfString("especial") != nil {
+                else if oracionArray[0].range(of: "especial") != nil {
                     tipo = 2
                 }
-                else if oracionArray[0].rangeOfString("infantil") != nil {
+                else if oracionArray[0].range(of: "infantil") != nil {
                     tipo = 3
                 }
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-                self.showViewController(nextViewController, sender: self)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "audioPlayer") as UIViewController
+                self.show(nextViewController, sender: self)
                 return false
             }
             else {
-                if oracionUrl.rangeOfString("especial.php") != nil {
+                if oracionUrl.range(of: "especial.php") != nil {
                     tipo = 2
                     let oracionArray = oracionUrl.characters.split{$0 == "="}.map(String.init)
                     id = Int(oracionArray[1])!
                 }
-                let nextViewControlles = storyboard!.instantiateViewControllerWithIdentifier("especialViewController") as UIViewController
-                self.showViewController(nextViewControlles, sender: self)
+                let nextViewControlles = storyboard!.instantiateViewController(withIdentifier: "especialViewController") as UIViewController
+                self.show(nextViewControlles, sender: self)
                 return false
             }
         }
@@ -94,15 +94,15 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        defaults.setObject(NSDate(), forKey: "LastRun")
+        defaults.set(Date(), forKey: "LastRun")
         if Reachability.isConnectedToNetwork() == true {
             print("Internet connection OK")
             conexion = 1
         } else {
             print("Internet connection FAILED")
-            let alert = UIAlertController(title: "Sin conexión a Internet", message: "Le redirigiremos a sus oraciones descargadas.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Cerrar", style: .Default, handler: { (alert: UIAlertAction!) in self.cerrar() }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Sin conexión a Internet", message: "Le redirigiremos a sus oraciones descargadas.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Cerrar", style: .default, handler: { (alert: UIAlertAction!) in self.cerrar() }))
+            self.present(alert, animated: true, completion: nil)
             conexion = 0
         }
         
@@ -111,12 +111,12 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         cargaPagina()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let lastTimeTheUserAnsweredTimestamp = defaults.objectForKey("LastRun") as! NSDate
+        let lastTimeTheUserAnsweredTimestamp = defaults.object(forKey: "LastRun") as! Date
         if (lastTimeTheUserAnsweredTimestamp.timeIntervalSinceNow <= DAY_IN_SECONDS) {
-            defaults.setObject(NSDate(), forKey: "LastRun")
+            defaults.set(Date(), forKey: "LastRun")
             conexion = 0
         }
         
@@ -134,11 +134,11 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidStartLoad(_: UIWebView){
-        loaderIndicator.hidden = false
+        loaderIndicator.isHidden = false
         loaderIndicator.startAnimating()
     }
     func webViewDidFinishLoad(_: UIWebView){
-        loaderIndicator.hidden = true
+        loaderIndicator.isHidden = true
         loaderIndicator.stopAnimating()
     }
     

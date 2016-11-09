@@ -13,35 +13,35 @@ class infantilViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet var webView: UIWebView!
     @IBOutlet weak var loaderIndicator: UIActivityIndicatorView!
     
-    @IBAction func donativos(sender: UIBarButtonItem) {
-        let donativosUrl = NSURL(string: "http://rezandovoy.org/appsdonativos.php");
-        UIApplication.sharedApplication().openURL(donativosUrl!)
+    @IBAction func donativos(_ sender: UIBarButtonItem) {
+        let donativosUrl = URL(string: "https://rezandovoy.org/appsdonativos.php");
+        UIApplication.shared.openURL(donativosUrl!)
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if navigationType == UIWebViewNavigationType.LinkClicked {
-            let oracionUrl = "\(request.URL!)"
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.linkClicked {
+            let oracionUrl = "\(request.url!)"
             let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
-            if oracionArray[0].rangeOfString("infantil") != nil {
+            if oracionArray[0].range(of: "infantil") != nil {
                 tipo = 3
             }
-            else if oracionArray[0].rangeOfString("especial") != nil {
+            else if oracionArray[0].range(of: "especial") != nil {
                 tipo = 4
             }
             id = Int(oracionArray[1])!
-            let nextViewControlles = storyboard!.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-            self.showViewController(nextViewControlles, sender: self)
+            let nextViewControlles = storyboard!.instantiateViewController(withIdentifier: "audioPlayer") as UIViewController
+            self.show(nextViewControlles, sender: self)
             return false
         }
         return true
     }
     
     
-    let url = "http://iosrv.rezandovoy.org/infantil.php"
+    let url = "https://iosrv.rezandovoy.org/infantil.php"
 
     func cargaPagina(){
-        let requestURL = NSURL(string: url)
-        let request = NSURLRequest(URL: requestURL!)
+        let requestURL = URL(string: url)
+        let request = URLRequest(url: requestURL!)
         webView.loadRequest(request)
     }
     
@@ -53,12 +53,12 @@ class infantilViewController: UIViewController, UIWebViewDelegate {
         cargaPagina()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let lastTimeTheUserAnsweredTimestamp = defaults.objectForKey("LastRun") as! NSDate
+        let lastTimeTheUserAnsweredTimestamp = defaults.object(forKey: "LastRun") as! Date
         if (lastTimeTheUserAnsweredTimestamp.timeIntervalSinceNow <= DAY_IN_SECONDS) {
-            defaults.setObject(NSDate(), forKey: "LastRun")
+            defaults.set(Date(), forKey: "LastRun")
             conexion = 0
         }
         
@@ -77,11 +77,11 @@ class infantilViewController: UIViewController, UIWebViewDelegate {
 
     
     func webViewDidStartLoad(_: UIWebView){
-        loaderIndicator.hidden = false
+        loaderIndicator.isHidden = false
         loaderIndicator.startAnimating()
     }
     func webViewDidFinishLoad(_: UIWebView){
-        loaderIndicator.hidden = true
+        loaderIndicator.isHidden = true
         loaderIndicator.stopAnimating()
     }
     

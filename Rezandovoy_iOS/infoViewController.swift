@@ -13,13 +13,13 @@ class infoViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet var webView: UIWebView!
     @IBOutlet weak var infoIndicator: UIActivityIndicatorView!
     
-    let url = "http://iosrv.rezandovoy.org/quienes.php"
+    let url = "https://iosrv.rezandovoy.org/quienes.php"
 
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if navigationType == UIWebViewNavigationType.LinkClicked {
-            let aux_url = "\(request.URL!)"
-            let url = NSURL(string: aux_url);
-            UIApplication.sharedApplication().openURL(url!)
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.linkClicked {
+            let aux_url = "\(request.url!)"
+            let url = URL(string: aux_url);
+            UIApplication.shared.openURL(url!)
             return false
         }
         else {
@@ -28,8 +28,8 @@ class infoViewController: UIViewController, UIWebViewDelegate {
     }
     
     func cargaPagina(){
-        let requestURL = NSURL(string: url)
-        let request = NSURLRequest(URL: requestURL!)
+        let requestURL = URL(string: url)
+        let request = URLRequest(url: requestURL!)
         webView.loadRequest(request)
     }    
     
@@ -42,7 +42,7 @@ class infoViewController: UIViewController, UIWebViewDelegate {
         // Do any additional setup after loading the view.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if Reachability.isConnectedToNetwork() == true && conexion == 0 {
             cargaPagina()
@@ -58,11 +58,11 @@ class infoViewController: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidStartLoad(_: UIWebView){
-        infoIndicator.hidden = false
+        infoIndicator.isHidden = false
         infoIndicator.startAnimating()
     }
     func webViewDidFinishLoad(_: UIWebView){
-        infoIndicator.hidden = true
+        infoIndicator.isHidden = true
         infoIndicator.stopAnimating()
     }
     

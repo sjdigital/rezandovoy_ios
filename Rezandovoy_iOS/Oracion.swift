@@ -39,35 +39,35 @@ class Oracion: NSObject, NSCoding {
         self.tipo = auxTipo
     }
     
-    func setmp3 (auxmp3: String) {
+    func setmp3 (_ auxmp3: String) {
         self.mp3 = auxmp3
     }
     
-    func settitulo (auxtitulo: String) {
+    func settitulo (_ auxtitulo: String) {
         self.titulo = auxtitulo
     }
     
-    func setimages (auximages: String) {
+    func setimages (_ auximages: String) {
         self.images = auximages
     }
     
-    func setfecha (auxfecha: String?) {
+    func setfecha (_ auxfecha: String?) {
         self.fecha = auxfecha
     }
     
-    func setmusicas (auxmusicas: NSArray?) {
+    func setmusicas (_ auxmusicas: NSArray?) {
         self.musicas = auxmusicas
     }
     
-    func setlectura (auxlectura: NSArray?) {
+    func setlectura (_ auxlectura: NSArray?) {
         self.lectura = auxlectura
     }
     
-    func setdocumentos (auxdocs: NSArray?) {
+    func setdocumentos (_ auxdocs: NSArray?) {
         self.documentos = auxdocs
     }
     
-    func seticono (auxicon: String?) {
+    func seticono (_ auxicon: String?) {
         self.icono = auxicon
     }
     
@@ -94,32 +94,32 @@ class Oracion: NSObject, NSCoding {
         }
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeInteger(id, forKey: PropertyKey.idKey)
-        aCoder.encodeInteger(tipo, forKey: PropertyKey.tipoKey)
-        aCoder.encodeObject(mp3, forKey: PropertyKey.mp3Key)
-        aCoder.encodeObject(titulo, forKey: PropertyKey.tituloKey)
-        aCoder.encodeObject(images, forKey: PropertyKey.imagesKey)
-        aCoder.encodeObject(fecha, forKey: PropertyKey.fechaKey)
-        aCoder.encodeObject(musicas, forKey: PropertyKey.musicasKey)
-        aCoder.encodeObject(lectura, forKey: PropertyKey.lecturaKey)
-        aCoder.encodeObject(documentos, forKey: PropertyKey.documentosKey)
-        aCoder.encodeObject(icono, forKey: PropertyKey.iconoKey)
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: PropertyKey.idKey)
+        aCoder.encode(tipo, forKey: PropertyKey.tipoKey)
+        aCoder.encode(mp3, forKey: PropertyKey.mp3Key)
+        aCoder.encode(titulo, forKey: PropertyKey.tituloKey)
+        aCoder.encode(images, forKey: PropertyKey.imagesKey)
+        aCoder.encode(fecha, forKey: PropertyKey.fechaKey)
+        aCoder.encode(musicas, forKey: PropertyKey.musicasKey)
+        aCoder.encode(lectura, forKey: PropertyKey.lecturaKey)
+        aCoder.encode(documentos, forKey: PropertyKey.documentosKey)
+        aCoder.encode(icono, forKey: PropertyKey.iconoKey)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let id = aDecoder.decodeIntegerForKey(PropertyKey.idKey) as Int
-        let tipo = aDecoder.decodeIntegerForKey(PropertyKey.tipoKey) as Int
-        let mp3 = aDecoder.decodeObjectForKey(PropertyKey.mp3Key) as! String
-        let titulo = aDecoder.decodeObjectForKey(PropertyKey.tituloKey) as! String
-        let images = aDecoder.decodeObjectForKey(PropertyKey.imagesKey) as! String
-        let fecha = aDecoder.decodeObjectForKey(PropertyKey.fechaKey) as? String
-        let musicas = aDecoder.decodeObjectForKey(PropertyKey.musicasKey) as? NSArray
-        let lectura = aDecoder.decodeObjectForKey(PropertyKey.lecturaKey) as? NSArray
-        let documentos = aDecoder.decodeObjectForKey(PropertyKey.documentosKey) as? NSArray
-        let icono = aDecoder.decodeObjectForKey(PropertyKey.iconoKey) as? String
+        let id = aDecoder.decodeInteger(forKey: PropertyKey.idKey) as Int
+        let tipo = aDecoder.decodeInteger(forKey: PropertyKey.tipoKey) as Int
+        let mp3 = aDecoder.decodeObject(forKey: PropertyKey.mp3Key) as! String
+        let titulo = aDecoder.decodeObject(forKey: PropertyKey.tituloKey) as! String
+        let images = aDecoder.decodeObject(forKey: PropertyKey.imagesKey) as! String
+        let fecha = aDecoder.decodeObject(forKey: PropertyKey.fechaKey) as? String
+        let musicas = aDecoder.decodeObject(forKey: PropertyKey.musicasKey) as? NSArray
+        let lectura = aDecoder.decodeObject(forKey: PropertyKey.lecturaKey) as? NSArray
+        let documentos = aDecoder.decodeObject(forKey: PropertyKey.documentosKey) as? NSArray
+        let icono = aDecoder.decodeObject(forKey: PropertyKey.iconoKey) as? String
         self.init(auxId: id, auxTipo: tipo, auxmp3: mp3, auxtitulo: titulo, auximages: images, auxfecha: fecha, auxmusicas: musicas, auxlectura: lectura, auxdocs: documentos, auxicon: icono)
     }
     
-    static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
 }

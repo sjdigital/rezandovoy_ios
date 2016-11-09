@@ -15,28 +15,28 @@ class especialViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet var webView: UIWebView!
     @IBOutlet var especialIndicator: UIActivityIndicatorView!
     
-    @IBAction func donativos(sender: UIBarButtonItem) {
-        let donativosUrl = NSURL(string: "http://rezandovoy.org/appsdonativos.php");
-        UIApplication.sharedApplication().openURL(donativosUrl!)
+    @IBAction func donativos(_ sender: UIBarButtonItem) {
+        let donativosUrl = URL(string: "https://rezandovoy.org/appsdonativos.php");
+        UIApplication.shared.openURL(donativosUrl!)
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        if navigationType == UIWebViewNavigationType.LinkClicked {
-            let oracionUrl = "\(request.URL!)"
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if navigationType == UIWebViewNavigationType.linkClicked {
+            let oracionUrl = "\(request.url!)"
             tipo = 2
             let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
             id = Int(oracionArray[1])!
-            let nextViewControlles = storyboard!.instantiateViewControllerWithIdentifier("audioPlayer") as UIViewController
-            self.showViewController(nextViewControlles, sender: self)
+            let nextViewControlles = storyboard!.instantiateViewController(withIdentifier: "audioPlayer") as UIViewController
+            self.show(nextViewControlles, sender: self)
             return false
         }
         return true
     }
     
     func cargaPagina() {
-        url = "http://iosrv.rezandovoy.org/especial.php?id=\(id)"
-        let requestURL = NSURL(string: url!)
-        let request = NSURLRequest(URL: requestURL!)
+        url = "https://iosrv.rezandovoy.org/especial.php?id=\(id)"
+        let requestURL = URL(string: url!)
+        let request = URLRequest(url: requestURL!)
         webView.loadRequest(request)
     }
     
@@ -48,12 +48,12 @@ class especialViewController: UIViewController, UIWebViewDelegate {
         cargaPagina()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let lastTimeTheUserAnsweredTimestamp = defaults.objectForKey("LastRun") as! NSDate
+        let lastTimeTheUserAnsweredTimestamp = defaults.object(forKey: "LastRun") as! Date
         if (lastTimeTheUserAnsweredTimestamp.timeIntervalSinceNow <= DAY_IN_SECONDS) {
-            defaults.setObject(NSDate(), forKey: "LastRun")
+            defaults.set(Date(), forKey: "LastRun")
             conexion = 0
         }
         
@@ -71,11 +71,11 @@ class especialViewController: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidStartLoad(_: UIWebView){
-        especialIndicator.hidden = false
+        especialIndicator.isHidden = false
         especialIndicator.startAnimating()
     }
     func webViewDidFinishLoad(_: UIWebView){
-        especialIndicator.hidden = true
+        especialIndicator.isHidden = true
         especialIndicator.stopAnimating()
     }
     

@@ -235,13 +235,16 @@
 					D470A8371BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 62PLVFJPYH;
+						LastSwiftMigration = 0810;
 					};
 					D470A84D1BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = D470A8371BF0CDC40078C231;
 					};
 					D470A8581BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = D470A8371BF0CDC40078C231;
 					};
 				};
@@ -464,6 +467,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sjdigital.rezandovoy.rv;
 				PRODUCT_NAME = Rezandovoy;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -479,6 +483,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sjdigital.rezandovoy.rv;
 				PRODUCT_NAME = Rezandovoy;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -490,6 +495,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOSTests";
 				PRODUCT_NAME = Rezandovoy;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rezandovoy.app/Rezandovoy";
 			};
 			name = Debug;
@@ -502,6 +508,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOSTests";
 				PRODUCT_NAME = Rezandovoy;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rezandovoy.app/Rezandovoy";
 			};
 			name = Release;
@@ -513,6 +520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOSUITests";
 				PRODUCT_NAME = Rezandovoy;
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Rezandovoy_iOS;
 				USES_XCTRUNNER = YES;
 			};
@@ -525,6 +533,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjdigital.Rezandovoy-iOSUITests";
 				PRODUCT_NAME = Rezandovoy;
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Rezandovoy_iOS;
 				USES_XCTRUNNER = YES;
 			};
