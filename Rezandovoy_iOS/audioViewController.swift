@@ -1028,6 +1028,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     
     // Recuperar la fecha y darle formato
     func recuperarFecha(_ aux_fecha: String!)-> Void {
+        format.locale = Locale(identifier: "en_GB")
         format.dateFormat = "MMM d, yyyy"
         let fecha_aux = format.date(from: aux_fecha!)!
         var esp = Calendar(identifier: Calendar.Identifier.gregorian)
