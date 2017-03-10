@@ -11,18 +11,6 @@
 import UIKit
 import AVKit
 import AVFoundation
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
 
 
 var format = DateFormatter()
@@ -44,6 +32,82 @@ extension UIView {
         frame.size = subviewsRect.size
     }
 }
+
+class ProgressHUD: UIVisualEffectView {
+    
+    var text: String? {
+        didSet {
+            label.text = text
+        }
+    }
+    
+    let activityIndictor: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+    let label: UILabel = UILabel()
+    let blurEffect = UIBlurEffect(style: .dark)
+    let vibrancyView: UIVisualEffectView
+    
+    init(text: String) {
+        self.text = text
+        self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
+        super.init(effect: blurEffect)
+        self.setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.text = ""
+        self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
+        super.init(coder: aDecoder)
+        self.setup()
+    }
+    
+    func setup() {
+        contentView.addSubview(vibrancyView)
+        contentView.addSubview(activityIndictor)
+        contentView.addSubview(label)
+        activityIndictor.startAnimating()
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        if let superview = self.superview {
+            
+            let width = superview.frame.size.width / 1.5
+            let height: CGFloat = 50.0
+            self.frame = CGRect(x: superview.frame.size.width / 2 - width / 2,
+                                y: superview.frame.height / 2 - height / 2,
+                                width: width,
+                                height: height)
+            vibrancyView.frame = self.bounds
+            
+            let activityIndicatorSize: CGFloat = 40
+            activityIndictor.frame = CGRect(x: 5,
+                                            y: height / 2 - activityIndicatorSize / 2,
+                                            width: activityIndicatorSize,
+                                            height: activityIndicatorSize)
+            
+            layer.cornerRadius = 8.0
+            layer.masksToBounds = true
+            label.text = text
+            label.textAlignment = NSTextAlignment.center
+            label.frame = CGRect(x: activityIndicatorSize + 5,
+                                 y: 0,
+                                 width: width - activityIndicatorSize - 15,
+                                 height: height)
+            label.textColor = UIColor.white
+            label.font = UIFont.boldSystemFont(ofSize: 16)
+        }
+    }
+    
+    func show() {
+        self.isHidden = false
+    }
+    
+    func hide() {
+        self.isHidden = true
+    }
+}
+
 
 class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDownloadDelegate {
     
@@ -72,9 +136,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     var docsLabel: UILabel?
     var mp3Url: String?
     var iconoUrl: URL?
-    fileprivate var downloadTask: URLSessionDownloadTask?
+    var downloadTask: URLSessionDownloadTask?
     var oracion: Oracion = Oracion(auxId: id, auxTipo: tipo)
-
+    var progressHUD: ProgressHUD?
+    var temporizador: Timer?
+    var audioItem: AVPlayerItem?
     
     @IBOutlet var controles: UIView!
     @IBOutlet var botonPlay: UIButton!
@@ -96,7 +162,11 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             sender.setImage(UIImage(named: "ic_play"), for: UIControlState())
             self.infoView.isHidden = false
         } else {
-            audioPlayer?.play()
+            if #available(iOS 10, *) {
+                audioPlayer?.playImmediately(atRate: 1.0)
+            } else {
+                audioPlayer?.play()
+            }
             sender.setImage(UIImage(named: "ic_pause"), for: UIControlState())
             self.infoView.isHidden = true
         }
@@ -234,6 +304,21 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.present(activityViewController, animated: true, completion: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if #available(iOS 10.0, *) {
+            self.temporizador = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
+                _ in
+                if (self.audioItem?.isPlaybackLikelyToKeepUp==true) {
+                    if (self.progressHUD?.isHidden == false) {
+                        self.progressHUD?.hide()
+                    } else {
+                        self.temporizador?.invalidate()
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -313,6 +398,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         statusLabel.text = ""
         modalView.frame = view.bounds
         modalView.backgroundColor = UIColor(red: 10/255, green: 50/255, blue: 66/255, alpha: 0.7)
+        
+        self.progressHUD = ProgressHUD(text: "Cargando oración")
     }
     
     override func remoteControlReceived(with event: UIEvent?) {
@@ -784,12 +871,13 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         var aux = auxiliar
         aux = aux.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         self.mp3Url = aux
-        let assetmp3 = AVURLAsset(url: URL(string:aux)!)
-        let localmp3 = AVPlayerItem(asset: assetmp3)
-        self.audioPlayer = AVPlayer(playerItem: localmp3)
+        //let assetmp3 = AVURLAsset(url: URL(string:aux)!)
+        //let localmp3 = AVPlayerItem(asset: assetmp3)
+        self.audioItem = AVPlayerItem(url: URL(string: self.mp3Url!)!)
+        self.audioPlayer = AVPlayer(playerItem: audioItem)
         self.audioPlayer?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 10), queue: DispatchQueue.main) {
             time in
-            if (self.audioPlayer?.currentItem!.currentTime() < self.audioPlayer?.currentItem!.duration) {
+            if ((self.audioPlayer?.currentItem!.currentTime())! < (self.audioPlayer?.currentItem!.duration)!) {
                 // Poner tiempo en texto
                 let currentMins = Int(CMTimeGetSeconds(time)) / 60
                 let currentSecs = Int(CMTimeGetSeconds(time)) % 60
@@ -826,9 +914,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                 self.infoView.isHidden = false
             }
         }
-        print(self.audioPlayer!.status)
         self.reproductor(self.botonPlay)
     }
+
     
     // Recuperar los documentos y darles formato, puede estar vacio
     func recuperaDocs(_ aux_docs: NSArray?)->Void {
@@ -1111,6 +1199,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.view.addSubview(self.imageView!)
             self.view.bringSubview(toFront: self.controles)
             self.view.bringSubview(toFront: self.infoView)
+            self.view.addSubview(self.progressHUD!)
+            self.progressHUD?.show()
         }
     }
     
