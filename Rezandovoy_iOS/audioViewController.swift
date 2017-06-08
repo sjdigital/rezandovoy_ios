@@ -6,7 +6,6 @@
 //  Copyright © 2016 sjdigital. All rights reserved.
 //
 
-/* TODO: La ventana de la informacion sale oculta cuando arranca el reproductor y las etiquetas de informacion tambien */
 
 import UIKit
 import AVKit
@@ -225,7 +224,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.downloadButton.isEnabled = true
     }
 
-    func imageTap() {
+    @objc func imageTap() {
         if (self.infoView.isHidden == true) {
             self.infoView.isHidden = false
         }
@@ -234,7 +233,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         }
     }
     
-    func toggleCita(_ sender: UIButton) {
+    @objc func toggleCita(_ sender: UIButton) {
         let supervista = sender.superview
         if (supervista?.subviews.last!.isHidden == true) {
             supervista?.subviews.last!.sizeToFit()
@@ -249,7 +248,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.redimensionar()
     }
     
-    func toggleDocs(_ sender: UIButton) {
+    @objc func toggleDocs(_ sender: UIButton) {
         let supervista = sender.superview
         if (supervista?.subviews.last!.isHidden == true) {
             supervista?.subviews.last!.sizeToFit()
@@ -264,7 +263,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.redimensionar()
     }
     
-    func toggleCompartir() {
+    @objc func toggleCompartir() {
         var url: String?
         let miTexto = "Rezandovoy - Una oración diaria en mp3"
         if tipo == 1 {
@@ -305,10 +304,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10, *) {
             self.temporizador = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
                 _ in
-                if (self.audioItem?.isPlaybackLikelyToKeepUp==true) {
+                if (self.audioPlayer?.currentItem?.isPlaybackLikelyToKeepUp == true) {
                     if (self.progressHUD?.isHidden == false) {
                         self.progressHUD?.hide()
                     } else {
@@ -432,7 +431,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.tabBarController?.tabBar.isHidden = false
             self.navigationController?.navigationBar.barTintColor = nil
             self.navigationController?.navigationBar.tintColor = self.view.tintColor
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 15)!]
             self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
             do {
@@ -600,7 +599,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -671,7 +670,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -742,7 +741,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -813,7 +812,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -1001,9 +1000,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             var cadena2: NSAttributedString?
             var cadena3: NSAttributedString?
             var cadena4: NSAttributedString?
-            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 13)! ] as [String : AnyObject]
-            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 13)! ] as [String : AnyObject]
-            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 13)! ] as [String : AnyObject]
+            let normal:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Regular", size: 13)! ]
+            let bold:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Bold", size: 13)! ]
+            let italic:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Italic", size: 13)! ]
             for (musica) in aux_mus {
                 if alto == 0 {
                     self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll!.frame.width), height: 0))
@@ -1075,7 +1074,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         var aux_titulo = auxiliar_titulo
         DispatchQueue.main.async {
             aux_titulo = aux_titulo?.uppercased()
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 12)!]
             self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             self.navigationController?.navigationBar.topItem!.title = aux_titulo
         }
@@ -1146,7 +1145,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.numLabel?.textAlignment = NSTextAlignment.center
             self.numLabel?.textColor = UIColor.white
             self.numLabel?.font = UIFont(name: "Aleo-Regular", size: 50)
-            self.numLabel?.text = aux_diaNum as? String
+            self.numLabel?.text = aux_diaNum as String?
             self.hojaView.addSubview(self.numLabel!)
 
             // Etiqueta para poner el nombre del mes
@@ -1154,7 +1153,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.mesLabel?.textAlignment = NSTextAlignment.center
             self.mesLabel?.textColor = UIColor.white
             self.mesLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
-            self.mesLabel?.text = aux_mes as? String
+            self.mesLabel?.text = aux_mes as String?
             self.hojaView.addSubview(self.mesLabel!)
             
             // Etiqueta para poner el dia en texto
@@ -1163,7 +1162,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.diaLabel?.textAlignment = NSTextAlignment.center
             self.diaLabel?.textColor = UIColor.white
             self.diaLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
-            self.diaLabel?.text = aux_dia as? String
+            self.diaLabel?.text = aux_dia as String?
             self.hojaView.addSubview(self.diaLabel!)
         }
     }
