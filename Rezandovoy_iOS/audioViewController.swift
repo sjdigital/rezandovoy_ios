@@ -431,7 +431,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.tabBarController?.tabBar.isHidden = false
             self.navigationController?.navigationBar.barTintColor = nil
             self.navigationController?.navigationBar.tintColor = self.view.tintColor
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 15)!]
             self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
             do {
@@ -997,9 +997,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             var cadena2: NSAttributedString?
             var cadena3: NSAttributedString?
             var cadena4: NSAttributedString?
-            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 13)! ] as [String : AnyObject]
-            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 13)! ] as [String : AnyObject]
-            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 13)! ] as [String : AnyObject]
+            let normal:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Regular", size: 13)! ]
+            let bold:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Bold", size: 13)! ]
+            let italic:[NSAttributedStringKey : AnyObject] = [ NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): UIFont(name: "Aleo-Italic", size: 13)! ]
             for (musica) in aux_mus {
                 if alto == 0 {
                     self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll!.frame.width), height: 0))
@@ -1071,7 +1071,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         var aux_titulo = auxiliar_titulo
         DispatchQueue.main.async {
             aux_titulo = aux_titulo?.uppercased()
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 12)!]
             self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
             self.navigationController?.navigationBar.topItem!.title = aux_titulo
         }
