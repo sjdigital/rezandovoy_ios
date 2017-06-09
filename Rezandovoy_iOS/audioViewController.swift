@@ -307,7 +307,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         if #available(iOS 10, *) {
             self.temporizador = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
                 _ in
-                if (self.audioPlayer?.currentItem?.isPlaybackLikelyToKeepUp == true) {
+                if (self.audioPlayer?.currentItem?.isPlaybackBufferFull == true || self.audioPlayer?.currentItem?.isPlaybackLikelyToKeepUp == true || self.audioPlayer?.currentItem?.currentTime().value != 0) {
                     if (self.progressHUD?.isHidden == false) {
                         self.progressHUD?.hide()
                     } else {
@@ -685,7 +685,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -755,7 +755,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -826,7 +826,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -837,7 +837,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.recuperarImagenes(jsonDict.value(forKey: "ficheroImagenes") as! String)
                     
                     // LLamada a la funcion para recuperar fecha
-                    var aux = "https://rezandovoy.ovh/"
+                    var aux = "http://rezandovoy.ovh/"
                     aux += jsonDict.value(forKey: "icono_link") as!  String
                     self.recuperarIcono(aux)
                     
@@ -872,10 +872,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.mp3Url = aux
         //let assetmp3 = AVURLAsset(url: URL(string:aux)!)
         //let localmp3 = AVPlayerItem(asset: assetmp3)
-        //self.audioItem = AVPlayerItem(url: URL(string: self.mp3Url!)!)
-        let asset = AVAsset(url: URL(string: aux)!)
-        let assetKeys = ["playable"]
-        self.audioItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
+        self.audioItem = AVPlayerItem(url: URL(string: self.mp3Url!)!)
         self.audioPlayer = AVPlayer(playerItem: audioItem)
         self.audioPlayer?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 10), queue: DispatchQueue.main) {
             time in
@@ -1201,10 +1198,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.view.addSubview(self.imageView!)
             self.view.bringSubview(toFront: self.controles)
             self.view.bringSubview(toFront: self.infoView)
-            if #available(iOS 10, *) {
-                self.view.addSubview(self.progressHUD!)
-                self.progressHUD?.show()
-            }
+            self.view.addSubview(self.progressHUD!)
+            self.progressHUD?.show()
         }
     }
     
