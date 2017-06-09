@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12117" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -207,7 +207,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NaK-zS-a0a" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Rezandovoy" image="ic_rvinicio" id="acW-dT-cKf"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="88q-bl-V70">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="88q-bl-V70">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -632,7 +632,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3XX-w4-au0" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Infantil" image="ic_rvinicio_infantil" id="wBN-Sw-OnU"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xz4-2j-Jze">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Xz4-2j-Jze">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -651,7 +651,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WyU-1Q-uG4" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Mis Oraciones" image="ic_oraciones" id="Szn-bH-fIo"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KYK-AK-seb">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="KYK-AK-seb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

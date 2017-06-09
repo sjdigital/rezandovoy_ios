@@ -6,7 +6,6 @@
 //  Copyright © 2016 sjdigital. All rights reserved.
 //
 
-/* TODO: La ventana de la informacion sale oculta cuando arranca el reproductor y las etiquetas de informacion tambien */
 
 import UIKit
 import AVKit
@@ -225,7 +224,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.downloadButton.isEnabled = true
     }
 
-    func imageTap() {
+    @objc func imageTap() {
         if (self.infoView.isHidden == true) {
             self.infoView.isHidden = false
         }
@@ -234,7 +233,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         }
     }
     
-    func toggleCita(_ sender: UIButton) {
+    @objc func toggleCita(_ sender: UIButton) {
         let supervista = sender.superview
         if (supervista?.subviews.last!.isHidden == true) {
             supervista?.subviews.last!.sizeToFit()
@@ -249,7 +248,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.redimensionar()
     }
     
-    func toggleDocs(_ sender: UIButton) {
+    @objc func toggleDocs(_ sender: UIButton) {
         let supervista = sender.superview
         if (supervista?.subviews.last!.isHidden == true) {
             supervista?.subviews.last!.sizeToFit()
@@ -264,7 +263,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.redimensionar()
     }
     
-    func toggleCompartir() {
+    @objc func toggleCompartir() {
         var url: String?
         let miTexto = "Rezandovoy - Una oración diaria en mp3"
         if tipo == 1 {
@@ -305,10 +304,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if #available(iOS 10.0, *) {
+        if #available(iOS 10, *) {
             self.temporizador = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
                 _ in
-                if (self.audioItem?.isPlaybackLikelyToKeepUp==true) {
+                if (self.audioPlayer?.currentItem?.isPlaybackBufferFull == true || self.audioPlayer?.currentItem?.isPlaybackLikelyToKeepUp == true || self.audioPlayer?.currentItem?.currentTime().value != 0) {
                     if (self.progressHUD?.isHidden == false) {
                         self.progressHUD?.hide()
                     } else {
@@ -600,7 +599,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -671,7 +670,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -686,7 +685,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -742,7 +741,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -756,7 +755,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -813,7 +812,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             guard let realResponse = response as? HTTPURLResponse, realResponse.statusCode == 200 else {
                 let respuesta = response as? HTTPURLResponse
-                print("Not a 200 response is:\n \(respuesta)")
+                print("Not a 200 response is:\n \(String(describing: respuesta))")
                 return
             }
             do {
@@ -827,7 +826,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.oracion.setdocumentos(jsonDict.value(forKey: "documentos") as? NSArray)
                     
                     // Recuperar el link de la oración
-                    var aux_mp3 = "https://rezandovoy.ovh/"
+                    var aux_mp3 = "http://rezandovoy.ovh/"
                     aux_mp3 += jsonDict.value(forKey: "oracion_link") as! String
                     self.reproductorInit(aux_mp3)
                     
@@ -838,7 +837,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                     self.recuperarImagenes(jsonDict.value(forKey: "ficheroImagenes") as! String)
                     
                     // LLamada a la funcion para recuperar fecha
-                    var aux = "https://rezandovoy.ovh/"
+                    var aux = "http://rezandovoy.ovh/"
                     aux += jsonDict.value(forKey: "icono_link") as!  String
                     self.recuperarIcono(aux)
                     
@@ -873,10 +872,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         self.mp3Url = aux
         //let assetmp3 = AVURLAsset(url: URL(string:aux)!)
         //let localmp3 = AVPlayerItem(asset: assetmp3)
-        //self.audioItem = AVPlayerItem(url: URL(string: self.mp3Url!)!)
-        let asset = AVAsset(url: URL(string: aux)!)
-        let assetKeys = ["playable"]
-        self.audioItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
+        self.audioItem = AVPlayerItem(url: URL(string: self.mp3Url!)!)
         self.audioPlayer = AVPlayer(playerItem: audioItem)
         self.audioPlayer?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 10), queue: DispatchQueue.main) {
             time in
@@ -1146,7 +1142,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.numLabel?.textAlignment = NSTextAlignment.center
             self.numLabel?.textColor = UIColor.white
             self.numLabel?.font = UIFont(name: "Aleo-Regular", size: 50)
-            self.numLabel?.text = aux_diaNum as? String
+            self.numLabel?.text = aux_diaNum as String?
             self.hojaView.addSubview(self.numLabel!)
 
             // Etiqueta para poner el nombre del mes
@@ -1154,7 +1150,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.mesLabel?.textAlignment = NSTextAlignment.center
             self.mesLabel?.textColor = UIColor.white
             self.mesLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
-            self.mesLabel?.text = aux_mes as? String
+            self.mesLabel?.text = aux_mes as String?
             self.hojaView.addSubview(self.mesLabel!)
             
             // Etiqueta para poner el dia en texto
@@ -1163,7 +1159,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.diaLabel?.textAlignment = NSTextAlignment.center
             self.diaLabel?.textColor = UIColor.white
             self.diaLabel?.font = UIFont(name: "Aleo-Regular", size: 17)
-            self.diaLabel?.text = aux_dia as? String
+            self.diaLabel?.text = aux_dia as String?
             self.hojaView.addSubview(self.diaLabel!)
         }
     }
@@ -1202,10 +1198,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.view.addSubview(self.imageView!)
             self.view.bringSubview(toFront: self.controles)
             self.view.bringSubview(toFront: self.infoView)
-            if #available(iOS 10, *) {
-                self.view.addSubview(self.progressHUD!)
-                self.progressHUD?.show()
-            }
+            self.view.addSubview(self.progressHUD!)
+            self.progressHUD?.show()
         }
     }
     

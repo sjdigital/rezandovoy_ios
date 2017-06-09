@@ -22,6 +22,7 @@
 		D470A8531BF0CDC40078C231 /* Rezandovoy_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A8521BF0CDC40078C231 /* Rezandovoy_iOSTests.swift */; };
 		D470A85E1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */; };
 		D47A58851C625ADB000DFA61 /* Aleo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */; };
+		D4857BD81EEACCE100BC6F6A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4857BD71EEACCE100BC6F6A /* Default-568h@2x.png */; };
 		D4A2D8FC1C637C6600200E7A /* especialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2D8FB1C637C6600200E7A /* especialViewController.swift */; };
 		D4D0F7541C2AD12B00AE0801 /* especialesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */; };
 		D4D0F7561C2AF02E00AE0801 /* infantilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */; };
@@ -70,6 +71,7 @@
 		D470A85D1BF0CDC40078C231 /* Rezandovoy_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rezandovoy_iOSUITests.swift; sourceTree = "<group>"; };
 		D470A85F1BF0CDC40078C231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D47A58841C625ADB000DFA61 /* Aleo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Regular.otf"; sourceTree = "<group>"; };
+		D4857BD71EEACCE100BC6F6A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D4A2D8FB1C637C6600200E7A /* especialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = especialViewController.swift; sourceTree = "<group>"; };
 		D4D0F7531C2AD12B00AE0801 /* especialesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = especialesViewController.swift; sourceTree = "<group>"; };
 		D4D0F7551C2AF02E00AE0801 /* infantilViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infantilViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		D470A82F1BF0CDC40078C231 = {
 			isa = PBXGroup;
 			children = (
+				D4857BD71EEACCE100BC6F6A /* Default-568h@2x.png */,
 				D470A83A1BF0CDC40078C231 /* Rezandovoy_iOS */,
 				D470A8511BF0CDC40078C231 /* Rezandovoy_iOSTests */,
 				D470A85C1BF0CDC40078C231 /* Rezandovoy_iOSUITests */,
@@ -229,22 +232,22 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = sjdigital;
 				TargetAttributes = {
 					D470A8371BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 62PLVFJPYH;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0830;
 					};
 					D470A84D1BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0830;
 						TestTargetID = D470A8371BF0CDC40078C231;
 					};
 					D470A8581BF0CDC40078C231 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0830;
 						TestTargetID = D470A8371BF0CDC40078C231;
 					};
 				};
@@ -279,6 +282,7 @@
 				D4144A281C64B08000CFE210 /* Aleo-Italic.otf in Resources */,
 				D4144A261C64B05100CFE210 /* Aleo-Bold.otf in Resources */,
 				D470A8431BF0CDC40078C231 /* Main.storyboard in Resources */,
+				D4857BD81EEACCE100BC6F6A /* Default-568h@2x.png in Resources */,
 				D47A58851C625ADB000DFA61 /* Aleo-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,17 +380,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -421,17 +434,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -450,6 +472,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -467,6 +490,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sjdigital.rezandovoy.rv;
 				PRODUCT_NAME = Rezandovoy;
 				PROVISIONING_PROFILE = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -483,6 +507,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sjdigital.rezandovoy.rv;
 				PRODUCT_NAME = Rezandovoy;
 				PROVISIONING_PROFILE = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
