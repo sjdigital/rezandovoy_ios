@@ -1117,6 +1117,10 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     func recuperarFecha(_ aux_fecha: String!)-> Void {
         format.locale = Locale(identifier: "en_GB")
         format.dateFormat = "MMM d, yyyy"
+        if format.date(from: aux_fecha) == nil {
+            format.locale = Locale(identifier: "es_ES")
+            format.dateFormat = "MMM d, yyyy"
+        }
         let fecha_aux = format.date(from: aux_fecha!)!
         var esp = Calendar(identifier: Calendar.Identifier.gregorian)
         esp.timeZone = TimeZone(identifier: "Europe/Madrid")!
