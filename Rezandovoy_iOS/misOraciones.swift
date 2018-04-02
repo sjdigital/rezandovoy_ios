@@ -15,7 +15,7 @@ class misOraciones: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 15)!]
+        let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
         self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
         self.navigationController?.navigationBar.topItem!.title = "Mis Oraciones"
         // Uncomment the following line to preserve selection between presentations
