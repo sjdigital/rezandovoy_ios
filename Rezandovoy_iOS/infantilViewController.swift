@@ -21,7 +21,7 @@ class infantilViewController: UIViewController, UIWebViewDelegate {
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if navigationType == UIWebViewNavigationType.linkClicked {
             let oracionUrl = "\(request.url!)"
-            let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
+            let oracionArray = oracionUrl.split{$0 == "#"}.map(String.init)
             if oracionArray[0].range(of: "infantil") != nil {
                 tipo = 3
             }

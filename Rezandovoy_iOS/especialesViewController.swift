@@ -24,7 +24,7 @@ class especialesViewController: UIViewController, UIWebViewDelegate {
         if navigationType == UIWebViewNavigationType.linkClicked {
             let oracionUrl = "\(request.url!)"
             tipo = 2
-            let oracionArray = oracionUrl.characters.split{$0 == "="}.map(String.init)
+            let oracionArray = oracionUrl.split{$0 == "="}.map(String.init)
             id = Int(oracionArray[1])!
             let nextViewControlles = storyboard!.instantiateViewController(withIdentifier: "especialViewController") as UIViewController
             self.show(nextViewControlles, sender: self)

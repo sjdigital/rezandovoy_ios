@@ -431,8 +431,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             self.tabBarController?.tabBar.isHidden = false
             self.navigationController?.navigationBar.barTintColor = nil
             self.navigationController?.navigationBar.tintColor = self.view.tintColor
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 15)!]
-            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 15)!]
+            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [NSAttributedStringKey : Any]
             UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
             do {
                 try AVAudioSession.sharedInstance().setActive(false)
@@ -997,9 +997,9 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
             var cadena2: NSAttributedString?
             var cadena3: NSAttributedString?
             var cadena4: NSAttributedString?
-            let normal = [ NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 13)! ] as [String : AnyObject]
-            let bold = [ NSFontAttributeName: UIFont(name: "Aleo-Bold", size: 13)! ] as [String : AnyObject]
-            let italic = [ NSFontAttributeName: UIFont(name: "Aleo-Italic", size: 13)! ] as [String : AnyObject]
+            let normal: NSDictionary = [ NSAttributedStringKey.font.rawValue: UIFont(name: "Aleo-Regular", size: 13)! ]
+            let bold: NSDictionary = [ NSAttributedStringKey.font.rawValue: UIFont(name: "Aleo-Bold", size: 13)! ]
+            let italic: NSDictionary = [ NSAttributedStringKey.font.rawValue: UIFont(name: "Aleo-Italic", size: 13)! ]
             for (musica) in aux_mus {
                 if alto == 0 {
                     self.datosView = UIView(frame: CGRect(x: 0, y: alto, width: Int(self.dentroScroll!.frame.width), height: 0))
@@ -1014,29 +1014,29 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
                 let coleccion = (musica as AnyObject).value(forKey: "coleccion")
                 let permiso = (musica as AnyObject).value(forKey: "permiso")
                 let titulo = (cancion as AnyObject).value(forKey: "titulo")
-                cadena1 = NSAttributedString(string: String(describing: titulo!), attributes: bold)
+                cadena1 = NSAttributedString(string: String(describing: titulo!), attributes: bold as? [NSAttributedStringKey : Any])
                 if ((cancion as AnyObject).value(forKey: "autor") as! String == "" && (cancion as AnyObject).value(forKey: "interprete") as! String != "") {
                     let interprete = (cancion as AnyObject).value(forKey: "interprete")
-                    cadena2 = NSAttributedString(string: " interpretado por \(interprete!). CD ", attributes: normal)
+                    cadena2 = NSAttributedString(string: " interpretado por \(interprete!). CD ", attributes: normal as? [NSAttributedStringKey : Any])
                 }
                 else if ((cancion as AnyObject).value(forKey: "interprete") as! String == "" && (cancion as AnyObject).value(forKey: "autor") as! String != "") {
                     let autor = (cancion as AnyObject).value(forKey: "autor")
-                    cadena2 = NSAttributedString(string: " de \(autor!). CD ", attributes: normal)
+                    cadena2 = NSAttributedString(string: " de \(autor!). CD ", attributes: normal as? [NSAttributedStringKey : Any])
                 }
                 else if ((cancion as AnyObject).value(forKey: "interprete") as! String != "" && (cancion as AnyObject).value(forKey: "autor") as! String != "") {
                     let interprete = (cancion as AnyObject).value(forKey: "interprete")
                     let autor = (cancion as AnyObject).value(forKey: "autor")
-                    cadena2 = NSAttributedString(string: " de \(autor!) interpretado por \(interprete!). CD ", attributes: normal)
+                    cadena2 = NSAttributedString(string: " de \(autor!) interpretado por \(interprete!). CD ", attributes: normal as? [NSAttributedStringKey : Any])
                 }
                 else{
-                    cadena2 = NSAttributedString(string: " ",attributes:normal)
+                    cadena2 = NSAttributedString(string: " ",attributes: normal as? [NSAttributedStringKey : Any])
                 }
                 let cd = (coleccion as AnyObject).value(forKey: "nombre")
-                cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic)
+                cadena3 = NSAttributedString(string: "\(cd!) ", attributes: italic as? [NSAttributedStringKey : Any])
                 let formula = (permiso as AnyObject).value(forKey: "formula")
                 let propietario = (permiso as AnyObject).value(forKey: "propietario") as! String
                 if propietario != "#" {
-                    cadena4 = NSAttributedString(string: "\(formula!) \(propietario)", attributes: normal)
+                    cadena4 = NSAttributedString(string: "\(formula!) \(propietario)", attributes: normal as? [NSAttributedStringKey : Any])
                 }
                 let cadenaMusica: NSMutableAttributedString = NSMutableAttributedString(string: "")
                 cadenaMusica.append(cadena1!)
@@ -1071,8 +1071,8 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
         var aux_titulo = auxiliar_titulo
         DispatchQueue.main.async {
             aux_titulo = aux_titulo?.uppercased()
-            let atributos: NSDictionary = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Aleo-Regular", size: 12)!]
-            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [String : AnyObject]
+            let atributos: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "Aleo-Regular", size: 12)!]
+            self.navigationController?.navigationBar.titleTextAttributes = atributos as? [NSAttributedStringKey : Any]
             self.navigationController?.navigationBar.topItem!.title = aux_titulo
         }
     }
@@ -1170,7 +1170,7 @@ class audioViewController: UIViewController, AVAudioPlayerDelegate, URLSessionDo
     
     // Recuperar el fichero de imagenes y comprobar si esta cargado en la APP, si no usar default.
     func recuperarImagenes(_ ficheroImagenes: String!)-> Void {
-        let nombreImagenes = ficheroImagenes.characters.split{$0 == "/"}.map(String.init)
+        let nombreImagenes = ficheroImagenes.split{$0 == "/"}.map(String.init)
         var imagenes = ["\(nombreImagenes[2])_1","\(nombreImagenes[2])_2","\(nombreImagenes[2])_3","\(nombreImagenes[2])_4"]
         let pruebaImg: UIImage? = UIImage(named: "\(nombreImagenes[2])_1")
         if pruebaImg != nil {

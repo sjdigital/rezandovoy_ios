@@ -30,8 +30,8 @@ extension Array {
         for i in 0 ..< (count - 1) {
             let j = Int(arc4random_uniform(UInt32(count - i))) + i
             guard i != j else { continue }
-            swap(&self[i], &self[j])
-            //self.swapAt(i, j)
+            //swap(&self[i], &self[j])
+            self.swapAt(i, j)
         }
     }
 }
@@ -59,7 +59,7 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
         if navigationType == UIWebViewNavigationType.linkClicked {
             let oracionUrl = "\(request.url!)"
             if oracionUrl.range(of: ".php") == nil {
-                let oracionArray = oracionUrl.characters.split{$0 == "#"}.map(String.init)
+                let oracionArray = oracionUrl.split{$0 == "#"}.map(String.init)
                 id = Int(oracionArray[1])!
                 if oracionArray[0].range(of: "adultos") != nil {
                     tipo = 1
@@ -78,7 +78,7 @@ class InicioViewController: UIViewController, UIWebViewDelegate {
             else {
                 if oracionUrl.range(of: "especial.php") != nil {
                     tipo = 2
-                    let oracionArray = oracionUrl.characters.split{$0 == "="}.map(String.init)
+                    let oracionArray = oracionUrl.split{$0 == "="}.map(String.init)
                     id = Int(oracionArray[1])!
                 }
                 let nextViewControlles = storyboard!.instantiateViewController(withIdentifier: "especialViewController") as UIViewController
